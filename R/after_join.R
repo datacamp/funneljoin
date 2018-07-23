@@ -35,6 +35,15 @@ after_join <- function(x,
                        mode = "inner",
                        type = "first-first") {
 
+  types <- stringr::str_split(type, '\\-')[[1]]
+
+  if (length(types) != 2) {
+    stop("type argument only supports pairs.")
+  }
+
+  type_x <- match.arg(types[1], c("first", "last", "any"))
+  type_y <- match.arg(types[2], c("first", "last", "any", "firstafter"))
+
   if (length(by_user) > 1) {
     stop("Joining on multiple user columns is not supported. Check the by_user argument.")
   }
@@ -52,20 +61,19 @@ after_join <- function(x,
   y_i <- y %>%
     mutate(..idy = row_number())
 
-  types <- stringr::str_split(type, '\\-')[[1]]
 
-  if (types[1] %in% c("first", "last")) {
+  if (type_x %in% c("first", "last")) {
     x_i <- x_i %>%
       distinct_events(time_col = time_xy$x,
                       user_col = user_xy$x,
-                      type = types[1])
+                      type = type_x)
   }
 
-  if (types[2] %in% c("first", "last")) {
+  if (type_y %in% c("first", "last")) {
     y_i <- y_i %>%
       distinct_events(time_col = time_xy$y,
                       user_col = user_xy$y,
-                      type = types[2])
+                      type = type_y)
   }
 
   # Handle the case when columns with the same name are appended with .x & .y
@@ -77,7 +85,16 @@ after_join <- function(x,
   # Get all the matching rows
   pairs <- x_i %>%
     inner_join(y_i, by = user_xy) %>%
-    filter(!!sym(time_xy$x) <= !!sym(time_xy$y)) %>%
+    filter(!!sym(time_xy$x) <= !!sym(time_xy$y))
+
+  if (type_y == "firstafter") {
+    pairs <- pairs %>%
+      distinct_events(time_col = time_xy$y,
+                      user_col = "..idx",
+                      type = "first")
+  }
+
+  pairs <- pairs %>%
     select(..idx, ..idy)
 
   join_func <- switch(mode,

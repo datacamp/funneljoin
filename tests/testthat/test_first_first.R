@@ -39,6 +39,7 @@ test_that("after_join works with mode = inner and type = first-first", {
   expect_true(all(!is.na(res$timestamp.x)))
   expect_true(all(!is.na(res$timestamp.y)))
   expect_true(all(!is.na(res$user_id)))
+  expect_true(!4 %in% res$user_id)
 })
 
 test_that("after_join works with mode = left and type = first-first", {
