@@ -23,8 +23,19 @@ distinct_events <- function(.data, time_col, user_col, type) {
       arrange(desc(!!sym(time_col)))
   }
 
-  data_sorted %>%
-    distinct(!!sym(user_col), .keep_all = T)
+  if (inherits(.data, "tbl_lazy")) {
+    ret <- data_sorted %>%
+      group_by(!!sym(user_col)) %>%
+      mutate(..rank = row_number()) %>%
+      ungroup() %>%
+      filter(..rank == 1) %>%
+      select(-..rank)
+  } else {
+    ret <- data_sorted %>%
+      distinct(!!sym(user_col), .keep_all = T)
+  }
+
+  ret
 }
 
 
@@ -121,5 +132,5 @@ after_join <- function(x,
       select(-..idx)
   }
 
-  return(ret)
+  ret
 }
