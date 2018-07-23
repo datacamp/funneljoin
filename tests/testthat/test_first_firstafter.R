@@ -27,6 +27,7 @@ registered <- tribble(
   7, "2018-07-07"
 ) %>%
   mutate(timestamp = as.Date(timestamp))
+
 test_that("after_join works with mode = inner and type = first-firstafter", {
 
   res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "inner", type = "first-firstafter")
