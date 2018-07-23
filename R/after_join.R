@@ -4,7 +4,7 @@
 # * first-first: You can take earliest x and y for each user before the join (entered an experiment, then registered)
 # * first-firstafter: Take the first x, then the first y after that (entered an experiment, then started a course)
 # * lastbefore-firstafter: First x that's followed by a y before the next x (last click paid ad attribution)
-# * last-
+# * last-firstafter
 # * smallestgap: Smallest x-y gap (in tie, earliest).
 #
 # Some also have multiple rows per user:
@@ -13,36 +13,27 @@
 # * every-firstafter: All Xs followed by a Y
 
 
-landed <- tribble(
-  ~user_id, ~timestamp,
-  1, "2018-07-01",
-  2, "2018-07-01",
-  3, "2018-07-02",
-  4, "2018-07-01",
-  4, "2018-07-04",
-  5, "2018-07-10",
-  5, "2018-07-12",
-  6, "2018-07-07",
-  6, "2018-07-07"
-)
+distinct_events <- function(.data, time_col, user_col, type) {
 
-registered <- tribble(
-  ~user_id, ~timestamp,
-  1, "2018-07-02",
-  3, "2018-07-02",
-  4, "2018-06-10",
-  4, "2018-07-02",
-  5, "2018-07-11",
-  6, "2018-07-10",
-  7, "2018-07-07"
-)
+  if (type == "first") {
+    data_sorted <- .data %>%
+      arrange(!!sym(time_col))
+  } else if (type == "last") {
+    data_sorted <- .data %>%
+      arrange(desc(!!sym(time_col)))
+  }
+
+  data_sorted %>%
+    distinct(!!sym(user_col), .keep_all = T)
+}
+
 
 after_join <- function(x,
                        y,
                        by_time,
                        by_user,
                        mode = "inner",
-                       criterion = "first-first") {
+                       type = "first-first") {
 
   if (length(by_user) > 1) {
     stop("Joining on multiple user columns is not supported. Check the by_user argument.")
@@ -55,25 +46,63 @@ after_join <- function(x,
   user_xy <- dplyr:::common_by(by_user, x, y)
   time_xy <- dplyr:::common_by(by_time, x, y)
 
+  x_i <- x %>%
+    mutate(..idx = row_number())
 
+  y_i <- y %>%
+    mutate(..idy = row_number())
 
-  x_distinct <- x %>%
-    arrange(!!sym(time_xy$x)) %>%
-    distinct(!!sym(user_xy$x), .keep_all = T)
+  types <- stringr::str_split(type, '\\-')[[1]]
 
-  y_distinct <- y %>%
-    arrange(!!sym(time_xy$y)) %>%
-    distinct(!!sym(user_xy$y), .keep_all = T)
+  if (types[1] %in% c("first", "last")) {
+    x_i <- x_i %>%
+      distinct_events(time_col = time_xy$x,
+                      user_col = user_xy$x,
+                      type = types[1])
+  }
 
-  # Handle the case where columns with the same name are appended with .x & .y
+  if (types[2] %in% c("first", "last")) {
+    y_i <- y_i %>%
+      distinct_events(time_col = time_xy$y,
+                      user_col = user_xy$y,
+                      type = types[2])
+  }
+
+  # Handle the case when columns with the same name are appended with .x & .y
   if (time_xy$x == time_xy$y) {
     time_xy <- list(x = paste0(time_xy$x, ".x"),
                     y = paste0(time_xy$y, ".y"))
   }
 
-  x_distinct %>%
-    inner_join(y_distinct, by = user_xy) %>%
-    filter(!!sym(time_xy$x) <= !!sym(time_xy$y))
-}
+  # Get all the matching rows
+  pairs <- x_i %>%
+    inner_join(y_i, by = user_xy) %>%
+    filter(!!sym(time_xy$x) <= !!sym(time_xy$y)) %>%
+    select(..idx, ..idy)
 
-after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"))
+  join_func <- switch(mode,
+                      inner = inner_join,
+                      left = left_join,
+                      right = right_join,
+                      full = full_join,
+                      semi = semi_join,
+                      anti = anti_join
+  )
+
+  if (is.null(join_func)) {
+    stop("Unknown joining mode: ", mode)
+  }
+
+  if (mode %in% c("inner", "left", "right", "full")) {
+    ret <- x_i %>%
+      join_func(pairs, by = "..idx") %>%
+      join_func(y_i, by = c(by_user, "..idy" = "..idy")) %>%
+      select(-..idx, -..idy)
+  } else if (mode %in% c("semi", "anti")) {
+    ret <- x_i %>%
+      join_func(pairs, by = "..idx") %>%
+      select(-..idx)
+  }
+
+  return(ret)
+}
