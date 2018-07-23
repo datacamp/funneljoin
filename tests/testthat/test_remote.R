@@ -1,3 +1,4 @@
+context("Joining using remote tables")
 library(datacampr)
 
 soft_launches <- tbl_main_course_state_logs() %>%
@@ -19,26 +20,96 @@ test_that("after_join works for out-of-memory tables with mode = inner and type 
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("course_id", "soft_launch_at", "live_at"))
-  expect_true(all(res$soft_launch_at >= res$live_at))
+  expect_true(all(res$soft_launch_at <= res$live_at))
   expect_equal(length(res$course_id), n_distinct(res$course_id))
-  expect_true(nrow(res) >= 4)
+  expect_true(nrow(res) >= 40)
   expect_true(all(!is.na(res$soft_launch_at)))
   expect_true(all(!is.na(res$live_at)))
   expect_true(all(!is.na(res$course_id)))
+
+  first_soft_launches <- soft_launches %>%
+    group_by(course_id) %>%
+    summarise(first_soft_launch_at = min(soft_launch_at, na.rm = T)) %>%
+    collect() %>%
+    inner_join(res, by = "course_id")
+
+  expect_equal(first_soft_launches$first_soft_launch_at, first_soft_launches$soft_launch_at)
 })
 
 
+test_that("after_join works for out-of-memory tables with mode = inner and type = last-firstafter", {
+
+  res <- after_join(soft_launches,
+                    hard_launches,
+                    by_user = "course_id",
+                    by_time = c("soft_launch_at" = "live_at"),
+                    mode = "inner",
+                    type = "last-firstafter") %>%
+    collect()
+
+  expect_is(res, "tbl_df")
+  expect_equal(names(res), c("course_id", "soft_launch_at", "live_at"))
+  expect_true(all(res$soft_launch_at <= res$live_at))
+  expect_equal(length(res$course_id), n_distinct(res$course_id))
+  expect_true(nrow(res) >= 40)
+  expect_true(all(!is.na(res$soft_launch_at)))
+  expect_true(all(!is.na(res$live_at)))
+  expect_true(all(!is.na(res$course_id)))
+
+  last_soft_launches <- soft_launches %>%
+    group_by(course_id) %>%
+    summarise(last_soft_launch_at = max(soft_launch_at, na.rm = T)) %>%
+    collect() %>%
+    inner_join(res, by = "course_id")
+
+  expect_equal(last_soft_launches$last_soft_launch_at, last_soft_launches$soft_launch_at)
+})
 
 
-# # Is the left col always the first by course_id?
-# first_soft_launches <- soft_launches %>%
-#   group_by(course_id) %>%
-#   filter(soft_launch_at == min(soft_launch_at, na.rm = T)) %>%
-#   ungroup() %>%
-#   collect() %>%
-#   rename(first_soft_launch_at = soft_launch_at)
-#
-# test_results %>%
-#   left_join(first_soft_launches, by = "course_id") %>%
-#   count(first_soft_launch_at == soft_launch_at)
-#
+test_that("after_join works for out-of-memory tables with mode = anti and type = last-firstafter", {
+
+  res <- after_join(soft_launches,
+                    hard_launches,
+                    by_user = "course_id",
+                    by_time = c("soft_launch_at" = "live_at"),
+                    mode = "anti",
+                    type = "last-firstafter") %>%
+    collect()
+
+  expect_is(res, "tbl_df")
+  expect_equal(names(res), c("course_id", "soft_launch_at"))
+  expect_equal(length(res$course_id), n_distinct(res$course_id))
+  expect_true(nrow(res) >= 1)
+  expect_true(all(!is.na(res$soft_launch_at)))
+  expect_true(all(!is.na(res$course_id)))
+
+  hard_launches_in_res <- hard_launches %>%
+    filter(course_id %in% res$course_id) %>%
+    collect()
+
+  expect_equal(nrow(hard_launches_in_res), 0)
+})
+
+
+test_that("after_join works for out-of-memory tables with mode = semi and type = first-any", {
+
+  res <- after_join(soft_launches,
+                    hard_launches,
+                    by_user = "course_id",
+                    by_time = c("soft_launch_at" = "live_at"),
+                    mode = "semi",
+                    type = "first-any") %>%
+    collect()
+
+  expect_is(res, "tbl_df")
+  expect_equal(names(res), c("course_id", "soft_launch_at"))
+  expect_true(nrow(res) >= 40)
+  expect_true(all(!is.na(res$soft_launch_at)))
+  expect_true(all(!is.na(res$course_id)))
+
+  hard_launches_in_res <- hard_launches %>%
+    filter(course_id %in% res$course_id) %>%
+    collect()
+
+  expect_equal(n_distinct(hard_launches_in_res$course_id), nrow(res))
+})
