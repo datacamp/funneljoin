@@ -12,7 +12,8 @@ landed <- tribble(
   5, "2018-07-12",
   6, "2018-07-07",
   6, "2018-07-08"
-)
+) %>%
+  mutate(timestamp = as.Date(timestamp))
 
 registered <- tribble(
   ~user_id, ~timestamp,
@@ -24,7 +25,8 @@ registered <- tribble(
   6, "2018-07-10",
   6, "2018-07-11",
   7, "2018-07-07"
-)
+) %>%
+  mutate(timestamp = as.Date(timestamp))
 
 test_that("after_join works with mode = inner and type = first-first", {
 
