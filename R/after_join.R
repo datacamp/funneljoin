@@ -1,17 +1,4 @@
 
-# Types of joins. Will always return at most one row per user
-#
-# * first-first: You can take earliest x and y for each user before the join (entered an experiment, then registered)
-# * first-firstafter: Take the first x, then the first y after that (entered an experiment, then started a course)
-# * lastbefore-firstafter: First x that's followed by a y before the next x (last click paid ad attribution)
-# * last-firstafter
-# * smallestgap: Smallest x-y gap (in tie, earliest).
-#
-# Some also have multiple rows per user:
-#
-# * withingap: Gap is less than X (all ad clicks followed by a course start within an hour), smallest gap for each X
-# * every-firstafter: All Xs followed by a Y
-
 
 distinct_events <- function(.data, time_col, user_col, type) {
 
