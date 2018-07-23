@@ -1,5 +1,3 @@
-
-
 distinct_events <- function(.data, time_col, user_col, type) {
 
   if (type == "first") {
