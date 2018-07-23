@@ -12,7 +12,8 @@ landed <- tribble(
   5, "2018-07-12",
   6, "2018-07-07",
   6, "2018-07-08"
-)
+) %>%
+  mutate(timestamp = as.Date(timestamp))
 
 registered <- tribble(
   ~user_id, ~timestamp,
@@ -24,7 +25,8 @@ registered <- tribble(
   6, "2018-07-10",
   6, "2018-07-11",
   7, "2018-07-07"
-)
+) %>%
+  mutate(timestamp = as.Date(timestamp))
 
 
 test_that("after_join works with mode = left and type = any-any", {
@@ -85,6 +87,7 @@ test_that("after_join works with mode = anti and type = any-any", {
   expect_true(!3 %in% res$user_id)
   expect_true(all(!is.na(res$timestamp)))
   expect_true(all(!is.na(res$user_id)))
+  expect_true(as.Date("2018-07-04") %in% res$timestamp)
 })
 
 test_that("after_join works with mode = semi and type = any-any", {
