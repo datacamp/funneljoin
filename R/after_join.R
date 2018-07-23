@@ -1,3 +1,6 @@
+
+
+
 distinct_events <- function(.data, time_col, user_col, type) {
 
   if (type == "first") {
@@ -24,6 +27,74 @@ distinct_events <- function(.data, time_col, user_col, type) {
 }
 
 
+#' Join tables based on one event happening after another
+#'
+#' @param x A tbl that is the first event to occur in the funnel.
+#' @param y A tbl that is the following event to occur in the funnel.
+#' @param by_time A character vector to specify the time columns in x and y.
+#' Must be a single column in each tbl. Note that this column is used to filter for time y >= time x.
+#' @param by_user A character vector to specify the user or identity columns in x and y.
+#' Must be a single column in each tbl.
+#' @param mode The method used to join: "inner", "full", "anti", "semi", "right", "left"
+#' @param type The type of funnel used to distinguish between event pairs,
+#' such as "first-first", "last-first", "any-firstafter". See details for more.
+#'
+#' @details TODO
+#'
+#'
+#' @return A tbl
+#' @export
+#'
+#' @examples
+#'
+#' library(dplyr)
+#' landed <- tribble(
+#'   ~user_id, ~timestamp,
+#'   1, "2018-07-01",
+#'   2, "2018-07-01",
+#'   2, "2018-07-01",
+#'   3, "2018-07-02",
+#'   4, "2018-07-01",
+#'   4, "2018-07-04",
+#'   5, "2018-07-10",
+#'   5, "2018-07-12",
+#'   6, "2018-07-07",
+#'   6, "2018-07-08"
+#' ) %>%
+#'   mutate(timestamp = as.Date(timestamp))
+#'
+#' registered <- tribble(
+#'   ~user_id, ~timestamp,
+#'   1, "2018-07-02",
+#'   3, "2018-07-02",
+#'   4, "2018-06-10",
+#'   4, "2018-07-02",
+#'   5, "2018-07-11",
+#'   6, "2018-07-10",
+#'   6, "2018-07-11",
+#'   7, "2018-07-07"
+#' ) %>%
+#'  mutate(timestamp = as.Date(timestamp))
+#'
+#' after_join(landed, registered, by_user = "user_id",
+#'            by_time = "timestamp", mode = "inner", type = "first-first")
+#'
+#' after_join(landed, registered, by_user = "user_id",
+#'            by_time = "timestamp", mode = "inner", type = "any-firstafter")
+#'
+#' after_join(landed, registered, by_user = "user_id",
+#'            by_time = "timestamp", mode = "inner", type = "any-any")
+#'
+#' # You can change mode to control the method of joining:
+#' after_join(landed, registered, by_user = "user_id",
+#'            by_time = "timestamp", mode = "left", type = "first-first")
+#'
+#' after_join(landed, registered, by_user = "user_id",
+#'            by_time = "timestamp", mode = "right", type = "any-firstafter")
+#'
+#' after_join(landed, registered, by_user = "user_id",
+#'            by_time = "timestamp", mode = "anti", type = "any-any")
+#'
 after_join <- function(x,
                        y,
                        by_time,
