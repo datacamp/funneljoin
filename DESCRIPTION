@@ -2,7 +2,10 @@ Package: funneljoin
 Type: Package
 Title: Join Tables Based on Events Occurring in Sequence in a Funnel
 Version: 0.1.0
-Author: Who wrote it
+Authors@R: c(
+    person("Emily", "Robinson", email = "emily@datacamp.com", role = c("aut", "cre")),
+    person("Anthony", "Baker", email = "anthony@datacamp.com", role = c("aut", "cre")),
+    person("David", "Robinson", email = "david@datacamp.com", role = c("aut", "cre")))
 Maintainer: Emily Robinson <emily@datacamp.com>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
