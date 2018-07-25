@@ -4,8 +4,8 @@ Title: Join Tables Based on Events Occurring in Sequence in a Funnel
 Version: 0.1.0
 Authors@R: c(
     person("Emily", "Robinson", email = "emily@datacamp.com", role = c("aut", "cre")),
-    person("Anthony", "Baker", email = "anthony@datacamp.com", role = c("aut", "cre")),
-    person("David", "Robinson", email = "david@datacamp.com", role = c("aut", "cre")))
+    person("Anthony", "Baker", email = "anthony@datacamp.com", role = c("aut")),
+    person("David", "Robinson", email = "david@datacamp.com", role = c("aut")))
 Maintainer: Emily Robinson <emily@datacamp.com>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
