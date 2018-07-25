@@ -2,9 +2,27 @@
 % Please edit documentation in R/after_join.R
 \name{after_join}
 \alias{after_join}
+\alias{after_inner_join}
+\alias{after_left_join}
+\alias{after_right_join}
+\alias{after_full_join}
+\alias{after_anti_join}
+\alias{after_semi_join}
 \title{Join tables based on one event happening after another}
 \usage{
 after_join(x, y, by_time, by_user, mode = "inner", type = "first-first")
+
+after_inner_join(x, y, by_time, by_user, type = "first-first")
+
+after_left_join(x, y, by_time, by_user, type = "first-first")
+
+after_right_join(x, y, by_time, by_user, type = "first-first")
+
+after_full_join(x, y, by_time, by_user, type = "first-first")
+
+after_anti_join(x, y, by_time, by_user, type = "first-first")
+
+after_semi_join(x, y, by_time, by_user, type = "first-first")
 }
 \arguments{
 \item{x}{A tbl that is the first event to occur in the funnel.}

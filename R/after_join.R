@@ -190,3 +190,45 @@ after_join <- function(x,
 
   ret
 }
+
+#' @rdname after_join
+#' @export
+after_inner_join <- function(x, y, by_time, by_user, type = "first-first") {
+  after_join(x, y, by_time, by_user,
+             mode = "inner", type = type)
+}
+
+#' @rdname after_join
+#' @export
+after_left_join <- function(x, y, by_time, by_user, type = "first-first") {
+  after_join(x, y, by_time, by_user,
+             mode = "left", type = type)
+}
+
+#' @rdname after_join
+#' @export
+after_right_join <- function(x, y, by_time, by_user, type = "first-first") {
+  after_join(x, y, by_time, by_user,
+             mode = "right", type = type)
+}
+
+#' @rdname after_join
+#' @export
+after_full_join <- function(x, y, by_time, by_user, type = "first-first") {
+  after_join(x, y, by_time, by_user,
+             mode = "full", type = type)
+}
+
+#' @rdname after_join
+#' @export
+after_anti_join <- function(x, y, by_time, by_user, type = "first-first") {
+  after_join(x, y, by_time, by_user,
+             mode = "anti", type = type)
+}
+
+#' @rdname after_join
+#' @export
+after_semi_join <- function(x, y, by_time, by_user, type = "first-first") {
+  after_join(x, y, by_time, by_user,
+             mode = "semi", type = type)
+}
