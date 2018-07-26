@@ -18,7 +18,6 @@ The goal of funneljoin is to ...
 
 ## Installation
 
-
 You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
@@ -42,7 +41,7 @@ devtools::install_github("datacamp/funneljoin")
 
 Gaps: 
 * smallestgap: Smallest x-y gap (in tie, earliest).
-* withingap: Gap is less than X (all ad clicks followed by a course start within an hour), smallest gap for each X. 
+* withingap: Gap is less than X (all ad clicks followed by a course start within an hour). 
 
 
 
