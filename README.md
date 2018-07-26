@@ -34,4 +34,4 @@ Types of joins
 -   any-firstafter: All Xs followed by the first Y after it.
 -   any-any: All Xs followed by all Ys.
 
-Gaps: \* smallestgap: Smallest x-y gap (in tie, earliest). \* withingap: Gap is less than X (all ad clicks followed by a course start within an hour), smallest gap for each X.
+Gaps: \* smallestgap: Smallest x-y gap (in tie, earliest). \* withingap: Gap is less than X (all ad clicks followed by a course start within an hour).
