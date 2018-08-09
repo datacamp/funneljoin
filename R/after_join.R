@@ -71,12 +71,18 @@ after_join <- function(x,
                        by_time,
                        by_user,
                        mode = "inner",
-                       type = "first-first") {
+                       type = "first-first",
+                       dt = 10000) {
 
   types <- stringr::str_split(type, '\\-')[[1]]
 
+  if (type %in% c("smallestgap", "withingap")) {
+    types[1] = "any"
+    types[2] = "any"
+  }
+
   if (length(types) != 2) {
-    stop("type argument only supports pairs.")
+    stop("type argument only supports pairs, 'smallestgap', or 'withingap'.")
   }
 
   type_x <- match.arg(types[1], c("first", "last", "any"))
@@ -98,7 +104,6 @@ after_join <- function(x,
 
   y_i <- y %>%
     dplyr::mutate(..idy = row_number())
-
 
   if (type_x %in% c("first", "last")) {
     x_i <- x_i %>%
@@ -130,6 +135,19 @@ after_join <- function(x,
       distinct_events(time_col = time_xy$y,
                       user_col = "..idx",
                       type = "first")
+  }
+
+  if (type == "smallestgap") {
+    pairs <- filter_smallest_gap(pairs = pairs,
+                                 dt = dt,
+                                 time_xy = time_xy,
+                                 user_xy = user_xy)
+  }
+  if (type == "withingap") {
+    pairs <- filter_within_gap(pairs = pairs,
+                                 dt = dt,
+                                 time_xy = time_xy,
+                                 user_xy = user_xy)
   }
 
   pairs <- pairs %>%
