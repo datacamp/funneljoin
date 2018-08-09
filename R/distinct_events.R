@@ -4,30 +4,31 @@
 #' @param time_col the name of the time column
 #' @param user_col the name of the user identifying column
 #' @param type the type of after_join ("first-first", "first-firstafter", etc.)
-#'
+#' @importFrom magrittr %>%
 #' @return
 #'
 #' @examples
+
 distinct_events <- function(.data, time_col, user_col, type) {
   if (inherits(.data, "tbl_lazy")) {
     desc <- if (type == "first") " DESC" else ""
-    rank_sql <- sql(glue::glue('RANK() OVER (PARTITION BY "{ user_col }" ORDER BY "{ time_col }" { desc })'))
+    rank_sql <- dplyr::sql(glue::glue('RANK() OVER (PARTITION BY "{ user_col }" ORDER BY "{ time_col }" { desc })'))
 
     ret <- .data %>%
-      mutate(..rank = rank_sql) %>%
-      filter(..rank == 1) %>%
-      select(-..rank)
+      dplyr::mutate(..rank = rank_sql) %>%
+      dplyr::filter(..rank == 1) %>%
+      dplyr::select(-..rank)
   } else {
     if (type == "first") {
       data_sorted <- .data %>%
-        arrange(!!sym(time_col))
+        dplyr::arrange(!!sym(time_col))
     } else if (type == "last") {
       data_sorted <- .data %>%
-        arrange(desc(!!sym(time_col)))
+        dplyr::arrange(desc(!!sym(time_col)))
     }
 
     ret <- data_sorted %>%
-      distinct(!!sym(user_col), .keep_all = T)
+      dplyr::distinct(!!sym(user_col), .keep_all = T)
   }
   ret
 }
