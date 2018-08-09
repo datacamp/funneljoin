@@ -69,7 +69,7 @@ test_that("after_join works with mode = right and type = first-firstafter", {
   expect_true(all(res$timestamp.y >= res$timestamp.x |
                     is.na(res$timestamp.x)))
   expect_equal(n_distinct(registered$user_id), n_distinct(res$user_id))
-  expect_equal(nrow(res), dplyr::nrow(registered))
+  expect_equal(nrow(res), nrow(registered))
   expect_true(4 %in% res$user_id)
   expect_true(1 %in% res$user_id)
   expect_true(!2 %in% res$user_id)
