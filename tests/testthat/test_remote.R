@@ -3,12 +3,12 @@ skip_on_travis()
 library(datacampr)
 
 soft_launches <- tbl_main_course_state_logs() %>%
-  filter(new_state == "soft_launch") %>%
-  select(course_id, soft_launch_at = created_at)
+  dplyr::filter(new_state == "soft_launch") %>%
+  dplyr::select(course_id, soft_launch_at = created_at)
 
 hard_launches <- tbl_main_course_state_logs() %>%
-  filter(new_state == "live") %>%
-  select(course_id, live_at = created_at)
+  dplyr::filter(new_state == "live") %>%
+  dplyr::select(course_id, live_at = created_at)
 
 
 test_that("after_join works for out-of-memory tables with mode = inner and type = first-first", {
@@ -17,21 +17,21 @@ test_that("after_join works for out-of-memory tables with mode = inner and type 
                     hard_launches,
                     by_user = "course_id",
                     by_time = c("soft_launch_at" = "live_at")) %>%
-    collect()
+    dplyr::collect()
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("course_id", "soft_launch_at", "live_at"))
   expect_true(all(res$soft_launch_at <= res$live_at))
-  expect_equal(length(res$course_id), n_distinct(res$course_id))
+  expect_equal(length(res$course_id), dplyr::n_distinct(res$course_id))
   expect_true(nrow(res) >= 40)
   expect_true(all(!is.na(res$soft_launch_at)))
   expect_true(all(!is.na(res$live_at)))
   expect_true(all(!is.na(res$course_id)))
 
   first_soft_launches <- soft_launches %>%
-    group_by(course_id) %>%
-    summarise(first_soft_launch_at = min(soft_launch_at, na.rm = T)) %>%
-    collect() %>%
+    dplyr::group_by(course_id) %>%
+    dplyr::summarise(first_soft_launch_at = min(soft_launch_at, na.rm = T)) %>%
+    dplyr::collect() %>%
     inner_join(res, by = "course_id")
 
   expect_equal(first_soft_launches$first_soft_launch_at, first_soft_launches$soft_launch_at)
@@ -46,7 +46,7 @@ test_that("after_join works for out-of-memory tables with mode = inner and type 
                     by_time = c("soft_launch_at" = "live_at"),
                     mode = "inner",
                     type = "last-firstafter") %>%
-    collect()
+    dplyr::collect()
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("course_id", "soft_launch_at", "live_at"))
@@ -79,14 +79,14 @@ test_that("after_join works for out-of-memory tables with mode = anti and type =
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("course_id", "soft_launch_at"))
-  expect_equal(length(res$course_id), n_distinct(res$course_id))
+  expect_equal(length(res$course_id), dplyr::n_distinct(res$course_id))
   expect_true(nrow(res) >= 1)
   expect_true(all(!is.na(res$soft_launch_at)))
   expect_true(all(!is.na(res$course_id)))
 
   hard_launches_in_res <- hard_launches %>%
-    filter(course_id %in% res$course_id) %>%
-    collect()
+    dplyr::filter(course_id %in% res$course_id) %>%
+    dplyr::collect()
 
   expect_equal(nrow(hard_launches_in_res), 0)
 })
@@ -109,8 +109,8 @@ test_that("after_join works for out-of-memory tables with mode = semi and type =
   expect_true(all(!is.na(res$course_id)))
 
   hard_launches_in_res <- hard_launches %>%
-    filter(course_id %in% res$course_id) %>%
-    collect()
+    dplyr::filter(course_id %in% res$course_id) %>%
+    dplyr::collect()
 
   expect_equal(n_distinct(hard_launches_in_res$course_id), nrow(res))
 })

@@ -1,7 +1,7 @@
 context("first-first joining")
 library(dplyr)
 
-landed <- tribble(
+landed <- tibble::tribble(
   ~user_id, ~timestamp,
   1, "2018-07-01",
   2, "2018-07-01",
@@ -15,7 +15,7 @@ landed <- tribble(
 ) %>%
   mutate(timestamp = as.Date(timestamp))
 
-registered <- tribble(
+registered <- tibble::tribble(
   ~user_id, ~timestamp,
   1, "2018-07-02",
   3, "2018-07-02",
@@ -35,7 +35,7 @@ test_that("after_join works with mode = inner and type = first-first", {
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp.x", "timestamp.y"))
   expect_true(all(res$timestamp.y >= res$timestamp.x))
-  expect_equal(length(res$user_id), n_distinct(res$user_id))
+  expect_equal(length(res$user_id), dplyr::n_distinct(res$user_id))
   expect_true(nrow(res) >= 4)
   expect_true(1 %in% res$user_id)
   expect_true(all(!is.na(res$timestamp.x)))
@@ -67,7 +67,7 @@ test_that("after_join works with mode = right and type = first-first", {
   expect_equal(names(res), c("user_id", "timestamp.x", "timestamp.y"))
   expect_true(all(res$timestamp.y >= res$timestamp.x | is.na(res$timestamp.x)))
   expect_equal(length(res$user_id), n_distinct(res$user_id))
-  expect_equal(nrow(res), n_distinct(registered$user_id))
+  expect_equal(nrow(res), dplyr::n_distinct(registered$user_id))
   expect_true(1 %in% res$user_id)
   expect_true(all(!is.na(res$timestamp.y)))
   expect_true(any(is.na(res$timestamp.x)))
@@ -109,8 +109,8 @@ test_that("after_join works with mode = full and type = first-first", {
   expect_true(all(res$timestamp.y >= res$timestamp.x |
                     is.na(res$timestamp.x) |
                     is.na(res$timestamp.y)))
-  expect_gt(nrow(res), n_distinct(landed$user_id))
-  expect_gt(nrow(res), n_distinct(registered$user_id))
+  expect_gt(nrow(res), dplyr::n_distinct(landed$user_id))
+  expect_gt(nrow(res), dplyr::n_distinct(registered$user_id))
   expect_true(any(is.na(res$timestamp.y)))
   expect_true(any(is.na(res$timestamp.x)))
   expect_true(all(!is.na(res$user_id)))

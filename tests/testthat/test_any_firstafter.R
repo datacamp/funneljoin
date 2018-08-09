@@ -1,7 +1,7 @@
 context("first-firstafter joining")
 library(dplyr)
 
-landed <- tribble(
+landed <- tibble::tribble(
   ~user_id, ~timestamp,
   1, "2018-07-01",
   2, "2018-07-01",
@@ -15,7 +15,7 @@ landed <- tribble(
 ) %>%
   mutate(timestamp = as.Date(timestamp))
 
-registered <- tribble(
+registered <- tibble::tribble(
   ~user_id, ~timestamp,
   1, "2018-07-02",
   3, "2018-07-02",
@@ -114,8 +114,8 @@ test_that("after_join works with mode = full and type = any-firstafter", {
   expect_true(all(res$timestamp.y >= res$timestamp.x |
                     is.na(res$timestamp.x) |
                     is.na(res$timestamp.y)))
-  expect_gt(nrow(res), n_distinct(registered$user_id))
-  expect_gt(nrow(res), n_distinct(landed$user_id))
+  expect_gt(nrow(res), dplyr::n_distinct(registered$user_id))
+  expect_gt(nrow(res), dplyr::n_distinct(landed$user_id))
   expect_true(any(is.na(res$timestamp.x)))
   expect_true(any(is.na(res$timestamp.y)))
   expect_true(all(!is.na(res$user_id)))
