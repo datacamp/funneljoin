@@ -9,7 +9,7 @@
 #' @param mode The method used to join: "inner", "full", "anti", "semi", "right", "left"
 #' @param type The type of funnel used to distinguish between event pairs,
 #' such as "first-first", "last-first", "any-firstafter". See details for more.
-#'
+#' @importFrom magrittr %>%
 #' @details TODO
 #'
 #'
@@ -97,7 +97,7 @@ after_join <- function(x,
     mutate(..idx = row_number())
 
   y_i <- y %>%
-    mutate(..idy = row_number())
+    dplyr::mutate(..idy = row_number())
 
 
   if (type_x %in% c("first", "last")) {
@@ -122,8 +122,8 @@ after_join <- function(x,
 
   # Get all the matching rows
   pairs <- x_i %>%
-    inner_join(y_i, by = user_xy) %>%
-    filter(!!sym(time_xy$x) <= !!sym(time_xy$y))
+    dplyr::inner_join(y_i, by = user_xy) %>%
+    dplyr::filter(!!sym(time_xy$x) <= !!sym(time_xy$y))
 
   if (type_y == "firstafter") {
     pairs <- pairs %>%
@@ -133,7 +133,7 @@ after_join <- function(x,
   }
 
   pairs <- pairs %>%
-    select(..idx, ..idy)
+    dplyr::select(..idx, ..idy)
 
   join_func <- switch(mode,
                       inner = inner_join,
@@ -152,11 +152,11 @@ after_join <- function(x,
     ret <- x_i %>%
       join_func(pairs, by = "..idx") %>%
       join_func(y_i, by = c(by_user, "..idy" = "..idy")) %>%
-      select(-..idx, -..idy)
+      dplyr::select(-..idx, -..idy)
   } else if (mode %in% c("semi", "anti")) {
     ret <- x_i %>%
       join_func(pairs, by = "..idx") %>%
-      select(-..idx)
+      dplyr::select(-..idx)
   }
 
   ret
