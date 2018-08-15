@@ -9,7 +9,7 @@
 #' @param mode The method used to join: "inner", "full", "anti", "semi", "right", "left"
 #' @param type The type of funnel used to distinguish between event pairs,
 #' such as "first-first", "last-first", "any-firstafter". See details for more.
-#' @param dt the datatime difference for gap join
+#' @param dt the datetime difference for gap join
 #' @importFrom magrittr %>%
 #' @details TODO
 #'
@@ -183,42 +183,42 @@ after_join <- function(x,
 
 #' @rdname after_join
 #' @export
-after_inner_join <- function(x, y, by_time, by_user, type = "first-first") {
+after_inner_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
   after_join(x, y, by_time, by_user,
-             mode = "inner", type = type)
+             mode = "inner", type = type, dt = dt)
 }
 
 #' @rdname after_join
 #' @export
-after_left_join <- function(x, y, by_time, by_user, type = "first-first") {
+after_left_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
   after_join(x, y, by_time, by_user,
-             mode = "left", type = type)
+             mode = "left", type = type, dt = dt)
 }
 
 #' @rdname after_join
 #' @export
-after_right_join <- function(x, y, by_time, by_user, type = "first-first") {
+after_right_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
   after_join(x, y, by_time, by_user,
-             mode = "right", type = type)
+             mode = "right", type = type, dt = dt)
 }
 
 #' @rdname after_join
 #' @export
-after_full_join <- function(x, y, by_time, by_user, type = "first-first") {
+after_full_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
   after_join(x, y, by_time, by_user,
              mode = "full", type = type)
 }
 
 #' @rdname after_join
 #' @export
-after_anti_join <- function(x, y, by_time, by_user, type = "first-first") {
+after_anti_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
   after_join(x, y, by_time, by_user,
-             mode = "anti", type = type)
+             mode = "anti", type = type, dt = dt)
 }
 
 #' @rdname after_join
 #' @export
-after_semi_join <- function(x, y, by_time, by_user, type = "first-first") {
+after_semi_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
   after_join(x, y, by_time, by_user,
-             mode = "semi", type = type)
+             mode = "semi", type = type, dt = dt)
 }
