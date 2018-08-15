@@ -100,7 +100,7 @@ after_join <- function(x,
   time_xy <- dplyr:::common_by(by_time, x, y)
 
   x_i <- x %>%
-    mutate(..idx = row_number())
+    dplyr::mutate(..idx = row_number())
 
   y_i <- y %>%
     dplyr::mutate(..idy = row_number())
