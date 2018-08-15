@@ -9,6 +9,7 @@
 #' @param mode The method used to join: "inner", "full", "anti", "semi", "right", "left"
 #' @param type The type of funnel used to distinguish between event pairs,
 #' such as "first-first", "last-first", "any-firstafter". See details for more.
+#' @param dt the datatime difference for gap join
 #' @importFrom magrittr %>%
 #' @details TODO
 #'
