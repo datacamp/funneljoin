@@ -10,7 +10,8 @@
 \alias{after_semi_join}
 \title{Join tables based on one event happening after another}
 \usage{
-after_join(x, y, by_time, by_user, mode = "inner", type = "first-first")
+after_join(x, y, by_time, by_user, mode = "inner",
+  type = "first-first", dt = 10000)
 
 after_inner_join(x, y, by_time, by_user, type = "first-first")
 
@@ -39,6 +40,8 @@ Must be a single column in each tbl.}
 
 \item{type}{The type of funnel used to distinguish between event pairs,
 such as "first-first", "last-first", "any-firstafter". See details for more.}
+
+\item{dt}{the datatime difference for gap join}
 }
 \value{
 A tbl
