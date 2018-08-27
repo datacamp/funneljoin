@@ -11,7 +11,7 @@
 
 distinct_events <- function(.data, time_col, user_col, type) {
   if (inherits(.data, "tbl_lazy")) {
-    desc <- if (type == "first") " DESC" else ""
+    desc <- if (type == "last") " DESC" else ""
     rank_sql <- dplyr::sql(glue::glue('ROW_NUMBER() OVER (PARTITION BY "{ user_col }" ORDER BY "{ time_col }" { desc })'))
 
     ret <- .data %>%
