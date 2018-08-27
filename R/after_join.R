@@ -77,7 +77,7 @@ after_join <- function(x,
 
   types <- stringr::str_split(type, '\\-')[[1]]
 
-  if (type %in% c("smallestgap", "withingap")) {
+  if (type %in% c("smallestgap", "withingap", "lastbefore-firstafter")) {
     types[1] = "any"
     types[2] = "any"
   }
@@ -149,6 +149,17 @@ after_join <- function(x,
                                  dt = dt,
                                  time_xy = time_xy,
                                  user_xy = user_xy)
+  }
+  if (type == "lastbefore-firstafter") {
+    # pick earliest y, then last x before it
+    pairs <- pairs %>%
+      group_by(!!sym(user_xy$x)) %>%
+      dplyr::filter(!!sym(time_xy$y) == min(!!sym(time_xy$y),
+                                            na.rm = TRUE)) %>%
+      ungroup() %>%
+      distinct_events(user_col = user_xy$x,
+                      time_col = time_xy$x,
+                      type = "last")
   }
 
   pairs <- pairs %>%
