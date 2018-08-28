@@ -102,6 +102,9 @@ test_that("after_join works with mode = semi and type = first-firstafter", {
   expect_true(all(!is.na(res$timestamp)))
   expect_true(all(!is.na(res$user_id)))
   expect_true(as.Date("2018-07-10") %in% res$timestamp)
+  expect_equal(filter(res, user_id == 6)$timestamp,
+               as.Date("2018-07-07"))
+
 })
 
 test_that("after_join works with mode = full and type = first-firstafter", {
