@@ -38,10 +38,6 @@ You can install the development version from [GitHub](https://github.com/) with:
 devtools::install_github("datacamp/funneljoin")
 ```
 
-## Rules 
-- If type_x is "last" or "first", then a right join has the same number of rows as y.
-- If type_y is "last", "first", or "firstafter", then a left join has the same number of rows as x. 
-
 ## Types of funnels
 Paired funneljoins can be any combination of `first`, `last`, `any`, and `lastbefore`, combined with `first`, `last`,  `any`, and `firstafter`. Some common ones you may use include:  
 * first-first: Take the earliest x and y for each user **before** joining. For example, you want the first time someone entered an experiment, followed by the first time someone **ever** registered. If they registered, entered the experiment, and registered again, you do not want to include that person. 
@@ -53,6 +49,11 @@ Paired funneljoins can be any combination of `first`, `last`, `any`, and `lastbe
 The other main types of funneljoins are gap joins. These take into account the time difference between events. There are currently two types:  
 * smallestgap: Take the smallest x-y gap (in tie, earliest).
 * withingap: Take all x-y pairs with a gap of less than dt (all ad clicks followed by a course start within an hour). 
+
+## Rules 
+Some rules to keep in mind: 
+- If type_x is "last" or "first", then a right join has the same number of rows as y.
+- If type_y is "last", "first", or "firstafter", then a left join has the same number of rows as x. 
 
 ## Reporting bugs and adding features
 
