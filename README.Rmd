@@ -51,8 +51,8 @@ Paired funneljoins can be any combination of `first`, `last`, `any`, and `lastbe
 
 The other main types of funneljoins are gap joins. These take into account the time difference between events. There are currently two types:  
 
-  - smallestgap: Take the smallest x-y gap (in tie, earliest).
-  - withingap: Take all x-y pairs with a gap of less than dt (all ad clicks followed by a course start within an hour). 
+  - **smallestgap**: Take the smallest x-y gap (in tie, earliest).
+  - **withingap**: Take all x-y pairs with a gap of less than dt (all ad clicks followed by a course start within an hour). 
 
 ## Rules 
 Some rules to keep in mind: 
