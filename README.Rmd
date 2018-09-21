@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
+
 **Disclaimer**: funneljoin is still in active development. While we are using it actively at DataCamp, there are still some bugs, especially with remote tables. If you can, we recommend pulling your data to work with locally. 
 
 # Overview
