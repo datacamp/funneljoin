@@ -13,17 +13,17 @@
 after_join(x, y, by_time, by_user, mode = "inner",
   type = "first-first", dt = 10000)
 
-after_inner_join(x, y, by_time, by_user, type = "first-first")
+after_inner_join(x, y, by_time, by_user, type = "first-first", dt)
 
-after_left_join(x, y, by_time, by_user, type = "first-first")
+after_left_join(x, y, by_time, by_user, type = "first-first", dt)
 
-after_right_join(x, y, by_time, by_user, type = "first-first")
+after_right_join(x, y, by_time, by_user, type = "first-first", dt)
 
-after_full_join(x, y, by_time, by_user, type = "first-first")
+after_full_join(x, y, by_time, by_user, type = "first-first", dt)
 
-after_anti_join(x, y, by_time, by_user, type = "first-first")
+after_anti_join(x, y, by_time, by_user, type = "first-first", dt)
 
-after_semi_join(x, y, by_time, by_user, type = "first-first")
+after_semi_join(x, y, by_time, by_user, type = "first-first", dt)
 }
 \arguments{
 \item{x}{A tbl that is the first event to occur in the funnel.}
@@ -41,7 +41,7 @@ Must be a single column in each tbl.}
 \item{type}{The type of funnel used to distinguish between event pairs,
 such as "first-first", "last-first", "any-firstafter". See details for more.}
 
-\item{dt}{the datatime difference for gap join}
+\item{dt}{the datetime difference for gap join}
 }
 \value{
 A tbl

@@ -101,10 +101,10 @@ after_join <- function(x,
   time_xy <- dplyr::common_by(by_time, x, y)
 
   x_i <- x %>%
-    dplyr::mutate(..idx = dplyr::row_number())
+    dplyr::mutate(..idx = row_number())
 
   y_i <- y %>%
-    dplyr::mutate(..idy = dplyr::row_number())
+    dplyr::mutate(..idy = row_number())
 
   if (type_x %in% c("first", "last")) {
     x_i <- x_i %>%
@@ -153,10 +153,10 @@ after_join <- function(x,
   if (type == "lastbefore-firstafter") {
     # pick earliest y, then last x before it
     pairs <- pairs %>%
-      group_by(!!sym(user_xy$x)) %>%
+      dplyr::group_by(!!sym(user_xy$x)) %>%
       dplyr::filter(!!sym(time_xy$y) == min(!!sym(time_xy$y),
                                             na.rm = TRUE)) %>%
-      ungroup() %>%
+      dplyr::ungroup() %>%
       distinct_events(user_col = user_xy$x,
                       time_col = time_xy$x,
                       type = "last")

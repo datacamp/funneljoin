@@ -15,9 +15,6 @@ distinct_events(.data, time_col, user_col, type)
 
 \item{type}{the type of after_join ("first-first", "first-firstafter", etc.)}
 }
-\value{
-
-}
 \description{
 Distinct events
 }
