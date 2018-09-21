@@ -97,14 +97,14 @@ after_join <- function(x,
     stop("Joining on multiple time columns is not supported. Check the by_time argument.")
   }
 
-  user_xy <- dplyr:::common_by(by_user, x, y)
-  time_xy <- dplyr:::common_by(by_time, x, y)
+  user_xy <- dplyr::common_by(by_user, x, y)
+  time_xy <- dplyr::common_by(by_time, x, y)
 
   x_i <- x %>%
-    dplyr::mutate(..idx = row_number())
+    dplyr::mutate(..idx = dplyr::row_number())
 
   y_i <- y %>%
-    dplyr::mutate(..idy = row_number())
+    dplyr::mutate(..idy = dplyr::row_number())
 
   if (type_x %in% c("first", "last")) {
     x_i <- x_i %>%
@@ -166,12 +166,12 @@ after_join <- function(x,
     dplyr::select(..idx, ..idy)
 
   join_func <- switch(mode,
-                      inner = inner_join,
-                      left = left_join,
-                      right = right_join,
-                      full = full_join,
-                      semi = semi_join,
-                      anti = anti_join
+                      inner = dplyr::inner_join,
+                      left = dplyr::left_join,
+                      right = dplyr::right_join,
+                      full = dplyr::full_join,
+                      semi = dplyr::semi_join,
+                      anti = dplyr::anti_join
   )
 
   if (is.null(join_func)) {

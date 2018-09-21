@@ -14,8 +14,8 @@ filter_smallest_gap <- function(pairs, dt, time_xy, user_xy) {
   else {
 
     ret <- pairs %>%
-      dplyr::mutate(..time_diff = difftime(!!sym(time_xy$y), !!sym(time_xy$x), "secs")) %>%
-      dplyr::group_by(!!sym(user_xy$x)) %>%
+      dplyr::mutate(..time_diff = difftime(!!dplyr::sym(time_xy$y), !!dplyr::sym(time_xy$x), "secs")) %>%
+      dplyr::group_by(!!dplyr::sym(user_xy$x)) %>%
       dplyr::filter(..time_diff == min(..time_diff, na.rm = TRUE)) %>%
       dplyr::ungroup()
   }
@@ -36,7 +36,7 @@ filter_within_gap <- function(pairs, dt, time_xy, user_xy) {
   }
   else {
     ret <- pairs %>%
-      dplyr::mutate(..time_diff = difftime(!!sym(time_xy$y), !!sym(time_xy$x), "secs")) %>%
+      dplyr::mutate(..time_diff = difftime(!!dplyr::sym(time_xy$y), !!dplyr::sym(time_xy$x), "secs")) %>%
       dplyr::filter(..time_diff < !!as_seconds(dt))
   }
   ret
