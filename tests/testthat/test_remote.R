@@ -1,5 +1,6 @@
 context("Joining using remote tables")
 skip_on_travis()
+skip_if_not_installed("datacampr")
 library(datacampr)
 
 soft_launches <- tbl_main_course_state_logs() %>%
