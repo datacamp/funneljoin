@@ -129,7 +129,7 @@ after_join <- function(x,
   # Get all the matching rows
   pairs <- x_i %>%
     dplyr::inner_join(y_i, by = user_xy) %>%
-    dplyr::filter(!!sym(time_xy$x) <= !!sym(time_xy$y))
+    dplyr::filter(!!dplyr::sym(time_xy$x) <= !!dplyr::sym(time_xy$y))
 
   if (type_y == "firstafter") {
     pairs <- pairs %>%
@@ -153,8 +153,8 @@ after_join <- function(x,
   if (type == "lastbefore-firstafter") {
     # pick earliest y, then last x before it
     pairs <- pairs %>%
-      dplyr::group_by(!!sym(user_xy$x)) %>%
-      dplyr::filter(!!sym(time_xy$y) == min(!!sym(time_xy$y),
+      dplyr::group_by(!!dplyr::sym(user_xy$x)) %>%
+      dplyr::filter(!!dplyr::sym(time_xy$y) == min(!!dplyr::sym(time_xy$y),
                                             na.rm = TRUE)) %>%
       dplyr::ungroup() %>%
       distinct_events(user_col = user_xy$x,

@@ -18,14 +18,14 @@ distinct_events <- function(.data, time_col, user_col, type) {
   } else {
     if (type == "first") {
       data_sorted <- .data %>%
-        dplyr::arrange(!!sym(time_col))
+        dplyr::arrange(!!dplyr::sym(time_col))
     } else if (type == "last") {
       data_sorted <- .data %>%
-        dplyr::arrange(desc(!!sym(time_col)))
+        dplyr::arrange(desc(!!dplyr::sym(time_col)))
     }
 
     ret <- data_sorted %>%
-      dplyr::distinct(!!sym(user_col), .keep_all = T)
+      dplyr::distinct(!!dplyr::sym(user_col), .keep_all = T)
   }
   ret
 }
