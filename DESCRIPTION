@@ -1,6 +1,6 @@
 Package: funneljoin
 Type: Package
-Title: Join Tables Based on Events Occurring in Sequence in a Funnel
+Title: Join Tables Based on Events Occurring in Sequence
 Version: 0.1.0
 Authors@R: c(
     person("Emily", "Robinson", email = "emily@datacamp.com", role = c("aut", "cre")),
