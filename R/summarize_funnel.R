@@ -11,7 +11,9 @@ summarize_prop_tests <- function(x, ..., ungroup = TRUE) {
     dplyr::filter(dplyr::n() == 2,
            any(alternative.name == "control")) %>%
     dplyr::arrange(alternative.name != "control") %>%
-    dplyr::do(broom::tidy(stats::prop.test(.$nb_conversions, .$nb_starts, conf.level = .9, ...))) %>%
+    dplyr::do(broom::tidy(stats::prop.test(.$nb_conversions,
+                                           .$nb_starts,
+                                           conf.level = .9, ...))) %>%
     dplyr::transmute(control = estimate1,
               treatment = estimate2,
               p_value = p.value,
