@@ -13,12 +13,15 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests:
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 RoxygenNote: 6.1.0
-Imports: 
+Imports:
     dplyr,
     glue,
     stringr,
     tibble,
     magrittr,
     broom
+VignetteBuilder: knitr
