@@ -1,0 +1,232 @@
+---
+title: "Introduction to funneljoin"
+author: "Emily Robinson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to funneljoin}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", 
+  message = FALSE
+)
+```
+
+The goal of funneljoin is to make it easy to analyze behavior funnels. For example, maybe you're interested in finding the people who visit a page and then register. Or you want all the times people click on an item and add it to their cart within 2 days. 
+
+You can do this with funneljoin's `after_join()` function. The arguments are: 
+
+  - `x`: a dataset with the first set of behaviors.
+  - `y`: a dataset with the second set of behaviors.
+  - `by_time`: a character vector to specify the time columns in x and y. Must be a single column in each tbl. Note that this column is used to filter for time y >= time x.
+  - `by_user`: a character vector to specify the user or identity columns in x and y. Must be a single column in each tbl.
+  - `mode`: the method used to join: "inner", "full", "anti", "semi", "right", "left".
+  - `type`: the type of funnel used to distinguish between event pairs, such as "first-first", "last-first", "any-firstafter". See types of funnels.
+  - `dt` (optional): if doing a gap join, either the number of seconds between events or a difftime object. 
+
+There are two types of funneljoins - paired funneljoins and gap funneljoins. 
+
+## Paired funneljoins 
+
+Paired funneljoins can be any combination of `first`, `last`, `any`, and `lastbefore`, combined with `first`, `last`,  `any`, and `firstafter`.
+
+Let's take an example. We'll create two tables, one of landings and one of registrations. Each has a `user_id` and `timestamp` column. 
+
+```{r}
+library(dplyr)
+library(funneljoin)
+```
+
+```{r}
+landed <- tibble::tribble(
+  ~user_id, ~timestamp,
+  1, "2018-07-01",
+  2, "2018-07-01",
+  3, "2018-07-02",
+  4, "2018-07-01",
+  4, "2018-07-04",
+  5, "2018-07-10",
+  5, "2018-07-12",
+  6, "2018-07-07",
+  6, "2018-07-08"
+) %>%
+  mutate(timestamp = as.Date(timestamp))
+
+registered <- tibble::tribble(
+  ~user_id, ~timestamp,
+  1, "2018-07-02",
+  3, "2018-07-02",
+  4, "2018-06-10",
+  4, "2018-07-02",
+  5, "2018-07-11",
+  6, "2018-07-10",
+  6, "2018-07-11",
+  7, "2018-07-07"
+) %>%
+  mutate(timestamp = as.Date(timestamp))
+```
+
+Let's say we wanted to get only the first time people landed and registered. We would use a `first-first inner` join. 
+
+```{r}
+landed %>%
+  after_inner_join(registered, 
+                   by_user = "user_id",
+                   by_time = "timestamp",
+                   type = "first-first")
+```
+
+We now have a dataset of four rows. Notice a few things: 
+
+  - `timestamp.y` is always greater than or equal to `timestamp.x`. This is a condition of `after_join`.
+  - Because it's an `inner` join, we only have users who were in both tables and had a `timestamp.y` that was greater than a `timestamp.x`. 
+  - We only have one entry per user, as we made each table distinct by user, taking only their first landing or registration, before joining
+  - Although user 4 had a registration after a landing ("2018-07-01" landing and "2018-07-02" registration), they are not in the table because their **first** registration was on "2018-06-10", so we only checked if that happened after their first landing. 
+
+## Gap funneljoins 
+
+What if instead we wanted all landing-registration pairs that happened within a 3-day window? We now add the `dt` argument. This takes either a number, which is the number of seconds, or a difftime object. Instead of calculating the number of seconds in 3 days, we'll just make a difftime object. 
+
+```{r}
+landed %>%
+  after_inner_join(registered, 
+                   by_user = "user_id",
+                   by_time = "timestamp",
+                   type = "withingap", 
+                   dt = as.difftime(4, units = "days"))
+```
+
+We now have a dataset of 7 rows. Notice a few things: 
+
+  - As always, `timestamp.y` is greater than or equal to `timestamp.x`. 
+  - User 6 appears three times, as they have six landing-registration pairs where the time difference is less than four days.
+  - Just as before, because it's an `inner` join, we only have users who were in both tables and had a `timestamp.y` that was greater than a `timestamp.x`. 
+
+## Left Joins
+
+Left joins are very handy when you want to know what percentage of people who did X did Y afterward. For example, we may have an experiment where we want to know "what percentage of people registered after entering the experiment"?
+
+In this case, we'd use a `first-firstafter` left join - we want to get a person's first experiment start and then their first registration afterward, if they have one. Let's add another column to our experiment starts table, which experiment variant someone was in. 
+
+```{r}
+experiment_starts <- tibble::tribble(
+  ~user_id, ~timestamp, ~ alternative.name,
+  1, "2018-07-01", "control",
+  2, "2018-07-01", "treatment",
+  3, "2018-07-02", "control",
+  4, "2018-07-01", "control",
+  4, "2018-07-04", "control",
+  5, "2018-07-10", "treatment",
+  5, "2018-07-12", "treatment",
+  6, "2018-07-07", "treatment",
+  6, "2018-07-08", "treatment"
+) %>%
+  mutate(timestamp = as.Date(timestamp))
+
+experiment_registrations <- tibble::tribble(
+  ~user_id, ~timestamp, 
+  1, "2018-07-02", 
+  3, "2018-07-02", 
+  4, "2018-06-10", 
+  4, "2018-07-02", 
+  5, "2018-07-11", 
+  6, "2018-07-10", 
+  6, "2018-07-11", 
+  7, "2018-07-07"
+) %>%
+  mutate(timestamp = as.Date(timestamp))
+```
+
+```{r}
+experiment_starts %>%
+  after_left_join(experiment_registrations, 
+                   by_user = "user_id",
+                   by_time = "timestamp",
+                   type = "first-firstafter")
+```
+
+We now have an entry for each user in the experiment_starts table, which has their time of their first registration afterward or NA.
+
+```{r}
+experiment_starts %>%
+  after_left_join(experiment_registrations, 
+                   by_user = "user_id",
+                   by_time = "timestamp",
+                   type = "first-firstafter") %>% 
+  summarize_conversions()
+```
+
+```{r}
+for_conversion <- tibble::tribble(
+  ~"alternative.name", ~"timestamp.x", ~"timestamp.y", ~"type", 
+  "control", "2018-07-01", NA, "click",
+  "control", "2018-07-02", NA, "click",
+  "control", "2018-07-03", "2018-07-05", "click",
+  "treatment", "2018-07-01", "2018-07-05", "click",
+  "treatment", "2018-07-01", "2018-07-05", "click",
+  "control", "2018-07-01", NA, "purchase",
+  "control", "2018-07-02", NA, "purchase",
+  "control", "2018-07-03", NA, "purchase",
+  "treatment", "2018-07-01", NA, "purchase",
+  "treatment", "2018-07-01", "2018-07-05", "purchase"
+)
+
+for_conversion %>%
+  group_by(type) %>%
+  summarize_conversions()
+
+# works for if you group by type, but it doesn't work for if all are NA. We want a column with zero. 
+```
+
+```{r}
+for_conversion %>%
+  group_by(type) %>%
+  dplyr::count(alternative.name, !is.na(timestamp.y)) %>%
+  dplyr::add_count(alternative.name, wt = n) %>%
+    dplyr::rename(nb_starts = nn, nb_conversions = n) %>%
+    ungroup() %>%
+    dplyr::filter(`!is.na(timestamp.y)`) %>%
+    dplyr::select(-`!is.na(timestamp.y)`)  %>%
+      tidyr::complete(type, alternative.name, fill = list(nb_conversions = 0)) 
+
+# need to get nb_starts in there too. 
+```
+
+
+```{r}
+for_stimpe <- tibble::tribble(
+  ~"alternative.name", ~"timestamp.x", ~"timestamp.y", 
+  "control", "2018-07-01", NA, 
+  "control", "2018-07-02", NA, 
+  "control", "2018-07-03", NA, 
+  "treatment", "2018-07-01", "2018-07-05", 
+  "treatment", "2018-07-01", "2018-07-05", 
+  "control", "2018-07-01", NA, 
+  "control", "2018-07-02", NA, 
+  "control", "2018-07-03", NA, 
+  "treatment", "2018-07-01", NA, 
+  "treatment", "2018-07-01", "2018-07-05"
+)
+
+for_stimpe %>%
+    summarize_conversions()
+```
+
+```{r}
+for_stimpe %>%
+  dplyr::count(alternative.name, !is.na(timestamp.y)) %>%
+    dplyr::add_count(alternative.name, wt = n) %>%
+    dplyr::rename(nb_starts = nn, nb_conversions = n) %>%
+      tidyr::complete(alternative.name, 
+                      `!is.na(timestamp.y)`, 
+                      fill = list(nb_conversions = 0))
+
+# need to get nb_starts in there too. 
+```
+
+
