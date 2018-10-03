@@ -45,6 +45,69 @@ The other main types of funneljoins are gap joins. These take into account the t
 -   **smallestgap**: Take the smallest x-y gap (in tie, earliest).
 -   **withingap**: Take all x-y pairs with a gap of less than dt (all ad clicks followed by a course start within an hour).
 
+See the vignette for more.
+
+### Example
+
+``` r
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+library(funneljoin)
+```
+
+``` r
+landed <- tibble::tribble(
+  ~user_id, ~timestamp,
+  1, "2018-07-01",
+  2, "2018-07-01",
+  3, "2018-07-02",
+  4, "2018-07-01",
+  4, "2018-07-04",
+  5, "2018-07-10",
+  5, "2018-07-12",
+  6, "2018-07-07",
+  6, "2018-07-08"
+) %>%
+  mutate(timestamp = as.Date(timestamp))
+
+registered <- tibble::tribble(
+  ~user_id, ~timestamp,
+  1, "2018-07-02",
+  3, "2018-07-02",
+  4, "2018-06-10",
+  4, "2018-07-02",
+  5, "2018-07-11",
+  6, "2018-07-10",
+  6, "2018-07-11",
+  7, "2018-07-07"
+) %>%
+  mutate(timestamp = as.Date(timestamp))
+```
+
+Let's say we wanted to get only the first time people landed and registered. We would use a `first-first inner` join.
+
+``` r
+landed %>%
+  after_inner_join(registered, 
+                   by_user = "user_id",
+                   by_time = "timestamp",
+                   type = "first-first")
+#> # A tibble: 4 x 3
+#>   user_id timestamp.x timestamp.y
+#>     <dbl> <date>      <date>     
+#> 1       1 2018-07-01  2018-07-02 
+#> 2       3 2018-07-02  2018-07-02 
+#> 3       6 2018-07-07  2018-07-10 
+#> 4       5 2018-07-10  2018-07-11
+```
+
 Rules
 -----
 
@@ -52,6 +115,34 @@ Some rules to keep in mind:
 
 -   If type\_x is "last" or "first", then a right join has the same number of rows as y.
 -   If type\_y is "last", "first", or "firstafter", then a left join has the same number of rows as x.
+
+### Summarizing funnels
+
+Funneljoin also contains to functions to summarize funnels: `summarize_conversions` and `summarize_prop_tests()`.
+
+`summarize_prop_tests()` takes in a dataset with at least three columns - `alternative.name`, `nb_starts`, and `nb_conversions`. It can also have an additional column that is the type of conversion - for example, you could have clicks and purchases. Each type of conversion can only have two rows, one `control` and one other group. If you have that additional column, you need to group by it first.
+
+It returns a dataset with X columns - `control` (the conversion rate of the control group), `treatment` (the conversion rate of the treatment group), `p_value` of the proportion test, `pct_change` (the percentage difference between the control and treatment group), `pct_change_low`, and `pct_change_high`. If you had a type column, it will also be in the output.
+
+``` r
+tbl <- tibble::tribble(
+  ~ alternative.name, ~nb_starts, ~nb_conversions, ~type,
+  "control", 500, 200, "purchase",
+  "treatment", 500, 100, "purchase", 
+  "control", 500, 360, "click",
+  "treatment", 500, 375, "click"
+)
+
+tbl %>%
+  group_by(type) %>%
+  summarize_prop_tests()
+#> # A tibble: 2 x 7
+#>   type  control treatment  p_value pct_change pct_change_low
+#>   <chr>   <dbl>     <dbl>    <dbl>      <dbl>          <dbl>
+#> 1 click    0.72      0.75 3.16e- 1     0.0417        -0.0248
+#> 2 purc…    0.4       0.2  8.39e-12    -0.5           -0.621 
+#> # ... with 1 more variable: pct_change_high <dbl>
+```
 
 Reporting bugs and adding features
 ----------------------------------
