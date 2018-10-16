@@ -9,6 +9,8 @@ summarize_prop_tests(x, ..., ungroup = TRUE)
 \arguments{
 \item{x}{a data.frame}
 
+\item{...}{any additional arguments}
+
 \item{ungroup}{whether the table needs to be ungrouped}
 }
 \value{
