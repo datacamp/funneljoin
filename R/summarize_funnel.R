@@ -14,16 +14,22 @@ summarize_prop_tests <- function(x, ..., ungroup = TRUE) {
     stop("Need a column called alternative.name")
   }
 
+  prepared <- x %>%
+    dplyr::filter(dplyr::n() == 2) %>%
+    dplyr::arrange(alternative.name)
 
-  ret <- x %>%
-    dplyr::filter(dplyr::n() == 2,
-           any(alternative.name == "control")) %>%
-    dplyr::arrange(alternative.name != "control") %>%
+  alternatives <- sort(unique(prepared$alternative.name))
+
+  if (length(alternatives) != 2) {
+    stop("Must have exactly two alternatives")
+  }
+
+  ret <- prepared %>%
     dplyr::do(broom::tidy(stats::prop.test(.$nb_conversions,
                                            .$nb_starts,
                                            conf.level = .9, ...))) %>%
-    dplyr::transmute(control = estimate1,
-              treatment = estimate2,
+    transmute(estimate1,
+              estimate2,
               p_value = p.value,
               conf.low,
               conf.high)
@@ -32,29 +38,34 @@ summarize_prop_tests <- function(x, ..., ungroup = TRUE) {
     ret <- ungroup(ret)
   }
 
+  vars <- c("estimate1", "estimate2")
+  names(vars) <- alternatives
+
   ret <- ret %>%
-    dplyr::mutate(pct_change = (treatment - control) / control,
-           pct_change_low = -conf.high / control,
-           pct_change_high = -conf.low / control) %>%
-    dplyr::select(-conf.low, -conf.high)
+    dplyr::mutate(pct_change = (estimate2 - estimate1) / estimate1,
+           pct_change_low = -conf.high / estimate1,
+           pct_change_high = -conf.low / estimate1) %>%
+    dplyr::select(-conf.low, -conf.high) %>%
+    rename(!!vars)
 
   ret
 }
 
 #' Summarize Left-joined table into conversion count
 #'
-#' @param x
+#' @param x a table with one row per user
+#' @param time_col_y the name of the second event time column
 #'
 #' @return a table with three columns, `nb_starts`, `nb_conversions`, and `alternative.name`
 #' @export
-summarize_conversions <- function(x) {
+summarize_conversions <- function(x, time_col_y = timestamp.y) {
+
+  var_enq <- enquo(time_col_y)
 
   ret <- x %>%
-    dplyr::count(alternative.name, !is.na(timestamp.y)) %>%
-    dplyr::add_count(alternative.name, wt = n) %>%
-    dplyr::rename(nb_starts = nn, nb_conversions = n) %>%
-    dplyr::filter(`!is.na(timestamp.y)`) %>%
-    dplyr::select(-`!is.na(timestamp.y)`)
+    dplyr::group_by(alternative.name, add = TRUE) %>%
+    dplyr::summarise(nb_starts = n(),
+                     nb_conversions = sum(!is.na(!!var_enq)))
 
   ret
 }
