@@ -1,7 +1,7 @@
 #' Summarise after join funnel with proportion test
 #'
 #' @param x a data.frame
-#' @param ...
+#' @param ... any additional arguments
 #' @param ungroup whether the table needs to be ungrouped
 #'
 #' @return a data.frame with proportion test results
@@ -65,7 +65,7 @@ summarize_conversions <- function(x, time_col_y = timestamp.y) {
   if (inherits(x, "tbl_lazy")) {
     ret <- x %>%
       dplyr::group_by(alternative.name, add = TRUE) %>%
-      dplyr::summarise(nb_starts = dplyr::n(),
+      dplyr::summarise(nb_starts = n(),
                        nb_conversions = COUNT(!!var_enq))
   }
 
