@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-**Disclaimer**: funneljoin is still in active development. While we are using it actively at DataCamp, there are still some bugs, especially with remote tables. If you can, we recommend pulling your data to work with locally.
+**Disclaimer**: funneljoin is still in active development. While we are using it at DataCamp, there are still some bugs, especially with remote tables. If you can, we recommend pulling your data to work with locally. And **do not** do multiple funnel joins in a row remotely (it's fine locally).
 
 Overview
 ========
@@ -91,7 +91,7 @@ registered <- tibble::tribble(
   mutate(timestamp = as.Date(timestamp))
 ```
 
-Let's say we wanted to get only the first time people landed and registered. We would use a `first-first inner` join.
+Let's say we wanted to get only the first time people landed and registered. We would use a `first-first inner` join:
 
 ``` r
 landed %>%
@@ -119,9 +119,9 @@ Some rules to keep in mind:
 Summarizing funnels
 -------------------
 
-Funneljoin also contains to functions to summarize funnels: `summarize_conversions` and `summarize_prop_tests()`.
+Funneljoin also contains to functions to summarize funnels: `summarize_conversions` (see the vignette) and `summarize_prop_tests()`.
 
-`summarize_prop_tests()` takes in a dataset with at least three columns - `alternative.name`, `nb_starts`, and `nb_conversions`. It can also have an additional column that is the type of conversion - for example, you could have clicks and purchases. Each type of conversion can only have two rows, one `control` and one other group. If you have that additional column, you need to group by it first.
+`summarize_prop_tests()` takes in a dataset with at least three columns - `alternative.name`, `nb_starts`, and `nb_conversions`. It can also have an additional column that is the type of conversion - for example, you could have clicks and purchases. Each type of conversion can only have two rows, one `control` and one other group. If you have that additional column of type, you need to group by it first.
 
 It returns a dataset with X columns:
 
@@ -137,9 +137,9 @@ If you had a type column, it will also be in the output.
 tbl <- tibble::tribble(
   ~ alternative.name, ~nb_starts, ~nb_conversions, ~type,
   "control", 500, 200, "purchase",
-  "www", 500, 100, "purchase", 
+  "treatment", 500, 100, "purchase", 
   "control", 500, 360, "click",
-  "www", 500, 375, "click"
+  "treatment", 500, 375, "click"
 )
 
 tbl %>%
