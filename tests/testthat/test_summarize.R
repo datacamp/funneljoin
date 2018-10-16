@@ -1,5 +1,6 @@
 context("summarize functions")
 library(dplyr)
+library(datacampr)
 
 simple_example <- tibble::tribble(
   ~"alternative.name", ~"timestamp.x", ~"timestamp.y",
@@ -19,11 +20,12 @@ simple_summarized_conversion <- simple_example %>%
   summarize_conversions(timestamp.y)
 
 test_that("summarize_conversions works with when group has no conversions", {
-  expect_true(nrow(simple_summarized_conversion == 2))
-  expect_gt(10, tbl_views_snowplow_experiment_starts() %>%
+  expect_equal(nrow(simple_summarized_conversion), 2)
+  expect_gt(tbl_views_snowplow_experiment_starts() %>%
               summarize_conversions(user_id) %>%
               filter(nb_conversions == 0) %>%
-              count())
+              collect() %>%
+              nrow(), 10)
 })
 
 
