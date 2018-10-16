@@ -161,9 +161,11 @@ experiment_starts %>%
   summarize_conversions()
 ```
 
+It also works if we have multiple types of conversions, specified by a column. Just group by that column before doing `summarize_conversions`. You can also specify the name of your second timestamp column with the argument `time_col_y` (make sure you enter it unquoted). 
+
 ```{r}
 for_conversion <- tibble::tribble(
-  ~"alternative.name", ~"timestamp.x", ~"timestamp.y", ~"type", 
+  ~"alternative.name", ~"first_event", ~"last_event", ~"type", 
   "control", "2018-07-01", NA, "click",
   "control", "2018-07-02", NA, "click",
   "control", "2018-07-03", "2018-07-05", "click",
@@ -178,55 +180,5 @@ for_conversion <- tibble::tribble(
 
 for_conversion %>%
   group_by(type) %>%
-  summarize_conversions()
-
-# works for if you group by type, but it doesn't work for if all are NA. We want a column with zero. 
+  summarize_conversions(time_col_y = last_event)
 ```
-
-```{r}
-for_conversion %>%
-  group_by(type) %>%
-  dplyr::count(alternative.name, !is.na(timestamp.y)) %>%
-  dplyr::add_count(alternative.name, wt = n) %>%
-    dplyr::rename(nb_starts = nn, nb_conversions = n) %>%
-    ungroup() %>%
-    dplyr::filter(`!is.na(timestamp.y)`) %>%
-    dplyr::select(-`!is.na(timestamp.y)`)  %>%
-      tidyr::complete(type, alternative.name, fill = list(nb_conversions = 0)) 
-
-# need to get nb_starts in there too. 
-```
-
-
-```{r}
-for_stimpe <- tibble::tribble(
-  ~"alternative.name", ~"timestamp.x", ~"timestamp.y", 
-  "control", "2018-07-01", NA, 
-  "control", "2018-07-02", NA, 
-  "control", "2018-07-03", NA, 
-  "treatment", "2018-07-01", "2018-07-05", 
-  "treatment", "2018-07-01", "2018-07-05", 
-  "control", "2018-07-01", NA, 
-  "control", "2018-07-02", NA, 
-  "control", "2018-07-03", NA, 
-  "treatment", "2018-07-01", NA, 
-  "treatment", "2018-07-01", "2018-07-05"
-)
-
-for_stimpe %>%
-    summarize_conversions()
-```
-
-```{r}
-for_stimpe %>%
-  dplyr::count(alternative.name, !is.na(timestamp.y)) %>%
-    dplyr::add_count(alternative.name, wt = n) %>%
-    dplyr::rename(nb_starts = nn, nb_conversions = n) %>%
-      tidyr::complete(alternative.name, 
-                      `!is.na(timestamp.y)`, 
-                      fill = list(nb_conversions = 0))
-
-# need to get nb_starts in there too. 
-```
-
-
