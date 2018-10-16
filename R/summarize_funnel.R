@@ -62,10 +62,20 @@ summarize_conversions <- function(x, time_col_y = timestamp.y) {
 
   var_enq <- enquo(time_col_y)
 
-  ret <- x %>%
-    dplyr::group_by(alternative.name, add = TRUE) %>%
-    dplyr::summarise(nb_starts = n(),
-                     nb_conversions = sum(!is.na(!!var_enq)))
+  if (inherits(x, "tbl_lazy")) {
+    ret <- x %>%
+      dplyr::group_by(alternative.name, add = TRUE) %>%
+      dplyr::summarise(nb_starts = n(),
+                       nb_conversions = COUNT(!!var_enq))
+  }
+
+  else {
+    ret <- x %>%
+      dplyr::group_by(alternative.name, add = TRUE) %>%
+      dplyr::summarise(nb_starts = n(),
+                       nb_conversions = sum(!is.na(!!var_enq)))
+  }
 
   ret
 }
+
