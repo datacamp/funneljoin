@@ -108,6 +108,52 @@ landed %>%
 #> 4       5 2018-07-10  2018-07-11
 ```
 
+If your time and user columns have different names, you can work with that too:
+
+``` r
+landed <- tibble::tribble(
+  ~user_id_x, ~landed_at,
+  1, "2018-07-01",
+  2, "2018-07-01",
+  3, "2018-07-02",
+  4, "2018-07-01",
+  4, "2018-07-04",
+  5, "2018-07-10",
+  5, "2018-07-12",
+  6, "2018-07-07",
+  6, "2018-07-08"
+) %>%
+  mutate(landed_at = as.Date(landed_at))
+
+registered <- tibble::tribble(
+  ~user_id_y, ~registered_at,
+  1, "2018-07-02",
+  3, "2018-07-02",
+  4, "2018-06-10",
+  4, "2018-07-02",
+  5, "2018-07-11",
+  6, "2018-07-10",
+  6, "2018-07-11",
+  7, "2018-07-07"
+) %>%
+  mutate(registered_at = as.Date(registered_at))
+```
+
+``` r
+landed %>%
+  after_inner_join(registered, 
+                   by_user = c("user_id_x" = "user_id_y"),
+                   by_time = c("landed_at" = "registered_at"),
+                   type = "first-first")
+#> # A tibble: 4 x 3
+#>   user_id_x landed_at  registered_at
+#>       <dbl> <date>     <date>       
+#> 1         1 2018-07-01 2018-07-02   
+#> 2         3 2018-07-02 2018-07-02   
+#> 3         6 2018-07-07 2018-07-10   
+#> 4         5 2018-07-10 2018-07-11
+```
+
 Rules
 -----
 
