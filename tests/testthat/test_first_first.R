@@ -30,7 +30,8 @@ registered <- tibble::tribble(
 
 test_that("after_join works with mode = inner and type = first-first", {
 
-  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"))
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"),
+                    type = "first-first", mode = "inner")
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp.x", "timestamp.y"))
@@ -46,7 +47,7 @@ test_that("after_join works with mode = inner and type = first-first", {
 
 test_that("after_join works with mode = left and type = first-first", {
 
-  res <- after_join(landed, registered, mode = "left", by_user = "user_id", by_time = c("timestamp" = "timestamp"))
+  res <- after_join(landed, registered, mode = "left", by_user = "user_id", by_time = c("timestamp" = "timestamp"), type = "first-first")
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp.x", "timestamp.y"))
@@ -61,7 +62,7 @@ test_that("after_join works with mode = left and type = first-first", {
 
 test_that("after_join works with mode = right and type = first-first", {
 
-  res <- after_join(landed, registered, mode = "right", by_user = "user_id", by_time = c("timestamp" = "timestamp"))
+  res <- after_join(landed, registered, mode = "right", by_user = "user_id", by_time = c("timestamp" = "timestamp"), type = "first-first")
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp.x", "timestamp.y"))
@@ -76,7 +77,7 @@ test_that("after_join works with mode = right and type = first-first", {
 
 test_that("after_join works with mode = anti and type = first-first", {
 
-  res <- after_join(landed, registered, mode = "anti", by_user = "user_id", by_time = c("timestamp" = "timestamp"))
+  res <- after_join(landed, registered, mode = "anti", by_user = "user_id", by_time = c("timestamp" = "timestamp"), type = "first-first")
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp"))
@@ -89,7 +90,7 @@ test_that("after_join works with mode = anti and type = first-first", {
 
 test_that("after_join works with mode = semi and type = first-first", {
 
-  res <- after_join(landed, registered, mode = "semi", by_user = "user_id", by_time = c("timestamp" = "timestamp"))
+  res <- after_join(landed, registered, mode = "semi", by_user = "user_id", by_time = c("timestamp" = "timestamp"), type = "first-first")
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp"))
@@ -102,7 +103,7 @@ test_that("after_join works with mode = semi and type = first-first", {
 
 test_that("after_join works with mode = full and type = first-first", {
 
-  res <- after_join(landed, registered, mode = "full", by_user = "user_id", by_time = c("timestamp" = "timestamp"))
+  res <- after_join(landed, registered, mode = "full", by_user = "user_id", by_time = c("timestamp" = "timestamp"), type = "first-first")
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp.x", "timestamp.y"))
