@@ -13,7 +13,7 @@ summarize_prop_tests <- function(x, ..., ungroup = TRUE) {
   if (!('alternative.name' %in% colnames(x))) {
     stop("Need a column called alternative.name")
   }
-  if (inherits(.data, "tbl_lazy")) {
+  if (inherits(x, "tbl_lazy")) {
     stop("Needs to be a local (not remote) table")
   }
 
