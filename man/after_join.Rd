@@ -11,19 +11,19 @@
 \title{Join tables based on one event happening after another}
 \usage{
 after_join(x, y, by_time, by_user, mode = "inner",
-  type = "first-first", dt = 10000)
+  type = "first-first", max_gap = NULL)
 
-after_inner_join(x, y, by_time, by_user, type = "first-first", dt)
+after_inner_join(x, y, by_time, by_user, type, max_gap = NULL)
 
-after_left_join(x, y, by_time, by_user, type = "first-first", dt)
+after_left_join(x, y, by_time, by_user, type, max_gap = NULL)
 
-after_right_join(x, y, by_time, by_user, type = "first-first", dt)
+after_right_join(x, y, by_time, by_user, type, max_gap = NULL)
 
-after_full_join(x, y, by_time, by_user, type = "first-first", dt)
+after_full_join(x, y, by_time, by_user, type, max_gap = NULL)
 
-after_anti_join(x, y, by_time, by_user, type = "first-first", dt)
+after_anti_join(x, y, by_time, by_user, type, max_gap = NULL)
 
-after_semi_join(x, y, by_time, by_user, type = "first-first", dt)
+after_semi_join(x, y, by_time, by_user, type, max_gap = NULL)
 }
 \arguments{
 \item{x}{A tbl that is the first event to occur in the funnel.}
@@ -41,7 +41,7 @@ Must be a single column in each tbl.}
 \item{type}{The type of funnel used to distinguish between event pairs,
 such as "first-first", "last-first", "any-firstafter". See details for more.}
 
-\item{dt}{the datetime difference for gap join}
+\item{max_gap}{the maximum gap between events. Can be a integer representing the number of seconds or a difftime object}
 }
 \value{
 A tbl

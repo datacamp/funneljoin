@@ -9,7 +9,7 @@
 #' @param mode The method used to join: "inner", "full", "anti", "semi", "right", "left"
 #' @param type The type of funnel used to distinguish between event pairs,
 #' such as "first-first", "last-first", "any-firstafter". See details for more.
-#' @param dt the datetime difference for gap join
+#' @param max_gap the maximum gap between events. Can be a integer representing the number of seconds or a difftime object
 #' @importFrom magrittr %>%
 #' @details TODO
 #'
@@ -73,17 +73,17 @@ after_join <- function(x,
                        by_user,
                        mode = "inner",
                        type = "first-first",
-                       dt = 10000) {
+                       max_gap = NULL) {
 
   types <- stringr::str_split(type, '\\-')[[1]]
 
-  if (type %in% c("smallestgap", "withingap", "lastbefore-firstafter")) {
+  if (type == "lastbefore-firstafter") {
     types[1] = "any"
     types[2] = "any"
   }
 
   if (length(types) != 2) {
-    stop("type argument only supports pairs, 'smallestgap', or 'withingap'.")
+    stop("type argument only supports pairs")
   }
 
   type_x <- match.arg(types[1], c("first", "last", "any"))
@@ -138,18 +138,6 @@ after_join <- function(x,
                       type = "first")
   }
 
-  if (type == "smallestgap") {
-    pairs <- filter_smallest_gap(pairs = pairs,
-                                 dt = dt,
-                                 time_xy = time_xy,
-                                 user_xy = user_xy)
-  }
-  if (type == "withingap") {
-    pairs <- filter_within_gap(pairs = pairs,
-                                 dt = dt,
-                                 time_xy = time_xy,
-                                 user_xy = user_xy)
-  }
   if (type == "lastbefore-firstafter") {
     # pick earliest y, then last x before it
     pairs <- pairs %>%
@@ -160,6 +148,13 @@ after_join <- function(x,
       distinct_events(user_col = user_xy$x,
                       time_col = time_xy$x,
                       type = "last")
+  }
+
+  if (!is.null(max_gap)) {
+    pairs <- filter_within_gap(pairs = pairs,
+                               max_gap = max_gap,
+                               time_xy = time_xy,
+                               user_xy = user_xy)
   }
 
   pairs <- pairs %>%
@@ -194,42 +189,42 @@ after_join <- function(x,
 
 #' @rdname after_join
 #' @export
-after_inner_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
+after_inner_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
   after_join(x, y, by_time, by_user,
-             mode = "inner", type = type, dt = dt)
+             mode = "inner", type = type, max_gap = max_gap)
 }
 
 #' @rdname after_join
 #' @export
-after_left_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
+after_left_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
   after_join(x, y, by_time, by_user,
-             mode = "left", type = type, dt = dt)
+             mode = "left", type = type, max_gap = max_gap)
 }
 
 #' @rdname after_join
 #' @export
-after_right_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
+after_right_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
   after_join(x, y, by_time, by_user,
-             mode = "right", type = type, dt = dt)
+             mode = "right", type = type, max_gap = max_gap)
 }
 
 #' @rdname after_join
 #' @export
-after_full_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
+after_full_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
   after_join(x, y, by_time, by_user,
-             mode = "full", type = type)
+             mode = "full", type = type, max_gap = max_gap)
 }
 
 #' @rdname after_join
 #' @export
-after_anti_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
+after_anti_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
   after_join(x, y, by_time, by_user,
-             mode = "anti", type = type, dt = dt)
+             mode = "anti", type = type, max_gap = max_gap)
 }
 
 #' @rdname after_join
 #' @export
-after_semi_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
+after_semi_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
   after_join(x, y, by_time, by_user,
-             mode = "semi", type = type, dt = dt)
+             mode = "semi", type = type, max_gap = max_gap)
 }
