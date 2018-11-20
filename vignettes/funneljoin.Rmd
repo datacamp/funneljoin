@@ -27,7 +27,7 @@ You can do this with funneljoin's `after_join()` function. The arguments are:
   - `by_user`: a character vector to specify the user or identity columns in x and y. Must be a single column in each tbl.
   - `mode`: the method used to join: "inner", "full", "anti", "semi", "right", "left".
   - `type`: the type of funnel used to distinguish between event pairs, such as "first-first", "last-first", "any-firstafter". See types of funnels.
-  - `dt` (optional): if doing a gap join, either the number of seconds between events or a difftime object. 
+  - `max_gap` (optional): the maximum gap between events. Can be a integer representing the number of seconds or a difftime object
 
 There are two types of funneljoins - paired funneljoins and gap funneljoins. 
 
@@ -90,15 +90,15 @@ We now have a dataset of four rows. Notice a few things:
 
 ## Gap funneljoins 
 
-What if instead we wanted all landing-registration pairs that happened within a 3-day window? We now add the `dt` argument. This takes either a number, which is the number of seconds, or a difftime object. Instead of calculating the number of seconds in 3 days, we'll just make a difftime object. 
+What if instead we wanted all landing-registration pairs that happened within a 3-day window? We now add the `max_gap` argument. This takes either a number, which is the number of seconds, or a difftime object. Instead of calculating the number of seconds in 4 days, we'll just make a difftime object. 
 
 ```{r}
 landed %>%
   after_inner_join(registered, 
                    by_user = "user_id",
                    by_time = "timestamp",
-                   type = "withingap", 
-                   dt = as.difftime(4, units = "days"))
+                   type = "first-first", 
+                   max_gap = as.difftime(4, units = "days"))
 ```
 
 We now have a dataset of 7 rows. Notice a few things: 
