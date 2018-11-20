@@ -117,41 +117,15 @@ test_that("after_join works for out-of-memory tables with mode = semi and type =
   expect_equal(n_distinct(hard_launches_in_res$course_id), nrow(res))
 })
 
-test_that("after_join works for out-of-memory tables with mode = inner and type = smallestgap", {
+
+test_that("after_join works for out-of-memory tables with mode = inner and type = any-any with max_gap", {
 
   res <- after_join(soft_launches,
                     hard_launches,
                     by_user = "course_id",
                     by_time = c("soft_launch_at" = "live_at"),
-                    type = "smallestgap") %>%
-    dplyr::collect()
-
-  expect_is(res, "tbl_df")
-  expect_equal(names(res), c("course_id", "soft_launch_at", "live_at"))
-  expect_true(all(res$soft_launch_at <= res$live_at))
-  expect_equal(length(res$course_id), dplyr::n_distinct(res$course_id))
-  expect_true(nrow(res) >= 80)
-  expect_true(all(!is.na(res$soft_launch_at)))
-  expect_true(all(!is.na(res$live_at)))
-  expect_true(all(!is.na(res$course_id)))
-
-  first_soft_launches <- soft_launches %>%
-    dplyr::group_by(course_id) %>%
-    dplyr::summarise(first_soft_launch_at = min(soft_launch_at, na.rm = T)) %>%
-    dplyr::collect() %>%
-    inner_join(res, by = "course_id")
-
-  expect_equal(first_soft_launches$first_soft_launch_at, first_soft_launches$soft_launch_at)
-})
-
-test_that("after_join works for out-of-memory tables with mode = inner and type = withingap with difftime", {
-
-  res <- after_join(soft_launches,
-                    hard_launches,
-                    by_user = "course_id",
-                    by_time = c("soft_launch_at" = "live_at"),
-                    type = "withingap",
-                    dt = as.difftime(10, unit = "days")) %>%
+                    type = "any-any",
+                    max_gap = as.difftime(10, unit = "days")) %>%
     dplyr::collect()
 
   expect_is(res, "tbl_df")
@@ -180,8 +154,8 @@ test_that("after_join works for out-of-memory tables with mode = inner and type 
                     hard_launches,
                     by_user = "course_id",
                     by_time = c("soft_launch_at" = "live_at"),
-                    type = "withingap",
-                    dt = 1296000) %>%
+                    type = "any-any",
+                    max_gap = 1296000) %>%
     dplyr::collect()
 
   expect_is(res, "tbl_df")

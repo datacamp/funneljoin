@@ -189,42 +189,42 @@ after_join <- function(x,
 
 #' @rdname after_join
 #' @export
-after_inner_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
+after_inner_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
   after_join(x, y, by_time, by_user,
-             mode = "inner", type = type, dt = dt)
+             mode = "inner", type = type, max_gap = max_gap)
 }
 
 #' @rdname after_join
 #' @export
-after_left_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
+after_left_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
   after_join(x, y, by_time, by_user,
-             mode = "left", type = type, dt = dt)
+             mode = "left", type = type, max_gap = max_gap)
 }
 
 #' @rdname after_join
 #' @export
-after_right_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
+after_right_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
   after_join(x, y, by_time, by_user,
-             mode = "right", type = type, dt = dt)
+             mode = "right", type = type, max_gap = max_gap)
 }
 
 #' @rdname after_join
 #' @export
-after_full_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
+after_full_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
   after_join(x, y, by_time, by_user,
-             mode = "full", type = type)
+             mode = "full", type = type, max_gap = max_gap)
 }
 
 #' @rdname after_join
 #' @export
-after_anti_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
+after_anti_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
   after_join(x, y, by_time, by_user,
-             mode = "anti", type = type, dt = dt)
+             mode = "anti", type = type, max_gap = max_gap)
 }
 
 #' @rdname after_join
 #' @export
-after_semi_join <- function(x, y, by_time, by_user, type = "first-first", dt) {
+after_semi_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
   after_join(x, y, by_time, by_user,
-             mode = "semi", type = type, dt = dt)
+             mode = "semi", type = type, max_gap = max_gap)
 }
