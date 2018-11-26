@@ -9,7 +9,8 @@
 #' @param mode The method used to join: "inner", "full", "anti", "semi", "right", "left"
 #' @param type The type of funnel used to distinguish between event pairs,
 #' such as "first-first", "last-first", "any-firstafter". See details for more.
-#' @param max_gap the maximum gap between events. Can be a integer representing the number of seconds or a difftime object
+#' @param max_gap optional: the maximum gap allowed between events. Can be a integer representing the number of seconds or a difftime object.
+#' @param gap TRUE or FALSE for whether you want to return a column, .gap, that's the time difference in seconds between the events.
 #' @importFrom magrittr %>%
 #' @details TODO
 #'
@@ -73,7 +74,8 @@ after_join <- function(x,
                        by_user,
                        mode = "inner",
                        type = "first-first",
-                       max_gap = NULL) {
+                       max_gap = NULL,
+                       gap = FALSE) {
 
   types <- stringr::str_split(type, '\\-')[[1]]
 
@@ -157,8 +159,26 @@ after_join <- function(x,
                                user_xy = user_xy)
   }
 
-  pairs <- pairs %>%
-    dplyr::select(..idx, ..idy)
+  if (gap) {
+    if (inherits(pairs, "tbl_lazy")) {
+      time_difference <- dplyr::sql(glue::glue('DATEDIFF("seconds",
+                                               "{ time_xy$x }",
+                                               "{ time_xy$y }")::integer'))
+
+      pairs <- pairs %>%
+        dplyr::mutate(.gap = time_difference) %>%
+        dplyr::select(..idx, ..idy, .gap)
+    }
+    else {
+      pairs <- pairs %>%
+        dplyr::mutate(.gap = difftime(!!dplyr::sym(time_xy$y),
+                                      !!dplyr::sym(time_xy$x), "secs")) %>%
+        dplyr::select(..idx, ..idy, .gap)
+    }
+  } else {
+    pairs <- pairs %>%
+      dplyr::select(..idx, ..idy)
+  }
 
   join_func <- switch(mode,
                       inner = dplyr::inner_join,
