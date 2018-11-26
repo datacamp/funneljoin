@@ -28,12 +28,10 @@ You can do this with funneljoin's `after_join()` function. The arguments are:
   - `mode`: the method used to join: "inner", "full", "anti", "semi", "right", "left".
   - `type`: the type of funnel used to distinguish between event pairs, such as "first-first", "last-first", "any-firstafter". See types of funnels.
   - `max_gap` (optional): the maximum gap between events. Can be a integer representing the number of seconds or a difftime object
+  
+## after_join types
 
-There are two types of funneljoins - paired funneljoins and gap funneljoins. 
-
-## Paired funneljoins 
-
-Paired funneljoins can be any combination of `first`, `last`, `any`, and `lastbefore`, combined with `first`, `last`,  `any`, and `firstafter`.
+Funneljoins can be any combination of `first`, `last`, `any`, and `lastbefore` with `first`, `last`,  `any`, and `firstafter`.
 
 Let's take an example. We'll create two tables, one of landings and one of registrations. Each has a `user_id` and `timestamp` column. 
 
@@ -71,7 +69,7 @@ registered <- tibble::tribble(
   mutate(timestamp = as.Date(timestamp))
 ```
 
-Let's say we wanted to get only the first time people landed and registered. We would use a `first-first inner` join. 
+Let's say we wanted to get only the first time people landed and the first time they registered, *if* it was after their first registration. We would use a `first-first inner` join. 
 
 ```{r}
 landed %>%
@@ -85,31 +83,31 @@ We now have a dataset of four rows. Notice a few things:
 
   - `timestamp.y` is always greater than or equal to `timestamp.x`. This is a condition of `after_join`.
   - Because it's an `inner` join, we only have users who were in both tables and had a `timestamp.y` that was greater than a `timestamp.x`. 
-  - We only have one entry per user, as we made each table distinct by user, taking only their first landing or registration, before joining
+  - We only have one entry per user, as we made each table distinct by user, taking only their first landing or registration, before joining.
   - Although user 4 had a registration after a landing ("2018-07-01" landing and "2018-07-02" registration), they are not in the table because their **first** registration was on "2018-06-10", so we only checked if that happened after their first landing. 
 
-## Gap funneljoins 
+## Max gap 
 
-What if instead we wanted all landing-registration pairs that happened within a 3-day window? We now add the `max_gap` argument. This takes either a number, which is the number of seconds, or a difftime object. Instead of calculating the number of seconds in 4 days, we'll just make a difftime object. 
+What if instead we wanted all landing-registration pairs that happened within a 4-day window? We now add the `max_gap` argument. This takes either a number, which is the number of seconds, or a difftime object. Instead of calculating the number of seconds in 4 days, we'll just make a difftime object. Because we want any pair, not just the pairs of the first landings and registrations, we change the type to `any-any`
 
 ```{r}
 landed %>%
   after_inner_join(registered, 
                    by_user = "user_id",
                    by_time = "timestamp",
-                   type = "first-first", 
+                   type = "any-any", 
                    max_gap = as.difftime(4, units = "days"))
 ```
 
 We now have a dataset of 7 rows. Notice a few things: 
 
   - As always, `timestamp.y` is greater than or equal to `timestamp.x`. 
-  - User 6 appears three times, as they have six landing-registration pairs where the time difference is less than four days.
+  - User 6 appears three times, as they have three landing-registration pairs where the time difference is less than four days.
   - Just as before, because it's an `inner` join, we only have users who were in both tables and had a `timestamp.y` that was greater than a `timestamp.x`. 
 
-## Left Joins
+## Other types of joins
 
-Left joins are very handy when you want to know what percentage of people who did X did Y afterward. For example, we may have an experiment where we want to know "what percentage of people registered after entering the experiment"?
+Left joins are very handy when you want to know what percentage of people who did X did Y afterward. For example, we may have an experiment where we want to know "what percentage of people registered after entering the experiment?"
 
 In this case, we'd use a `first-firstafter` left join - we want to get a person's first experiment start and then their first registration afterward, if they have one. Let's add another column to our experiment starts table, which experiment variant someone was in. 
 
@@ -150,7 +148,9 @@ experiment_starts %>%
                    type = "first-firstafter")
 ```
 
-We now have an entry for each user in the experiment_starts table, which has their time of their first registration afterward or NA.
+We now have an entry for each user in the experiment_starts table, which has the time of their first registration afterward or NA if they did not have a registration afterwards. Each user only appears once since it's a `first-something` join.   
+
+We can use funneljoin's `summarize_conversions` function to get the number of starts and number of conversions (registrations) in each group. 
 
 ```{r}
 experiment_starts %>%
@@ -161,7 +161,7 @@ experiment_starts %>%
   summarize_conversions()
 ```
 
-It also works if we have multiple types of conversions, specified by a column. Just group by that column before doing `summarize_conversions`. You can also specify the name of your second timestamp column with the argument `time_col_y` (make sure you enter it unquoted). 
+`summarize_conversions` also works if we have multiple types of conversions, specified by a column. Just group by that column before doing `summarize_conversions`. You can also specify the name of your second timestamp column with the argument `time_col_y` (make sure you enter it unquoted). 
 
 ```{r}
 for_conversion <- tibble::tribble(
