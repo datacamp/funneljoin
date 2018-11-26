@@ -11,7 +11,7 @@
 \title{Join tables based on one event happening after another}
 \usage{
 after_join(x, y, by_time, by_user, mode = "inner",
-  type = "first-first", max_gap = NULL)
+  type = "first-first", max_gap = NULL, gap = FALSE)
 
 after_inner_join(x, y, by_time, by_user, type, max_gap = NULL)
 
@@ -41,7 +41,9 @@ Must be a single column in each tbl.}
 \item{type}{The type of funnel used to distinguish between event pairs,
 such as "first-first", "last-first", "any-firstafter". See details for more.}
 
-\item{max_gap}{the maximum gap between events. Can be a integer representing the number of seconds or a difftime object}
+\item{max_gap}{optional: the maximum gap allowed between events. Can be a integer representing the number of seconds or a difftime object.}
+
+\item{gap}{TRUE or FALSE for whether you want to return a column, .gap, that's the time difference in seconds between the events.}
 }
 \value{
 A tbl
