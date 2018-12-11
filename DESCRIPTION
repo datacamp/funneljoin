@@ -5,7 +5,7 @@ Version: 0.1.0
 Authors@R: c(
     person("Emily", "Robinson", email = "robinson.es@gmail.com", role = c("aut", "cre")),
     person("Anthony", "Baker", email = "anthony@datacamp.com", role = c("aut")),
-    person("David", "Robinson", email = "david@datacamp.com", role = c("aut")))
+    person("David", "Robinson", email = "drob@datacamp.com", role = c("aut")))
 Maintainer: Emily Robinson <robinson.es@gmail.com>
 Description: Time-based joins to analyze sequence of events, 
     both in memory and out of memory. 
