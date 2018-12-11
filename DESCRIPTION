@@ -3,10 +3,10 @@ Type: Package
 Title: Join Tables Based on Events Occurring in Sequence
 Version: 0.1.0
 Authors@R: c(
-    person("Emily", "Robinson", email = "emily@datacamp.com", role = c("aut", "cre")),
+    person("Emily", "Robinson", email = "robinson.es@gmail.com", role = c("aut", "cre")),
     person("Anthony", "Baker", email = "anthony@datacamp.com", role = c("aut")),
     person("David", "Robinson", email = "david@datacamp.com", role = c("aut")))
-Maintainer: Emily Robinson <emily@datacamp.com>
+Maintainer: Emily Robinson <robinson.es@gmail.com>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: MIT + file LICENSE
