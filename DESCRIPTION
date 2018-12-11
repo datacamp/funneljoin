@@ -7,8 +7,8 @@ Authors@R: c(
     person("Anthony", "Baker", email = "anthony@datacamp.com", role = c("aut")),
     person("David", "Robinson", email = "david@datacamp.com", role = c("aut")))
 Maintainer: Emily Robinson <robinson.es@gmail.com>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Time-based joins to analyze sequence of events, 
+    both in memory and out of memory. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
