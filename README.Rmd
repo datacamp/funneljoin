@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+[![Travis-CI Build Status](https://travis-ci.org/datacamp/funneljoin.svg?branch=master)](https://travis-ci.org/datacamp/funneljoin)
+
 **Disclaimer**: funneljoin is still in active development. While we are using it at DataCamp, there are still some bugs, especially with remote tables. If you can, we recommend pulling your data to work with locally. And **do not** do multiple funnel joins in a row remotely (it's fine locally). 
 
 # Overview
