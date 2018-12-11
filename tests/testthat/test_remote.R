@@ -1,5 +1,6 @@
 context("Joining using remote tables")
 skip_on_travis()
+skip_on_cran()
 skip_if_not_installed("datacampr")
 library(datacampr)
 
