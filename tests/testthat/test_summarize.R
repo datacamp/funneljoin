@@ -1,4 +1,6 @@
 context("summarize functions")
+skip_on_travis()
+skip_if_not_installed("datacampr")
 library(dplyr)
 library(datacampr)
 
