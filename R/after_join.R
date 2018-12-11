@@ -12,7 +12,6 @@
 #' @param max_gap optional: the maximum gap allowed between events. Can be a integer representing the number of seconds or a difftime object.
 #' @param gap TRUE or FALSE for whether you want to return a column, .gap, that's the time difference in seconds between the events.
 #' @importFrom magrittr %>%
-#' @details TODO
 #'
 #'
 #' @return A tbl
