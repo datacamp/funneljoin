@@ -178,5 +178,15 @@ test_that("after_join works for out-of-memory tables with mode = inner and type 
   expect_equal(first_soft_launches$first_soft_launch_at, first_soft_launches$soft_launch_at)
 })
 
-
+test_that("after_join throws an error when you try to do multiple remote after joins in a row", {
+  expect_error(after_join(soft_launches,
+                          hard_launches,
+                          by_user = "course_id",
+                          by_time = c("soft_launch_at" = "live_at"),
+                          type = "first-first") %>%
+                 after_join(hard_launches,
+                            by_user = "course_id",
+                            by_time = "live_at",
+                            type = "first-any"))
+})
 

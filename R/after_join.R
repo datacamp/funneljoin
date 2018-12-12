@@ -100,6 +100,10 @@ after_join <- function(x,
                        max_gap = NULL,
                        gap_col = FALSE) {
 
+  if (!is.null(attr(x, "after_join")) & inherits(x, "tbl_lazy")) {
+    stop("You can not do multiple after joins in a row remotely. Please pull your data locally.")
+  }
+
   types <- stringr::str_split(type, '\\-')[[1]]
 
   if (length(types) != 2) {
@@ -217,6 +221,7 @@ after_join <- function(x,
       dplyr::select(-..idx)
   }
 
+  attr(ret, "after_join") <- 1
   ret
 }
 
