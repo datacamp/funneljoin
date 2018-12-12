@@ -151,50 +151,10 @@ landed %>%
 #> 4         5 2018-07-10 2018-07-11
 ```
 
-Rules
------
-
-Some rules to keep in mind:
-
--   If the first type in the pair is "last" or "first", then a right join has the same number of rows as y.
--   If the second type in the pair is "last", "first", or "firstafter", then a left join has the same number of rows as x.
-
 Summarizing funnels
 -------------------
 
-Funneljoin also contains to functions to summarize funnels: `summarize_conversions` (see the vignette) and `summarize_prop_tests()`.
-
-`summarize_prop_tests()` takes in a dataset with at least three columns - `alternative.name`, `nb_starts`, and `nb_conversions`. It can also have an additional column that is the type of conversion - for example, you could have clicks and purchases. Each type of conversion can only have two rows, one `control` and one other group. If you have that additional column of type, you need to group by it first.
-
-It returns a dataset with X columns:
-
--   `control`: the conversion rate of the control group
--   `treatment`: the conversion rate of the treatment group
--   `p_value` of the proportion test
--   `pct_change`: the percentage difference between the control and treatment group
--   `pct_change_low` and `pct_change_high`: the bayesian estimates for a 90% confidence interval.
-
-If you had a type column, it will also be in the output.
-
-``` r
-tbl <- tibble::tribble(
-  ~ alternative.name, ~nb_starts, ~nb_conversions, ~type,
-  "control", 500, 200, "purchase",
-  "treatment", 500, 100, "purchase", 
-  "control", 500, 360, "click",
-  "treatment", 500, 375, "click"
-)
-
-tbl %>%
-  group_by(type) %>%
-  summarize_prop_tests()
-#> # A tibble: 2 x 7
-#>   type  control treatment  p_value pct_change pct_change_low
-#>   <chr>   <dbl>     <dbl>    <dbl>      <dbl>          <dbl>
-#> 1 click    0.72      0.75 3.16e- 1     0.0417        -0.0248
-#> 2 purc…    0.4       0.2  8.39e-12    -0.5           -0.621 
-#> # ... with 1 more variable: pct_change_high <dbl>
-```
+Funneljoin also contains to functions to summarize funnels: `summarize_conversions()` and `summarize_prop_tests()`- see the vignette.
 
 Reporting bugs and adding features
 ----------------------------------

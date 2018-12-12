@@ -104,6 +104,12 @@ We now have a dataset of 7 rows. Notice a few things:
   - As always, `timestamp.y` is greater than or equal to `timestamp.x`. 
   - User 6 appears three times, as they have three landing-registration pairs where the time difference is less than four days.
   - Just as before, because it's an `inner` join, we only have users who were in both tables and had a `timestamp.y` that was greater than a `timestamp.x`. 
+## Rules
+
+Some rules to keep in mind: 
+
+  - If the first type in the pair is "last" or "first", then a right join has the same number of rows as y.
+  - If the second type in the pair is "last", "first", or "firstafter", then a left join has the same number of rows as x. 
 
 ## Other types of joins
 
@@ -181,4 +187,32 @@ for_conversion <- tibble::tribble(
 for_conversion %>%
   group_by(type) %>%
   summarize_conversions(time_col_y = last_event)
+```
+
+## Summarize Prop Tests
+
+`summarize_prop_tests()` takes in a dataset with at least three columns - `alternative.name`, `nb_starts`, and `nb_conversions`. It can also have an additional column that is the type of conversion - for example, you could have clicks and purchases. Each type of conversion can only have two rows, one `control` and one other group. If you have that additional column of type, you need to group by it first. 
+
+It returns a dataset with X columns:
+
+  - `control`: the conversion rate of the control group
+  - `treatment`: the  conversion rate of the treatment group
+  - `p_value` of the proportion test
+  - `pct_change`: the percentage difference between the control and treatment group
+  - `pct_change_low` and `pct_change_high`: the bayesian estimates for a 90% confidence interval. 
+  
+If you had a type column, it will also be in the output. 
+
+```{r}
+tbl <- tibble::tribble(
+  ~ alternative.name, ~nb_starts, ~nb_conversions, ~type,
+  "control", 500, 200, "purchase",
+  "treatment", 500, 100, "purchase", 
+  "control", 500, 360, "click",
+  "treatment", 500, 375, "click"
+)
+
+tbl %>%
+  group_by(type) %>%
+  summarize_prop_tests()
 ```
