@@ -1,20 +1,44 @@
 #' Join tables based on one event happening after another
 #'
-#' @param x A tbl that is the first event to occur in the funnel.
-#' @param y A tbl that is the following event to occur in the funnel.
+#' Join two tables based on observations in one table happening after
+#' observations in the other. Each table must have a user_id column,
+#' which must always match for two observations to be joined,
+#' and a time column, which must be greater in \code{y} than in \code{x} for
+#' the two to be joined.
+#' Supports all types of dplyr joins (inner, left, anti, etc.) and requires a
+#' type argument to specify which observations in a funnel get kept
+#' (see details for supported types).
+#'
+#' @param x A tbl representing the first event to occur in the funnel.
+#' @param y A tbl representing an event to occur in the funnel.
 #' @param by_time A character vector to specify the time columns in x and y.
-#' Must be a single column in each tbl. Note that this column is used to filter for time y >= time x.
-#' @param by_user A character vector to specify the user or identity columns in x and y.
-#' Must be a single column in each tbl.
-#' @param mode The method used to join: "inner", "full", "anti", "semi", "right", "left"
-#' @param type The type of funnel used to distinguish between event pairs,
-#' such as "first-first", "last-first", "any-firstafter". See details for more.
-#' @param max_gap optional: the maximum gap allowed between events. Can be a integer representing the number of seconds or a difftime object.
-#' @param gap TRUE or FALSE for whether you want to return a column, .gap, that's the time difference in seconds between the events.
+#'   This would typically be a datetime or a date column. This column is used to
+#'   filter for time y being after time x.
+#' @param by_user A character vector to specify the user or identity columns in
+#'   x and y.
+#' @param mode The method used to join: "inner", "full", "anti", "semi",
+#'   "right", "left". Each also has its own function, such as
+#'   \code{after_inner_join}.
+#' @param type The type of funnel used to distinguish between event pairs, such
+#'   as "first-first", "last-first", or "any-firstafter". See details for more.
+#' @param max_gap Optional: the maximum gap allowed between events. Can be a
+#'   integer representing the number of seconds or a difftime object, such as
+#'   \code{as.difftime(2, unit = "hours")}.
+#' @param gap_col Whether to include a numeric column, \code{.gap},
+#'   with the time difference in seconds between the events.
 #' @importFrom magrittr %>%
 #'
+#' @details
 #'
-#' @return A tbl
+#' \code{type} can be any combination of \code{first}, \code{last}, \code{any} with \code{first}, \code{last}, \code{any}, and \code{firstafter}, as well as \code{lastbefore-firstafter}. Some common ones you may use include:
+#' \describe{
+#'   \item{first-first}{Take the earliest x and y for each user \bold{before} joining. For example, you want the first time someone entered an experiment, followed by the first time someone \bold{ever} registered. If they registered, entered the experiment, and registered again, you do not want to include that person.}
+#'   \item{first-firstafter}{Take the first x, then the first y after that. For example, you want when someone first entered an experiment and the first course they started afterwards. You don't care if they started courses before entering the experiment. }
+#'   \item{lastbefore-firstafter}{First x that's followed by a y before the next x. For example, in last click paid ad attribution, you want the last time someone clicked an ad before the first subscription they did afterward.}
+#'   \item{any-firstafter}{Take all Xs followed by the first Y after it. For example, you want all the times someone visited a homepage and their first product page they visited afterwards.}
+#'   \item{any-any}{Take all Xs followed by all Ys. For example, you want all the times someone visited a homepage and \bold{all} the product pages they saw afterward.}
+#'   }
+#'
 #' @export
 #'
 #' @examples
@@ -74,7 +98,7 @@ after_join <- function(x,
                        mode = "inner",
                        type = "first-first",
                        max_gap = NULL,
-                       gap = FALSE) {
+                       gap_col = FALSE) {
 
   types <- stringr::str_split(type, '\\-')[[1]]
 
@@ -158,7 +182,7 @@ after_join <- function(x,
                                user_xy = user_xy)
   }
 
-  if (gap) {
+  if (gap_col) {
     if (inherits(pairs, "tbl_lazy")) {
       time_difference <- dplyr::sql(glue::glue('DATEDIFF("seconds",
                                                "{ time_xy$x }",
@@ -170,8 +194,8 @@ after_join <- function(x,
     }
     else {
       pairs <- pairs %>%
-        dplyr::mutate(.gap = difftime(!!dplyr::sym(time_xy$y),
-                                      !!dplyr::sym(time_xy$x), "secs")) %>%
+        dplyr::mutate(.gap = as.numeric(difftime(!!dplyr::sym(time_xy$y),
+                                                 !!dplyr::sym(time_xy$x), "secs"))) %>%
         dplyr::select(..idx, ..idy, .gap)
     }
   } else {
@@ -208,42 +232,42 @@ after_join <- function(x,
 
 #' @rdname after_join
 #' @export
-after_inner_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
+after_inner_join <- function(x, y, by_time, by_user, type, max_gap = NULL, gap_col = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "inner", type = type, max_gap = max_gap)
+             mode = "inner", type = type, max_gap = max_gap, gap_col = gap_col)
 }
 
 #' @rdname after_join
 #' @export
-after_left_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
+after_left_join <- function(x, y, by_time, by_user, type, max_gap = NULL, gap_col = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "left", type = type, max_gap = max_gap)
+             mode = "left", type = type, max_gap = max_gap, gap_col = gap_col)
 }
 
 #' @rdname after_join
 #' @export
-after_right_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
+after_right_join <- function(x, y, by_time, by_user, type, max_gap = NULL, gap_col = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "right", type = type, max_gap = max_gap)
+             mode = "right", type = type, max_gap = max_gap, gap_col = gap_col)
 }
 
 #' @rdname after_join
 #' @export
-after_full_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
+after_full_join <- function(x, y, by_time, by_user, type, max_gap = NULL, gap_col = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "full", type = type, max_gap = max_gap)
+             mode = "full", type = type, max_gap = max_gap, gap_col = gap_col)
 }
 
 #' @rdname after_join
 #' @export
-after_anti_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
+after_anti_join <- function(x, y, by_time, by_user, type, max_gap = NULL, gap_col = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "anti", type = type, max_gap = max_gap)
+             mode = "anti", type = type, max_gap = max_gap, gap_col = gap_col)
 }
 
 #' @rdname after_join
 #' @export
-after_semi_join <- function(x, y, by_time, by_user, type, max_gap = NULL) {
+after_semi_join <- function(x, y, by_time, by_user, type, max_gap = NULL, gap_col = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "semi", type = type, max_gap = max_gap)
+             mode = "semi", type = type, max_gap = max_gap, gap_col = gap_col)
 }
