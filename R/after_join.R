@@ -30,7 +30,7 @@
 #'
 #' @details
 #'
-#' \code{type} can be any combination of \code{first}, \code{last}, \code{any} with \code{first}, \code{last}, \code{any}, and \code{firstafter}, as well as \code{lastbefore-firstafter}. Some common ones you may use include:
+#' \code{type} can be any combination of \code{first}, \code{last}, \code{any}, \code{lastbefore} with \code{first}, \code{last}, \code{any},  \code{firstafter}. Some common ones you may use include:
 #' \describe{
 #'   \item{first-first}{Take the earliest x and y for each user \bold{before} joining. For example, you want the first time someone entered an experiment, followed by the first time someone \bold{ever} registered. If they registered, entered the experiment, and registered again, you do not want to include that person.}
 #'   \item{first-firstafter}{Take the first x, then the first y after that. For example, you want when someone first entered an experiment and the first course they started afterwards. You don't care if they started courses before entering the experiment. }
@@ -102,16 +102,11 @@ after_join <- function(x,
 
   types <- stringr::str_split(type, '\\-')[[1]]
 
-  if (type == "lastbefore-firstafter") {
-    types[1] = "any"
-    types[2] = "any"
-  }
-
   if (length(types) != 2) {
     stop("type argument only supports pairs")
   }
 
-  type_x <- match.arg(types[1], c("first", "last", "any"))
+  type_x <- match.arg(types[1], c("first", "last", "any", "lastbefore"))
   type_y <- match.arg(types[2], c("first", "last", "any", "firstafter"))
 
   if (length(by_user) > 1) {
@@ -163,15 +158,10 @@ after_join <- function(x,
                       type = "first")
   }
 
-  if (type == "lastbefore-firstafter") {
-    # pick earliest y, then last x before it
+  if (type_x == "lastbefore") {
     pairs <- pairs %>%
-      dplyr::group_by(!!dplyr::sym(user_xy$x)) %>%
-      dplyr::filter(!!dplyr::sym(time_xy$y) == min(!!dplyr::sym(time_xy$y),
-                                            na.rm = TRUE)) %>%
-      dplyr::ungroup() %>%
-      distinct_events(user_col = user_xy$x,
-                      time_col = time_xy$x,
+      distinct_events(time_col = time_xy$x,
+                      user_col = "..idy",
                       type = "last")
   }
 
