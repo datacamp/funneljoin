@@ -7,9 +7,9 @@
 #'
 #' @return a data.frame with proportion test results
 #' @export
-summarize_prop_tests <- function(x, alternative.name = alternative.name, ..., ungroup = TRUE) {
+summarize_prop_tests <- function(x, alternative_name = alternative.name, ..., ungroup = TRUE) {
   if (nrow(x) > 2 && is.null(dplyr::groups(x))) {
-    stop("Need to group_by (probably by alternative.name column)")
+    stop("Need to group_by (probably by alternative_name column)")
   }
   if (inherits(x, "tbl_lazy")) {
     stop("Needs to be a local (not remote) table")

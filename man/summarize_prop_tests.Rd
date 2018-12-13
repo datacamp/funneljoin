@@ -4,10 +4,13 @@
 \alias{summarize_prop_tests}
 \title{Summarise after join funnel with proportion test}
 \usage{
-summarize_prop_tests(x, ..., ungroup = TRUE)
+summarize_prop_tests(x, alternative_name = alternative.name, ...,
+  ungroup = TRUE)
 }
 \arguments{
 \item{x}{a data.frame}
+
+\item{alternative_name}{the name of the column indicating the experiment group}
 
 \item{...}{any additional arguments}
 

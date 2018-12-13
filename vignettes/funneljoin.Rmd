@@ -167,11 +167,11 @@ experiment_starts %>%
   summarize_conversions()
 ```
 
-`summarize_conversions` also works if we have multiple types of conversions, specified by a column. Just group by that column before doing `summarize_conversions`. You can also specify the name of your second timestamp column with the argument `time_col_y` (make sure you enter it unquoted). 
+`summarize_conversions` also works if we have multiple types of conversions, specified by a column. Just group by that column before doing `summarize_conversions`. You can also specify the name of your second timestamp column with the argument `time_col_y` (make sure you enter it unquoted) and the column indicating experiment group with the argument `alternative_name`. 
 
 ```{r}
 for_conversion <- tibble::tribble(
-  ~"alternative.name", ~"first_event", ~"last_event", ~"type", 
+  ~"experiment_group", ~"first_event", ~"last_event", ~"type", 
   "control", "2018-07-01", NA, "click",
   "control", "2018-07-02", NA, "click",
   "control", "2018-07-03", "2018-07-05", "click",
@@ -186,12 +186,13 @@ for_conversion <- tibble::tribble(
 
 for_conversion %>%
   group_by(type) %>%
-  summarize_conversions(time_col_y = last_event)
+  summarize_conversions(time_col_y = last_event, 
+                        alternative_name = experiment_group)
 ```
 
 ## Summarize Prop Tests
 
-`summarize_prop_tests()` takes in a dataset with at least three columns - `alternative.name`, `nb_starts`, and `nb_conversions`. It can also have an additional column that is the type of conversion - for example, you could have clicks and purchases. Each type of conversion can only have two rows, one `control` and one other group. If you have that additional column of type, you need to group by it first. 
+`summarize_prop_tests()` takes in a dataset with at least three columns - `nb_starts`, `nb_conversions`, and a column indicating experiment group. It can also have an additional column that is the type of conversion - for example, you could have clicks and purchases. Each type of conversion can only have two rows, one `control` and one other group. If you have that additional column of type, you need to group by it first. 
 
 It returns a dataset with X columns:
 
@@ -205,7 +206,7 @@ If you had a type column, it will also be in the output.
 
 ```{r}
 tbl <- tibble::tribble(
-  ~ alternative.name, ~nb_starts, ~nb_conversions, ~type,
+  ~ experiment_group, ~nb_starts, ~nb_conversions, ~type,
   "control", 500, 200, "purchase",
   "treatment", 500, 100, "purchase", 
   "control", 500, 360, "click",
@@ -214,5 +215,5 @@ tbl <- tibble::tribble(
 
 tbl %>%
   group_by(type) %>%
-  summarize_prop_tests()
+  summarize_prop_tests(alternative_name = experiment_group)
 ```
