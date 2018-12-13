@@ -104,32 +104,13 @@ landed %>%
 If your time and user columns have different names, you can work with that too: 
 
 ```{r}
-landed <- tibble::tribble(
-  ~user_id_x, ~landed_at,
-  1, "2018-07-01",
-  2, "2018-07-01",
-  3, "2018-07-02",
-  4, "2018-07-01",
-  4, "2018-07-04",
-  5, "2018-07-10",
-  5, "2018-07-12",
-  6, "2018-07-07",
-  6, "2018-07-08"
-) %>%
-  mutate(landed_at = as.Date(landed_at))
+landed <- landed %>%
+  rename(landed_at = timestamp,
+         user_id_x = user_id)
 
-registered <- tibble::tribble(
-  ~user_id_y, ~registered_at,
-  1, "2018-07-02",
-  3, "2018-07-02",
-  4, "2018-06-10",
-  4, "2018-07-02",
-  5, "2018-07-11",
-  6, "2018-07-10",
-  6, "2018-07-11",
-  7, "2018-07-07"
-) %>%
-  mutate(registered_at = as.Date(registered_at))
+registered <- registered %>%
+  rename(registered_at = timestamp,
+         user_id_y = user_id)
 ```
 
 ```{r}
