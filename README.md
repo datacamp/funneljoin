@@ -2,7 +2,7 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Travis-CI Build Status](https://travis-ci.org/datacamp/funneljoin.svg?branch=master)](https://travis-ci.org/datacamp/funneljoin)
 
-**Disclaimer**: funneljoin is still in active development. While we are using it at DataCamp, there are still some bugs, especially with remote tables. If you can, we recommend pulling your data to work with locally. And **do not** do multiple funnel joins in a row remotely (it's fine locally).
+**Disclaimer**: funneljoin is still in active development. While we are frequently using it at DataCamp, there are still some bugs, especially with remote tables. If you can, we recommend pulling your data to work with locally. And **do not** do multiple funnel joins in a row remotely (it's fine locally).
 
 Overview
 ========
@@ -18,6 +18,7 @@ You can do this with funneljoin's `after_join()` function. The arguments are:
 -   `mode`: the method used to join: "inner", "full", "anti", "semi", "right", "left".
 -   `type`: the type of funnel used to distinguish between event pairs, such as "first-first", "last-first", "any-firstafter". See types of funnels.
 -   `max_gap` (optional): the maximum gap between events. Can be a integer representing the number of seconds or a difftime object
+-   `gap_col` (optional): whether to return a numeric column, `.gap`, with the time difference in seconds between the events. Defaults to `FALSE`.
 
 As funneljoin uses dplyr, it can also work with remote tables, **but has only been tried on postgres**. Some of the functionality, especially the gap joins, use SQL code that may not work with different versions.
 
@@ -154,7 +155,7 @@ landed %>%
 Summarizing funnels
 -------------------
 
-Funneljoin also contains to functions to summarize funnels: `summarize_conversions()` and `summarize_prop_tests()`- see the vignette.
+Funneljoin also contains to functions to summarize funnels: `summarize_conversions()` and `summarize_prop_tests()`- see the vignette for details.
 
 Reporting bugs and adding features
 ----------------------------------
