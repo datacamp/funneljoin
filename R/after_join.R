@@ -12,7 +12,7 @@
 #' @param x A tbl representing the first event to occur in the funnel.
 #' @param y A tbl representing an event to occur in the funnel.
 #' @param by_time A character vector to specify the time columns in x and y.
-#'   This would typically be a datetime or a date column. This column is used to
+#'   This would typically be a datetime or a date column. These columns are used to
 #'   filter for time y being after time x.
 #' @param by_user A character vector to specify the user or identity columns in
 #'   x and y.
