@@ -1,27 +1,27 @@
 #' Summarise after join funnel with proportion test
 #'
 #' @param x a data.frame
+#' @param alternative_name the name of the column indicating the experiment group
 #' @param ... any additional arguments
 #' @param ungroup whether the table needs to be ungrouped
 #'
 #' @return a data.frame with proportion test results
 #' @export
-summarize_prop_tests <- function(x, ..., ungroup = TRUE) {
+summarize_prop_tests <- function(x, alternative.name = alternative.name, ..., ungroup = TRUE) {
   if (nrow(x) > 2 && is.null(dplyr::groups(x))) {
     stop("Need to group_by (probably by alternative.name column)")
-  }
-  if (!('alternative.name' %in% colnames(x))) {
-    stop("Need a column called alternative.name")
   }
   if (inherits(x, "tbl_lazy")) {
     stop("Needs to be a local (not remote) table")
   }
 
+  var_enq_alternative <- dplyr::enquo(alternative_name)
+
   prepared <- x %>%
     dplyr::filter(dplyr::n() == 2) %>%
-    dplyr::arrange(alternative.name)
+    dplyr::arrange(!!var_enq_alternative)
 
-  alternatives <- sort(unique(prepared$alternative.name))
+  alternatives <- sort(unique(pull(prepared, !!var_enq_alternative)))
 
   if (length(alternatives) != 2) {
     stop("Must have exactly two alternatives")
@@ -58,25 +58,28 @@ summarize_prop_tests <- function(x, ..., ungroup = TRUE) {
 #'
 #' @param x a data.frame with one row per user
 #' @param time_col_y the name of the second event time column
+#' @param alternative.name the name of the column indicating the experiment group
 #'
 #' @return a table with three columns, `nb_starts`, `nb_conversions`, and `alternative.name`
 #' @export
-summarize_conversions <- function(x, time_col_y = timestamp.y) {
+summarize_conversions <- function(x, time_col_y = timestamp.y,
+                                  alternative_name = alternative.name) {
 
-  var_enq <- dplyr::enquo(time_col_y)
+  var_enq_time <- dplyr::enquo(time_col_y)
+  var_enq_alternative <- dplyr::enquo(alternative_name)
 
   if (inherits(x, "tbl_lazy")) {
     ret <- x %>%
-      dplyr::group_by(alternative.name, add = TRUE) %>%
+      dplyr::group_by(!!var_enq_alternative, add = TRUE) %>%
       dplyr::summarise(nb_starts = n(),
-                       nb_conversions = COUNT(!!var_enq))
+                       nb_conversions = COUNT(!!var_enq_time))
   }
 
   else {
     ret <- x %>%
-      dplyr::group_by(alternative.name, add = TRUE) %>%
+      dplyr::group_by(!!var_enq_alternative, add = TRUE) %>%
       dplyr::summarise(nb_starts = dplyr::n(),
-                       nb_conversions = sum(!is.na(!!var_enq)))
+                       nb_conversions = sum(!is.na(!!var_enq_time)))
   }
 
   ret

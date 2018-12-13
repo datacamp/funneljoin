@@ -19,6 +19,7 @@ simple_example <- tibble::tribble(
   "treatment", "2018-07-01", "2018-07-05"
 )
 
+
 simple_summarized_conversion <- simple_example %>%
   summarize_conversions(timestamp.y)
 
