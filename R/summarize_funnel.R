@@ -21,7 +21,7 @@ summarize_prop_tests <- function(x, alternative_name = alternative.name, ..., un
     dplyr::filter(dplyr::n() == 2) %>%
     dplyr::arrange(!!var_enq_alternative)
 
-  alternatives <- sort(unique(pull(prepared, !!var_enq_alternative)))
+  alternatives <- sort(unique(dplyr::pull(prepared, !!var_enq_alternative)))
 
   if (length(alternatives) != 2) {
     stop("Must have exactly two alternatives")
@@ -58,7 +58,7 @@ summarize_prop_tests <- function(x, alternative_name = alternative.name, ..., un
 #'
 #' @param x a data.frame with one row per user
 #' @param time_col_y the name of the second event time column
-#' @param alternative.name the name of the column indicating the experiment group
+#' @param alternative_name the name of the column indicating the experiment group
 #'
 #' @return a table with three columns, `nb_starts`, `nb_conversions`, and `alternative.name`
 #' @export

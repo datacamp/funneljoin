@@ -12,7 +12,7 @@ summarize_conversions(x, time_col_y = timestamp.y,
 
 \item{time_col_y}{the name of the second event time column}
 
-\item{alternative.name}{the name of the column indicating the experiment group}
+\item{alternative_name}{the name of the column indicating the experiment group}
 }
 \value{
 a table with three columns, `nb_starts`, `nb_conversions`, and `alternative.name`

@@ -37,7 +37,7 @@ after_semi_join(x, y, by_time, by_user, type, max_gap = NULL,
 \item{y}{A tbl representing an event to occur in the funnel.}
 
 \item{by_time}{A character vector to specify the time columns in x and y.
-This would typically be a datetime or a date column. This column is used to
+This would typically be a datetime or a date column. These columns are used to
 filter for time y being after time x.}
 
 \item{by_user}{A character vector to specify the user or identity columns in
