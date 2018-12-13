@@ -214,3 +214,34 @@ test_that("after_join works with mode = full and type = any-any and max_gap = nu
   expect_true(any(is.na(res$timestamp.y)))
   expect_true(all(!is.na(res$user_id)))
 })
+
+test_that("after_join works with mode = left, type = any-any, max_gap = difftime, and gap_col is TRUE", {
+
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "left", type = "any-any", max_gap = three_days, gap_col = TRUE)
+
+  expect_is(res, "tbl_df")
+  expect_equal(names(res), c("user_id", "timestamp.x", ".gap", "timestamp.y"))
+  expect_true(all(res$timestamp.y >= res$timestamp.x | is.na(res$timestamp.y)))
+  expect_gt(length(res$user_id), dplyr::n_distinct(res$user_id))
+  expect_gt(nrow(res), dplyr::n_distinct(landed$user_id))
+  expect_true(1 %in% res$user_id)
+  expect_true(all(!is.na(res$timestamp.x)))
+  expect_true(any(is.na(res$timestamp.y)))
+  expect_true(all(!is.na(res$user_id)))
+})
+
+test_that("after_join works with mode = left, type = any-any, max_gap = numeric, and gap_col is TRUE", {
+
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "left", type = "any-any", max_gap = three_days_numeric, gap_col = TRUE)
+
+  expect_is(res, "tbl_df")
+  expect_equal(names(res), c("user_id", "timestamp.x", ".gap", "timestamp.y"))
+  expect_true(all(res$timestamp.y >= res$timestamp.x | is.na(res$timestamp.y)))
+  expect_gt(length(res$user_id), dplyr::n_distinct(res$user_id))
+  expect_gt(nrow(res), dplyr::n_distinct(landed$user_id))
+  expect_true(1 %in% res$user_id)
+  expect_true(all(!is.na(res$timestamp.x)))
+  expect_true(any(is.na(res$timestamp.y)))
+  expect_true(all(!is.na(res$user_id)))
+})
+
