@@ -27,7 +27,7 @@ You can do this with funneljoin's `after_join()` function. The arguments are:
   - `y`: a dataset with the second set of behaviors.
   - `by_time`: a character vector to specify the time columns in x and y. This would typically be a datetime or a date column. These columns are used to filter for time y being after time x.
   - `by_user`: a character vector to specify the user or identity columns in x and y.
-  - `mode`: the method used to join: "inner", "full", "anti", "semi", "right", "left".
+  - `mode`: the method used to join: "inner", "full", "anti", "semi", "right", "left". You can also use `after_mode_join` instead (e.g. `after_inner_join` instead of `after_join(..., mode = "inner")`)
   - `type`: the type of funnel used to distinguish between event pairs, such as "first-first", "last-first", "any-firstafter". See types of funnels for details.
   - `max_gap` (optional): the maximum gap between events. Can be a integer representing the number of seconds between events or a difftime object. 
   - `gap_col` (optional): whether to return a numeric column, `.gap`, with the time difference in seconds between the events. Defaults to `FALSE`. 
