@@ -243,5 +243,6 @@ test_that("after_join works with mode = left, type = any-any, max_gap = numeric,
   expect_true(all(!is.na(res$timestamp.x)))
   expect_true(any(is.na(res$timestamp.y)))
   expect_true(all(!is.na(res$user_id)))
+  expect_equal(sum(res$.gap, na.rm = TRUE), 432000)
 })
 

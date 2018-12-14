@@ -4,6 +4,9 @@ skip_on_cran()
 skip_if_not_installed("datacampr")
 library(datacampr)
 
+three_days = as.difftime(3, unit = "days")
+three_days_numeric = 60 * 60 * 24 * 3
+
 soft_launches <- tbl_main_course_state_logs() %>%
   dplyr::filter(new_state == "soft_launch") %>%
   dplyr::select(course_id, soft_launch_at = created_at)
@@ -189,4 +192,21 @@ test_that("after_join throws an error when you try to do multiple remote after j
                             by_time = "live_at",
                             type = "first-any"))
 })
+
+test_that("after_join works with mode = inner, type = first-firstafter, max_gap = numeric, gap_col is TRUE, and table is remote", {
+
+  res <- after_join(soft_launches, hard_launches,
+                    by_user = "course_id",
+                    by_time = c("soft_launch_at" = "live_at"),
+                    mode = "inner",
+                    type = "first-firstafter",
+                    max_gap = three_days_numeric, gap_col = TRUE) %>%
+    dplyr::collect()
+
+  expect_is(res, "tbl_df")
+  expect_equal(names(res), c("course_id", "soft_launch_at", ".gap", "live_at"))
+  expect_true(all(res$live_at >= res$soft_launch_at))
+  expect_gte(sum(res$.gap, na.rm = TRUE), 292755)
+})
+
 
