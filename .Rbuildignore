@@ -4,3 +4,4 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^\.travis\.yml$
+^\.httr-oauth$

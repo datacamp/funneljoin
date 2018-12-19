@@ -209,4 +209,34 @@ test_that("after_join works with mode = inner, type = first-firstafter, max_gap 
   expect_gte(sum(res$.gap, na.rm = TRUE), 292755)
 })
 
+test_that("after_join works with mode = inner, type = any-any, table is remote", {
+  # this was an analysis that broke in earlier version code
+  # because of non-deterministic behavior of remote row_number
+
+  x <- tbl_snowplow_events() %>%
+    filter(collector_tstamp >= "2018-12-13",
+           collector_tstamp <= "2018-12-17",
+           event == "struct",
+           se_label == "premium_intro_courses") %>%
+    select(user_id = se_value, alternative.name = se_property, collector_tstamp) %>%
+    mutate(experiment_start_date = DATE(collector_tstamp)) %>%
+    mutate(user_id = as.integer(user_id))
+
+  y <- tbl_views_b2x_user_subscriptions() %>%
+    mutate(sub_start_date = DATE(started_at)) %>%
+    filter(sub_start_date >= "2018-12-13",
+           sub_start_date <= "2018-12-17")
+
+  res <- x %>%
+    after_inner_join(y,
+                     by_user = "user_id",
+                     by_time = c("experiment_start_date" = "sub_start_date"),
+                     type = "any-any") %>%
+    count() %>%
+    pull(n)
+
+  expect_gte(res, 50)
+})
+
+
 

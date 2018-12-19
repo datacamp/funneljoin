@@ -125,9 +125,11 @@ after_join <- function(x,
   time_xy <- dplyr::common_by(by_time, x, y)
 
   x_i <- x %>%
+    dplyr::arrange(!!dplyr::sym(user_xy$x), !!dplyr::sym(time_xy$x)) %>%
     dplyr::mutate(..idx = row_number())
 
   y_i <- y %>%
+    dplyr::arrange(!!dplyr::sym(user_xy$y), !!dplyr::sym(time_xy$y)) %>%
     dplyr::mutate(..idy = row_number())
 
   if (type_x %in% c("first", "last")) {
