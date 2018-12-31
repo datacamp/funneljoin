@@ -237,6 +237,3 @@ test_that("after_join works with mode = inner, type = any-any, table is remote",
 
   expect_gte(res, 50)
 })
-
-
-
