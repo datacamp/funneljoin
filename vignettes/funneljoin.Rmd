@@ -157,7 +157,7 @@ experiment_starts %>%
 
 We now have an entry for each user in the experiment_starts table, which has the time of their first registration afterward or NA if they did not have a registration afterwards. Each user only appears once since it's a `first-something` join.   
 
-We can use funneljoin's `summarize_conversions` function to get the number of starts and number of conversions (registrations) in each group. 
+We can use funneljoin's `summarize_conversions()` function to get the number of starts and number of conversions (registrations) in each group. 
 
 ```{r}
 experiment_starts %>%
@@ -168,7 +168,7 @@ experiment_starts %>%
   summarize_conversions()
 ```
 
-`summarize_conversions` also works if we have multiple types of conversions, specified by a column. Just group by that column before doing `summarize_conversions`. You can also specify the name of your second timestamp column with the argument `time_col_y` (make sure you enter it unquoted) and the column indicating experiment group with the argument `alternative_name`. 
+`summarize_conversions` also works if we have multiple types of conversions, specified by a column. Just group by that column before doing `summarize_conversions()`. You can also specify the name of your second timestamp column with the argument `time_col_y` (make sure you enter it unquoted) and the column indicating experiment group with the argument `alternative_name`. 
 
 ```{r}
 for_conversion <- tibble::tribble(
