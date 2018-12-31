@@ -1,6 +1,6 @@
 #' Summarise after join funnel with proportion test
 #'
-#' @param x a data.frame
+#' @param x a data.frame with columns nb_conversions and nb_starts
 #' @param alternative_name the name of the column indicating the experiment group
 #' @param ... any additional arguments
 #' @param ungroup whether the table needs to be ungrouped
