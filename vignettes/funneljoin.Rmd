@@ -88,7 +88,7 @@ We now have a dataset of four rows. Notice a few things:
 
 ## Max gap 
 
-What if instead we wanted all landing-registration pairs that happened within a 4-day window? We now add the `max_gap` argument. This takes either a number, which is the number of seconds, or a difftime object. Instead of calculating the number of seconds in 4 days, we'll just make a difftime object. Because we want any pair, not just the pairs of the first landings and registrations, we change the type to `any-any`
+What if instead we wanted all landing-registration pairs that happened within a 4-day window? We now add the `max_gap` argument. This takes either a number, which is the number of seconds, or a difftime object. Instead of calculating the number of seconds in 4 days, we'll just make a difftime object. Because we want any pair, not just the pairs of the first landings and registrations, we change the type to `any-any`.
 
 ```{r}
 landed %>%
