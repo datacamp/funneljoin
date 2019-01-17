@@ -11,7 +11,7 @@ filter_within_gap <- function(pairs, max_gap, time_xy, user_xy) {
   }
   else {
     ret <- pairs %>%
-      dplyr::mutate(..time_diff = difftime(!!dplyr::sym(time_xy$y), !!dplyr::sym(time_xy$x), "secs")) %>%
+      dplyr::mutate(..time_diff = difftime(!!dplyr::sym(time_xy$y), !!dplyr::sym(time_xy$x), units = "secs")) %>%
       dplyr::filter(..time_diff < !!as_seconds(max_gap))
   }
   ret

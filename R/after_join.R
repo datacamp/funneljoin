@@ -23,7 +23,7 @@
 #'   as "first-first", "last-first", or "any-firstafter". See details for more.
 #' @param max_gap Optional: the maximum gap allowed between events. Can be a
 #'   integer representing the number of seconds or a difftime object, such as
-#'   \code{as.difftime(2, unit = "hours")}.
+#'   \code{as.difftime(2, units = "hours")}.
 #' @param gap_col Whether to include a numeric column, \code{.gap},
 #'   with the time difference in seconds between the events.
 #' @importFrom magrittr %>%
@@ -191,7 +191,7 @@ after_join <- function(x,
     else {
       pairs <- pairs %>%
         dplyr::mutate(.gap = as.numeric(difftime(!!dplyr::sym(time_xy$y),
-                                                 !!dplyr::sym(time_xy$x), "secs"))) %>%
+                                                 !!dplyr::sym(time_xy$x), units = "secs"))) %>%
         dplyr::select(..idx, ..idy, .gap)
     }
   } else {
