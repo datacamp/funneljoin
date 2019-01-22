@@ -104,7 +104,7 @@ after_join <- function(x,
     stop("You can not do multiple after joins in a row remotely. Please pull your data locally.")
   }
 
-  types <- stringr::str_split(type, '\\-')[[1]]
+  types <- strsplit(type, '\\-')[[1]]
 
   if (length(types) != 2) {
     stop("type argument only supports pairs")

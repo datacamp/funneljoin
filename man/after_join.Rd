@@ -52,7 +52,7 @@ as "first-first", "last-first", or "any-firstafter". See details for more.}
 
 \item{max_gap}{Optional: the maximum gap allowed between events. Can be a
 integer representing the number of seconds or a difftime object, such as
-\code{as.difftime(2, unit = "hours")}.}
+\code{as.difftime(2, units = "hours")}.}
 
 \item{gap_col}{Whether to include a numeric column, \code{.gap},
 with the time difference in seconds between the events.}
