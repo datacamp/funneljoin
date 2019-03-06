@@ -15,22 +15,22 @@ after_join(x, y, by_time, by_user, mode = "inner",
   gap_col = FALSE)
 
 after_inner_join(x, y, by_time, by_user, type, max_gap = NULL,
-  gap_col = FALSE)
+  min_gap = NULL, gap_col = FALSE)
 
 after_left_join(x, y, by_time, by_user, type, max_gap = NULL,
-  gap_col = FALSE)
+  min_gap = NULL, gap_col = FALSE)
 
 after_right_join(x, y, by_time, by_user, type, max_gap = NULL,
-  gap_col = FALSE)
+  min_gap = NULL, gap_col = FALSE)
 
 after_full_join(x, y, by_time, by_user, type, max_gap = NULL,
-  gap_col = FALSE)
+  min_gap = NULL, gap_col = FALSE)
 
 after_anti_join(x, y, by_time, by_user, type, max_gap = NULL,
-  gap_col = FALSE)
+  min_gap = NULL, gap_col = FALSE)
 
 after_semi_join(x, y, by_time, by_user, type, max_gap = NULL,
-  gap_col = FALSE)
+  min_gap = NULL, gap_col = FALSE)
 }
 \arguments{
 \item{x}{A tbl representing the first event to occur in the funnel.}

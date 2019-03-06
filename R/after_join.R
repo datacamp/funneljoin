@@ -161,6 +161,14 @@ after_join <- function(x,
     dplyr::inner_join(y_i, by = user_xy) %>%
     dplyr::filter(!!dplyr::sym(time_xy$x) <= !!dplyr::sym(time_xy$y))
 
+  if (!is.null(max_gap) || !is.null(min_gap)) {
+    pairs <- filter_in_gap(pairs = pairs,
+                           max_gap = max_gap,
+                           min_gap = min_gap,
+                           time_xy = time_xy,
+                           user_xy = user_xy)
+  }
+
   if (type_y == "firstafter") {
     pairs <- pairs %>%
       distinct_events(time_col = time_xy$y,
@@ -173,14 +181,6 @@ after_join <- function(x,
       distinct_events(time_col = time_xy$x,
                       user_col = "..idy",
                       type = "last")
-  }
-
-  if (!is.null(max_gap) || !is.null(min_gap)) {
-    pairs <- filter_in_gap(pairs = pairs,
-                           max_gap = max_gap,
-                           min_gap = min_gap,
-                           time_xy = time_xy,
-                           user_xy = user_xy)
   }
 
   if (gap_col) {
@@ -234,42 +234,43 @@ after_join <- function(x,
 
 #' @rdname after_join
 #' @export
-after_inner_join <- function(x, y, by_time, by_user, type, max_gap = NULL, gap_col = FALSE) {
+after_inner_join <- function(x, y, by_time, by_user, type, max_gap = NULL,  min_gap = NULL, gap_col = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "inner", type = type, max_gap = max_gap, gap_col = gap_col)
+             mode = "inner", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col)
 }
 
 #' @rdname after_join
 #' @export
-after_left_join <- function(x, y, by_time, by_user, type, max_gap = NULL, gap_col = FALSE) {
+after_left_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "left", type = type, max_gap = max_gap, gap_col = gap_col)
+             mode = "left", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col)
 }
 
 #' @rdname after_join
 #' @export
-after_right_join <- function(x, y, by_time, by_user, type, max_gap = NULL, gap_col = FALSE) {
+after_right_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "right", type = type, max_gap = max_gap, gap_col = gap_col)
+             mode = "right", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col)
 }
 
 #' @rdname after_join
 #' @export
-after_full_join <- function(x, y, by_time, by_user, type, max_gap = NULL, gap_col = FALSE) {
+after_full_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "full", type = type, max_gap = max_gap, gap_col = gap_col)
+             mode = "full", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col)
 }
 
 #' @rdname after_join
 #' @export
-after_anti_join <- function(x, y, by_time, by_user, type, max_gap = NULL, gap_col = FALSE) {
+after_anti_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "anti", type = type, max_gap = max_gap, gap_col = gap_col)
+             mode = "anti", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col)
 }
 
 #' @rdname after_join
 #' @export
-after_semi_join <- function(x, y, by_time, by_user, type, max_gap = NULL, gap_col = FALSE) {
+after_semi_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL,
+                            gap_col = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "semi", type = type, max_gap = max_gap, gap_col = gap_col)
+             mode = "semi", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col)
 }
