@@ -11,7 +11,8 @@
 \title{Join tables based on one event happening after another}
 \usage{
 after_join(x, y, by_time, by_user, mode = "inner",
-  type = "first-first", max_gap = NULL, gap_col = FALSE)
+  type = "first-first", max_gap = NULL, min_gap = NULL,
+  gap_col = FALSE)
 
 after_inner_join(x, y, by_time, by_user, type, max_gap = NULL,
   gap_col = FALSE)
@@ -51,6 +52,10 @@ x and y.}
 as "first-first", "last-first", or "any-firstafter". See details for more.}
 
 \item{max_gap}{Optional: the maximum gap allowed between events. Can be a
+integer representing the number of seconds or a difftime object, such as
+\code{as.difftime(2, units = "hours")}.}
+
+\item{min_gap}{Optional: the maximum gap allowed between events. Can be a
 integer representing the number of seconds or a difftime object, such as
 \code{as.difftime(2, units = "hours")}.}
 
