@@ -15,12 +15,7 @@ knitr::opts_chunk$set(
 
 [![Travis-CI Build Status](https://travis-ci.org/datacamp/funneljoin.svg?branch=master)](https://travis-ci.org/datacamp/funneljoin)
 
-**Disclaimer**: funneljoin is still in development. While we are frequently using it at DataCamp, there might be some bugs, especially with remote tables. If you can, we recommend pulling your data to work with locally. And **do not** do multiple funnel joins in a row remotely; you will get an error (it's fine locally). 
-
-# Overview
-
 The goal of funneljoin is to make it easy to analyze behavior funnels. For example, maybe you're interested in finding the people who visit a page and then register. Or you want all the times people click on an item and add it to their cart within 2 days. 
-
 You can do this with funneljoin's `after_join()` function. The arguments are: 
 
   - `x`: a dataset with the first set of behaviors.
@@ -40,7 +35,7 @@ You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("datacamp/funneljoin")
+devtools::install_github("robinsones/funneljoin")
 ```
 
 ## Types of funnels
