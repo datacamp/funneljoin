@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-[![Travis-CI Build Status](https://travis-ci.org/datacamp/funneljoin.svg?branch=master)](https://travis-ci.org/datacamp/funneljoin)
+[![Travis-CI Build Status](https://travis-ci.org/robinsones/funneljoin.svg?branch=master)](https://travis-ci.org/robinsones/funneljoin)
 
 The goal of funneljoin is to make it easy to analyze behavior funnels. For example, maybe you're interested in finding the people who visit a page and then register. Or you want all the times people click on an item and add it to their cart within 2 days. 
 You can do this with funneljoin's `after_join()` function. The arguments are: 
