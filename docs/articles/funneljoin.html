@@ -67,7 +67,7 @@
       <h1>Introduction to funneljoin</h1>
                         <h4 class="author">Emily Robinson</h4>
             
-            <h4 class="date">2019-05-06</h4>
+            <h4 class="date">2019-05-07</h4>
       
       
       <div class="hidden name"><code>funneljoin.Rmd</code></div>
@@ -99,47 +99,47 @@
 <a href="#after_join-types" class="anchor"></a>after_join types</h2>
 <p>Funneljoins can be any combination of <code>first</code>, <code>last</code>, <code>any</code>, and <code>lastbefore</code> with <code>first</code>, <code>last</code>, <code>any</code>, and <code>firstafter</code>.</p>
 <p>Let’s take an example. We’ll create two tables, one of landings and one of registrations. Each has a <code>user_id</code> and <code>timestamp</code> column.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(funneljoin)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">landed &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="op">~</span>user_id, <span class="op">~</span>timestamp,</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="dv">1</span>, <span class="st">"2018-07-01"</span>,</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">  <span class="dv">2</span>, <span class="st">"2018-07-01"</span>,</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="dv">3</span>, <span class="st">"2018-07-02"</span>,</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">  <span class="dv">4</span>, <span class="st">"2018-07-01"</span>,</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">  <span class="dv">4</span>, <span class="st">"2018-07-04"</span>,</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">  <span class="dv">5</span>, <span class="st">"2018-07-10"</span>,</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">  <span class="dv">5</span>, <span class="st">"2018-07-12"</span>,</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">  <span class="dv">6</span>, <span class="st">"2018-07-07"</span>,</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">  <span class="dv">6</span>, <span class="st">"2018-07-08"</span></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(timestamp))</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb2-15" data-line-number="15">registered &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(</a>
-<a class="sourceLine" id="cb2-16" data-line-number="16">  <span class="op">~</span>user_id, <span class="op">~</span>timestamp,</a>
-<a class="sourceLine" id="cb2-17" data-line-number="17">  <span class="dv">1</span>, <span class="st">"2018-07-02"</span>,</a>
-<a class="sourceLine" id="cb2-18" data-line-number="18">  <span class="dv">3</span>, <span class="st">"2018-07-02"</span>,</a>
-<a class="sourceLine" id="cb2-19" data-line-number="19">  <span class="dv">4</span>, <span class="st">"2018-06-10"</span>,</a>
-<a class="sourceLine" id="cb2-20" data-line-number="20">  <span class="dv">4</span>, <span class="st">"2018-07-02"</span>,</a>
-<a class="sourceLine" id="cb2-21" data-line-number="21">  <span class="dv">5</span>, <span class="st">"2018-07-11"</span>,</a>
-<a class="sourceLine" id="cb2-22" data-line-number="22">  <span class="dv">6</span>, <span class="st">"2018-07-10"</span>,</a>
-<a class="sourceLine" id="cb2-23" data-line-number="23">  <span class="dv">6</span>, <span class="st">"2018-07-11"</span>,</a>
-<a class="sourceLine" id="cb2-24" data-line-number="24">  <span class="dv">7</span>, <span class="st">"2018-07-07"</span></a>
-<a class="sourceLine" id="cb2-25" data-line-number="25">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-26" data-line-number="26"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(timestamp))</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(funneljoin)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">landed &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
+  <span class="op">~</span>user_id, <span class="op">~</span>timestamp,
+  <span class="dv">1</span>, <span class="st">"2018-07-01"</span>,
+  <span class="dv">2</span>, <span class="st">"2018-07-01"</span>,
+  <span class="dv">3</span>, <span class="st">"2018-07-02"</span>,
+  <span class="dv">4</span>, <span class="st">"2018-07-01"</span>,
+  <span class="dv">4</span>, <span class="st">"2018-07-04"</span>,
+  <span class="dv">5</span>, <span class="st">"2018-07-10"</span>,
+  <span class="dv">5</span>, <span class="st">"2018-07-12"</span>,
+  <span class="dv">6</span>, <span class="st">"2018-07-07"</span>,
+  <span class="dv">6</span>, <span class="st">"2018-07-08"</span>
+) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(timestamp))
+
+registered &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
+  <span class="op">~</span>user_id, <span class="op">~</span>timestamp,
+  <span class="dv">1</span>, <span class="st">"2018-07-02"</span>,
+  <span class="dv">3</span>, <span class="st">"2018-07-02"</span>,
+  <span class="dv">4</span>, <span class="st">"2018-06-10"</span>,
+  <span class="dv">4</span>, <span class="st">"2018-07-02"</span>,
+  <span class="dv">5</span>, <span class="st">"2018-07-11"</span>,
+  <span class="dv">6</span>, <span class="st">"2018-07-10"</span>,
+  <span class="dv">6</span>, <span class="st">"2018-07-11"</span>,
+  <span class="dv">7</span>, <span class="st">"2018-07-07"</span>
+) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(timestamp))</code></pre></div>
 <p>Let’s say we wanted to get only the first time people landed and the first time they registered, <em>if</em> it was after their first registration. We would use a <code>first-first inner</code> join.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">landed <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="../reference/after_join.html">after_inner_join</a></span>(registered, </a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">                   <span class="dt">by_user =</span> <span class="st">"user_id"</span>,</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">                   <span class="dt">by_time =</span> <span class="st">"timestamp"</span>,</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">                   <span class="dt">type =</span> <span class="st">"first-first"</span>)</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; # A tibble: 4 x 3</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt;   user_id timestamp.x timestamp.y</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;     &lt;dbl&gt; &lt;date&gt;      &lt;date&gt;     </span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; 1       1 2018-07-01  2018-07-02 </span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; 2       3 2018-07-02  2018-07-02 </span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; 3       6 2018-07-07  2018-07-10 </span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; 4       5 2018-07-10  2018-07-11</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">landed <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="../reference/after_join.html">after_inner_join</a></span>(registered, 
+                   <span class="dt">by_user =</span> <span class="st">"user_id"</span>,
+                   <span class="dt">by_time =</span> <span class="st">"timestamp"</span>,
+                   <span class="dt">type =</span> <span class="st">"first-first"</span>)
+<span class="co">#&gt; # A tibble: 4 x 3</span>
+<span class="co">#&gt;   user_id timestamp.x timestamp.y</span>
+<span class="co">#&gt;     &lt;dbl&gt; &lt;date&gt;      &lt;date&gt;     </span>
+<span class="co">#&gt; 1       1 2018-07-01  2018-07-02 </span>
+<span class="co">#&gt; 2       3 2018-07-02  2018-07-02 </span>
+<span class="co">#&gt; 3       6 2018-07-07  2018-07-10 </span>
+<span class="co">#&gt; 4       5 2018-07-10  2018-07-11</span></code></pre></div>
 <p>We now have a dataset of four rows. Notice a few things:</p>
 <ul>
 <li>
@@ -153,22 +153,22 @@
 <h2 class="hasAnchor">
 <a href="#max-gap" class="anchor"></a>Max gap</h2>
 <p>What if instead we wanted all landing-registration pairs that happened within a 4-day window? We now add the <code>max_gap</code> argument. This takes either a number, which is the number of seconds, or a difftime object. Instead of calculating the number of seconds in 4 days, we’ll just make a difftime object. Because we want any pair, not just the pairs of the first landings and registrations, we change the type to <code>any-any</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">landed <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="../reference/after_join.html">after_inner_join</a></span>(registered, </a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">                   <span class="dt">by_user =</span> <span class="st">"user_id"</span>,</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">                   <span class="dt">by_time =</span> <span class="st">"timestamp"</span>,</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">                   <span class="dt">type =</span> <span class="st">"any-any"</span>, </a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">                   <span class="dt">max_gap =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/difftime">as.difftime</a></span>(<span class="dv">4</span>, <span class="dt">units =</span> <span class="st">"days"</span>))</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; # A tibble: 7 x 3</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt;   user_id timestamp.x timestamp.y</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt;     &lt;dbl&gt; &lt;date&gt;      &lt;date&gt;     </span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; 1       1 2018-07-01  2018-07-02 </span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; 2       3 2018-07-02  2018-07-02 </span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; 3       4 2018-07-01  2018-07-02 </span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; 4       5 2018-07-10  2018-07-11 </span></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; 5       6 2018-07-07  2018-07-10 </span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; 6       6 2018-07-08  2018-07-10 </span></a>
-<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; 7       6 2018-07-08  2018-07-11</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">landed <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="../reference/after_join.html">after_inner_join</a></span>(registered, 
+                   <span class="dt">by_user =</span> <span class="st">"user_id"</span>,
+                   <span class="dt">by_time =</span> <span class="st">"timestamp"</span>,
+                   <span class="dt">type =</span> <span class="st">"any-any"</span>, 
+                   <span class="dt">max_gap =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/difftime">as.difftime</a></span>(<span class="dv">4</span>, <span class="dt">units =</span> <span class="st">"days"</span>))
+<span class="co">#&gt; # A tibble: 7 x 3</span>
+<span class="co">#&gt;   user_id timestamp.x timestamp.y</span>
+<span class="co">#&gt;     &lt;dbl&gt; &lt;date&gt;      &lt;date&gt;     </span>
+<span class="co">#&gt; 1       1 2018-07-01  2018-07-02 </span>
+<span class="co">#&gt; 2       3 2018-07-02  2018-07-02 </span>
+<span class="co">#&gt; 3       4 2018-07-01  2018-07-02 </span>
+<span class="co">#&gt; 4       5 2018-07-10  2018-07-11 </span>
+<span class="co">#&gt; 5       6 2018-07-07  2018-07-10 </span>
+<span class="co">#&gt; 6       6 2018-07-08  2018-07-10 </span>
+<span class="co">#&gt; 7       6 2018-07-08  2018-07-11</span></code></pre></div>
 <p>We now have a dataset of 7 rows. Notice a few things:</p>
 <ul>
 <li>As always, <code>timestamp.y</code> is greater than or equal to <code>timestamp.x</code>.</li>
@@ -190,86 +190,86 @@
 <a href="#other-types-of-joins" class="anchor"></a>Other types of joins</h2>
 <p>Left joins are very handy when you want to know what percentage of people who did X did Y afterward. For example, we may have an experiment where we want to know “what percentage of people registered after entering the experiment?”</p>
 <p>In this case, we’d use a <code>first-firstafter</code> left join - we want to get a person’s first experiment start and then their first registration afterward, if they have one. Let’s add another column to our experiment starts table, which experiment variant someone was in.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">experiment_starts &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">  <span class="op">~</span>user_id, <span class="op">~</span>timestamp, <span class="op">~</span><span class="st"> </span>alternative.name,</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">  <span class="dv">1</span>, <span class="st">"2018-07-01"</span>, <span class="st">"control"</span>,</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">  <span class="dv">2</span>, <span class="st">"2018-07-01"</span>, <span class="st">"treatment"</span>,</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">  <span class="dv">3</span>, <span class="st">"2018-07-02"</span>, <span class="st">"control"</span>,</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">  <span class="dv">4</span>, <span class="st">"2018-07-01"</span>, <span class="st">"control"</span>,</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">  <span class="dv">4</span>, <span class="st">"2018-07-04"</span>, <span class="st">"control"</span>,</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8">  <span class="dv">5</span>, <span class="st">"2018-07-10"</span>, <span class="st">"treatment"</span>,</a>
-<a class="sourceLine" id="cb5-9" data-line-number="9">  <span class="dv">5</span>, <span class="st">"2018-07-12"</span>, <span class="st">"treatment"</span>,</a>
-<a class="sourceLine" id="cb5-10" data-line-number="10">  <span class="dv">6</span>, <span class="st">"2018-07-07"</span>, <span class="st">"treatment"</span>,</a>
-<a class="sourceLine" id="cb5-11" data-line-number="11">  <span class="dv">6</span>, <span class="st">"2018-07-08"</span>, <span class="st">"treatment"</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(timestamp))</a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15">experiment_registrations &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(</a>
-<a class="sourceLine" id="cb5-16" data-line-number="16">  <span class="op">~</span>user_id, <span class="op">~</span>timestamp, </a>
-<a class="sourceLine" id="cb5-17" data-line-number="17">  <span class="dv">1</span>, <span class="st">"2018-07-02"</span>, </a>
-<a class="sourceLine" id="cb5-18" data-line-number="18">  <span class="dv">3</span>, <span class="st">"2018-07-02"</span>, </a>
-<a class="sourceLine" id="cb5-19" data-line-number="19">  <span class="dv">4</span>, <span class="st">"2018-06-10"</span>, </a>
-<a class="sourceLine" id="cb5-20" data-line-number="20">  <span class="dv">4</span>, <span class="st">"2018-07-02"</span>, </a>
-<a class="sourceLine" id="cb5-21" data-line-number="21">  <span class="dv">5</span>, <span class="st">"2018-07-11"</span>, </a>
-<a class="sourceLine" id="cb5-22" data-line-number="22">  <span class="dv">6</span>, <span class="st">"2018-07-10"</span>, </a>
-<a class="sourceLine" id="cb5-23" data-line-number="23">  <span class="dv">6</span>, <span class="st">"2018-07-11"</span>, </a>
-<a class="sourceLine" id="cb5-24" data-line-number="24">  <span class="dv">7</span>, <span class="st">"2018-07-07"</span></a>
-<a class="sourceLine" id="cb5-25" data-line-number="25">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-26" data-line-number="26"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(timestamp))</a></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">experiment_starts <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="../reference/after_join.html">after_left_join</a></span>(experiment_registrations, </a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">                   <span class="dt">by_user =</span> <span class="st">"user_id"</span>,</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">                   <span class="dt">by_time =</span> <span class="st">"timestamp"</span>,</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">                   <span class="dt">type =</span> <span class="st">"first-firstafter"</span>)</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; # A tibble: 6 x 4</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;   user_id timestamp.x alternative.name timestamp.y</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;     &lt;dbl&gt; &lt;date&gt;      &lt;chr&gt;            &lt;date&gt;     </span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; 1       1 2018-07-01  control          2018-07-02 </span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; 2       2 2018-07-01  treatment        NA         </span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; 3       4 2018-07-01  control          2018-07-02 </span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; 4       3 2018-07-02  control          2018-07-02 </span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; 5       6 2018-07-07  treatment        2018-07-10 </span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 6       5 2018-07-10  treatment        2018-07-11</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">experiment_starts &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
+  <span class="op">~</span>user_id, <span class="op">~</span>timestamp, <span class="op">~</span><span class="st"> </span>alternative.name,
+  <span class="dv">1</span>, <span class="st">"2018-07-01"</span>, <span class="st">"control"</span>,
+  <span class="dv">2</span>, <span class="st">"2018-07-01"</span>, <span class="st">"treatment"</span>,
+  <span class="dv">3</span>, <span class="st">"2018-07-02"</span>, <span class="st">"control"</span>,
+  <span class="dv">4</span>, <span class="st">"2018-07-01"</span>, <span class="st">"control"</span>,
+  <span class="dv">4</span>, <span class="st">"2018-07-04"</span>, <span class="st">"control"</span>,
+  <span class="dv">5</span>, <span class="st">"2018-07-10"</span>, <span class="st">"treatment"</span>,
+  <span class="dv">5</span>, <span class="st">"2018-07-12"</span>, <span class="st">"treatment"</span>,
+  <span class="dv">6</span>, <span class="st">"2018-07-07"</span>, <span class="st">"treatment"</span>,
+  <span class="dv">6</span>, <span class="st">"2018-07-08"</span>, <span class="st">"treatment"</span>
+) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(timestamp))
+
+experiment_registrations &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
+  <span class="op">~</span>user_id, <span class="op">~</span>timestamp, 
+  <span class="dv">1</span>, <span class="st">"2018-07-02"</span>, 
+  <span class="dv">3</span>, <span class="st">"2018-07-02"</span>, 
+  <span class="dv">4</span>, <span class="st">"2018-06-10"</span>, 
+  <span class="dv">4</span>, <span class="st">"2018-07-02"</span>, 
+  <span class="dv">5</span>, <span class="st">"2018-07-11"</span>, 
+  <span class="dv">6</span>, <span class="st">"2018-07-10"</span>, 
+  <span class="dv">6</span>, <span class="st">"2018-07-11"</span>, 
+  <span class="dv">7</span>, <span class="st">"2018-07-07"</span>
+) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(timestamp))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">experiment_starts <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="../reference/after_join.html">after_left_join</a></span>(experiment_registrations, 
+                   <span class="dt">by_user =</span> <span class="st">"user_id"</span>,
+                   <span class="dt">by_time =</span> <span class="st">"timestamp"</span>,
+                   <span class="dt">type =</span> <span class="st">"first-firstafter"</span>)
+<span class="co">#&gt; # A tibble: 6 x 4</span>
+<span class="co">#&gt;   user_id timestamp.x alternative.name timestamp.y</span>
+<span class="co">#&gt;     &lt;dbl&gt; &lt;date&gt;      &lt;chr&gt;            &lt;date&gt;     </span>
+<span class="co">#&gt; 1       1 2018-07-01  control          2018-07-02 </span>
+<span class="co">#&gt; 2       2 2018-07-01  treatment        NA         </span>
+<span class="co">#&gt; 3       4 2018-07-01  control          2018-07-02 </span>
+<span class="co">#&gt; 4       3 2018-07-02  control          2018-07-02 </span>
+<span class="co">#&gt; 5       6 2018-07-07  treatment        2018-07-10 </span>
+<span class="co">#&gt; 6       5 2018-07-10  treatment        2018-07-11</span></code></pre></div>
 <p>We now have an entry for each user in the experiment_starts table, which has the time of their first registration afterward or NA if they did not have a registration afterwards. Each user only appears once since it’s a <code>first-something</code> join.</p>
 <p>We can use funneljoin’s <code><a href="../reference/summarize_conversions.html">summarize_conversions()</a></code> function to get the number of starts and number of conversions (registrations) in each group.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">experiment_starts <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="../reference/after_join.html">after_left_join</a></span>(experiment_registrations, </a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">                   <span class="dt">by_user =</span> <span class="st">"user_id"</span>,</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">                   <span class="dt">by_time =</span> <span class="st">"timestamp"</span>,</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">                   <span class="dt">type =</span> <span class="st">"first-firstafter"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="../reference/summarize_conversions.html">summarize_conversions</a></span>()</a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; # A tibble: 2 x 3</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;   alternative.name nb_starts nb_conversions</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;   &lt;chr&gt;                &lt;int&gt;          &lt;int&gt;</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; 1 control                  3              3</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; 2 treatment                3              2</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">experiment_starts <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="../reference/after_join.html">after_left_join</a></span>(experiment_registrations, 
+                   <span class="dt">by_user =</span> <span class="st">"user_id"</span>,
+                   <span class="dt">by_time =</span> <span class="st">"timestamp"</span>,
+                   <span class="dt">type =</span> <span class="st">"first-firstafter"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="../reference/summarize_conversions.html">summarize_conversions</a></span>()
+<span class="co">#&gt; # A tibble: 2 x 3</span>
+<span class="co">#&gt;   alternative.name nb_starts nb_conversions</span>
+<span class="co">#&gt;   &lt;chr&gt;                &lt;int&gt;          &lt;int&gt;</span>
+<span class="co">#&gt; 1 control                  3              3</span>
+<span class="co">#&gt; 2 treatment                3              2</span></code></pre></div>
 <p><code>summarize_conversions</code> also works if we have multiple types of conversions, specified by a column. Just group by that column before doing <code><a href="../reference/summarize_conversions.html">summarize_conversions()</a></code>. You can also specify the name of your second timestamp column with the argument <code>time_col_y</code> (make sure you enter it unquoted) and the column indicating experiment group with the argument <code>alternative_name</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">for_conversion &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">  <span class="op">~</span><span class="st">"experiment_group"</span>, <span class="op">~</span><span class="st">"first_event"</span>, <span class="op">~</span><span class="st">"last_event"</span>, <span class="op">~</span><span class="st">"type"</span>, </a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="st">"control"</span>, <span class="st">"2018-07-01"</span>, <span class="ot">NA</span>, <span class="st">"click"</span>,</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">  <span class="st">"control"</span>, <span class="st">"2018-07-02"</span>, <span class="ot">NA</span>, <span class="st">"click"</span>,</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">  <span class="st">"control"</span>, <span class="st">"2018-07-03"</span>, <span class="st">"2018-07-05"</span>, <span class="st">"click"</span>,</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">  <span class="st">"treatment"</span>, <span class="st">"2018-07-01"</span>, <span class="st">"2018-07-05"</span>, <span class="st">"click"</span>,</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">  <span class="st">"treatment"</span>, <span class="st">"2018-07-01"</span>, <span class="st">"2018-07-05"</span>, <span class="st">"click"</span>,</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">  <span class="st">"control"</span>, <span class="st">"2018-07-01"</span>, <span class="ot">NA</span>, <span class="st">"purchase"</span>,</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">  <span class="st">"control"</span>, <span class="st">"2018-07-02"</span>, <span class="ot">NA</span>, <span class="st">"purchase"</span>,</a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">  <span class="st">"control"</span>, <span class="st">"2018-07-03"</span>, <span class="ot">NA</span>, <span class="st">"purchase"</span>,</a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">  <span class="st">"treatment"</span>, <span class="st">"2018-07-01"</span>, <span class="ot">NA</span>, <span class="st">"purchase"</span>,</a>
-<a class="sourceLine" id="cb8-12" data-line-number="12">  <span class="st">"treatment"</span>, <span class="st">"2018-07-01"</span>, <span class="st">"2018-07-05"</span>, <span class="st">"purchase"</span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13">)</a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb8-15" data-line-number="15">for_conversion <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(type) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="st">  </span><span class="kw"><a href="../reference/summarize_conversions.html">summarize_conversions</a></span>(<span class="dt">time_col_y =</span> last_event, </a>
-<a class="sourceLine" id="cb8-18" data-line-number="18">                        <span class="dt">alternative_name =</span> experiment_group)</a>
-<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt; # A tibble: 4 x 4</span></a>
-<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt; # Groups:   type [2]</span></a>
-<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt;   type     experiment_group nb_starts nb_conversions</span></a>
-<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;                &lt;int&gt;          &lt;int&gt;</span></a>
-<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt; 1 click    control                  3              1</span></a>
-<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt; 2 click    treatment                2              2</span></a>
-<a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co">#&gt; 3 purchase control                  3              0</span></a>
-<a class="sourceLine" id="cb8-26" data-line-number="26"><span class="co">#&gt; 4 purchase treatment                2              1</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">for_conversion &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
+  <span class="op">~</span><span class="st">"experiment_group"</span>, <span class="op">~</span><span class="st">"first_event"</span>, <span class="op">~</span><span class="st">"last_event"</span>, <span class="op">~</span><span class="st">"type"</span>, 
+  <span class="st">"control"</span>, <span class="st">"2018-07-01"</span>, <span class="ot">NA</span>, <span class="st">"click"</span>,
+  <span class="st">"control"</span>, <span class="st">"2018-07-02"</span>, <span class="ot">NA</span>, <span class="st">"click"</span>,
+  <span class="st">"control"</span>, <span class="st">"2018-07-03"</span>, <span class="st">"2018-07-05"</span>, <span class="st">"click"</span>,
+  <span class="st">"treatment"</span>, <span class="st">"2018-07-01"</span>, <span class="st">"2018-07-05"</span>, <span class="st">"click"</span>,
+  <span class="st">"treatment"</span>, <span class="st">"2018-07-01"</span>, <span class="st">"2018-07-05"</span>, <span class="st">"click"</span>,
+  <span class="st">"control"</span>, <span class="st">"2018-07-01"</span>, <span class="ot">NA</span>, <span class="st">"purchase"</span>,
+  <span class="st">"control"</span>, <span class="st">"2018-07-02"</span>, <span class="ot">NA</span>, <span class="st">"purchase"</span>,
+  <span class="st">"control"</span>, <span class="st">"2018-07-03"</span>, <span class="ot">NA</span>, <span class="st">"purchase"</span>,
+  <span class="st">"treatment"</span>, <span class="st">"2018-07-01"</span>, <span class="ot">NA</span>, <span class="st">"purchase"</span>,
+  <span class="st">"treatment"</span>, <span class="st">"2018-07-01"</span>, <span class="st">"2018-07-05"</span>, <span class="st">"purchase"</span>
+)
+
+for_conversion <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(type) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="../reference/summarize_conversions.html">summarize_conversions</a></span>(<span class="dt">time_col_y =</span> last_event, 
+                        <span class="dt">alternative_name =</span> experiment_group)
+<span class="co">#&gt; # A tibble: 4 x 4</span>
+<span class="co">#&gt; # Groups:   type [2]</span>
+<span class="co">#&gt;   type     experiment_group nb_starts nb_conversions</span>
+<span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;                &lt;int&gt;          &lt;int&gt;</span>
+<span class="co">#&gt; 1 click    control                  3              1</span>
+<span class="co">#&gt; 2 click    treatment                2              2</span>
+<span class="co">#&gt; 3 purchase control                  3              0</span>
+<span class="co">#&gt; 4 purchase treatment                2              1</span></code></pre></div>
 </div>
 <div id="summarize-prop-tests" class="section level2">
 <h2 class="hasAnchor">
@@ -289,23 +289,23 @@
 <code>pct_change_low</code> and <code>pct_change_high</code>: the bayesian estimates for a 90% confidence interval.</li>
 </ul>
 <p>If you had a type column, it will also be in the output.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">tbl &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">  <span class="op">~</span><span class="st"> </span>experiment_group, <span class="op">~</span>nb_starts, <span class="op">~</span>nb_conversions, <span class="op">~</span>type,</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="st">"control"</span>, <span class="dv">500</span>, <span class="dv">200</span>, <span class="st">"purchase"</span>,</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">  <span class="st">"treatment"</span>, <span class="dv">500</span>, <span class="dv">100</span>, <span class="st">"purchase"</span>, </a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">  <span class="st">"control"</span>, <span class="dv">500</span>, <span class="dv">360</span>, <span class="st">"click"</span>,</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6">  <span class="st">"treatment"</span>, <span class="dv">500</span>, <span class="dv">375</span>, <span class="st">"click"</span></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7">)</a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb9-9" data-line-number="9">tbl <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(type) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="st">  </span><span class="kw"><a href="../reference/summarize_prop_tests.html">summarize_prop_tests</a></span>(<span class="dt">alternative_name =</span> experiment_group)</a>
-<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt; # A tibble: 2 x 7</span></a>
-<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt;   type  control treatment  p_value pct_change pct_change_low</span></a>
-<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt;   &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;          &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt; 1 click    0.72      0.75 3.16e- 1     0.0417        -0.0248</span></a>
-<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt; 2 purc…    0.4       0.2  8.39e-12    -0.5           -0.621 </span></a>
-<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt; # … with 1 more variable: pct_change_high &lt;dbl&gt;</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tbl &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
+  <span class="op">~</span><span class="st"> </span>experiment_group, <span class="op">~</span>nb_starts, <span class="op">~</span>nb_conversions, <span class="op">~</span>type,
+  <span class="st">"control"</span>, <span class="dv">500</span>, <span class="dv">200</span>, <span class="st">"purchase"</span>,
+  <span class="st">"treatment"</span>, <span class="dv">500</span>, <span class="dv">100</span>, <span class="st">"purchase"</span>, 
+  <span class="st">"control"</span>, <span class="dv">500</span>, <span class="dv">360</span>, <span class="st">"click"</span>,
+  <span class="st">"treatment"</span>, <span class="dv">500</span>, <span class="dv">375</span>, <span class="st">"click"</span>
+)
+
+tbl <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(type) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="../reference/summarize_prop_tests.html">summarize_prop_tests</a></span>(<span class="dt">alternative_name =</span> experiment_group)
+<span class="co">#&gt; # A tibble: 2 x 7</span>
+<span class="co">#&gt;   type  control treatment  p_value pct_change pct_change_low</span>
+<span class="co">#&gt;   &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;          &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 click    0.72      0.75 3.16e- 1     0.0417        -0.0248</span>
+<span class="co">#&gt; 2 purc…    0.4       0.2  8.39e-12    -0.5           -0.621 </span>
+<span class="co">#&gt; # … with 1 more variable: pct_change_high &lt;dbl&gt;</span></code></pre></div>
 </div>
   </div>
 

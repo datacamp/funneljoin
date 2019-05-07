@@ -70,12 +70,7 @@
     
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<p><strong>Disclaimer</strong>: funneljoin is still in development. While we are frequently using it at DataCamp, there might be some bugs, especially with remote tables. If you can, we recommend pulling your data to work with locally. And <strong>do not</strong> do multiple funnel joins in a row remotely; you will get an error (it’s fine locally).</p>
-<div id="overview" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h1></div>
-<p>The goal of funneljoin is to make it easy to analyze behavior funnels. For example, maybe you’re interested in finding the people who visit a page and then register. Or you want all the times people click on an item and add it to their cart within 2 days.</p>
-<p>You can do this with funneljoin’s <code><a href="reference/after_join.html">after_join()</a></code> function. The arguments are:</p>
+<p>The goal of funneljoin is to make it easy to analyze behavior funnels. For example, maybe you’re interested in finding the people who visit a page and then register. Or you want all the times people click on an item and add it to their cart within 2 days. You can do this with funneljoin’s <code><a href="reference/after_join.html">after_join()</a></code> function. The arguments are:</p>
 <ul>
 <li>
 <code>x</code>: a dataset with the first set of behaviors.</li>
@@ -99,8 +94,8 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"datacamp/funneljoin"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
+devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"robinsones/funneljoin"</span>)</code></pre></div>
 </div>
 <div id="types-of-funnels" class="section level2">
 <h2 class="hasAnchor">
@@ -122,75 +117,75 @@
 <div id="example" class="section level3">
 <h3 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; Attaching package: 'dplyr'</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; The following objects are masked from 'package:stats':</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt;     filter, lag</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; The following objects are masked from 'package:base':</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt;     intersect, setdiff, setequal, union</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(funneljoin)</a></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">landed &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="op">~</span>user_id, <span class="op">~</span>timestamp,</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dv">1</span>, <span class="st">"2018-07-01"</span>,</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dv">2</span>, <span class="st">"2018-07-01"</span>,</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="dv">3</span>, <span class="st">"2018-07-02"</span>,</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">  <span class="dv">4</span>, <span class="st">"2018-07-01"</span>,</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">  <span class="dv">4</span>, <span class="st">"2018-07-04"</span>,</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">  <span class="dv">5</span>, <span class="st">"2018-07-10"</span>,</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">  <span class="dv">5</span>, <span class="st">"2018-07-12"</span>,</a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">  <span class="dv">6</span>, <span class="st">"2018-07-07"</span>,</a>
-<a class="sourceLine" id="cb3-11" data-line-number="11">  <span class="dv">6</span>, <span class="st">"2018-07-08"</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(timestamp))</a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15">registered &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(</a>
-<a class="sourceLine" id="cb3-16" data-line-number="16">  <span class="op">~</span>user_id, <span class="op">~</span>timestamp,</a>
-<a class="sourceLine" id="cb3-17" data-line-number="17">  <span class="dv">1</span>, <span class="st">"2018-07-02"</span>,</a>
-<a class="sourceLine" id="cb3-18" data-line-number="18">  <span class="dv">3</span>, <span class="st">"2018-07-02"</span>,</a>
-<a class="sourceLine" id="cb3-19" data-line-number="19">  <span class="dv">4</span>, <span class="st">"2018-06-10"</span>,</a>
-<a class="sourceLine" id="cb3-20" data-line-number="20">  <span class="dv">4</span>, <span class="st">"2018-07-02"</span>,</a>
-<a class="sourceLine" id="cb3-21" data-line-number="21">  <span class="dv">5</span>, <span class="st">"2018-07-11"</span>,</a>
-<a class="sourceLine" id="cb3-22" data-line-number="22">  <span class="dv">6</span>, <span class="st">"2018-07-10"</span>,</a>
-<a class="sourceLine" id="cb3-23" data-line-number="23">  <span class="dv">6</span>, <span class="st">"2018-07-11"</span>,</a>
-<a class="sourceLine" id="cb3-24" data-line-number="24">  <span class="dv">7</span>, <span class="st">"2018-07-07"</span></a>
-<a class="sourceLine" id="cb3-25" data-line-number="25">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(timestamp))</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'dplyr'</span>
+<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     filter, lag</span>
+<span class="co">#&gt; The following objects are masked from 'package:base':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(funneljoin)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">landed &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
+  <span class="op">~</span>user_id, <span class="op">~</span>timestamp,
+  <span class="dv">1</span>, <span class="st">"2018-07-01"</span>,
+  <span class="dv">2</span>, <span class="st">"2018-07-01"</span>,
+  <span class="dv">3</span>, <span class="st">"2018-07-02"</span>,
+  <span class="dv">4</span>, <span class="st">"2018-07-01"</span>,
+  <span class="dv">4</span>, <span class="st">"2018-07-04"</span>,
+  <span class="dv">5</span>, <span class="st">"2018-07-10"</span>,
+  <span class="dv">5</span>, <span class="st">"2018-07-12"</span>,
+  <span class="dv">6</span>, <span class="st">"2018-07-07"</span>,
+  <span class="dv">6</span>, <span class="st">"2018-07-08"</span>
+) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(timestamp))
+
+registered &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
+  <span class="op">~</span>user_id, <span class="op">~</span>timestamp,
+  <span class="dv">1</span>, <span class="st">"2018-07-02"</span>,
+  <span class="dv">3</span>, <span class="st">"2018-07-02"</span>,
+  <span class="dv">4</span>, <span class="st">"2018-06-10"</span>,
+  <span class="dv">4</span>, <span class="st">"2018-07-02"</span>,
+  <span class="dv">5</span>, <span class="st">"2018-07-11"</span>,
+  <span class="dv">6</span>, <span class="st">"2018-07-10"</span>,
+  <span class="dv">6</span>, <span class="st">"2018-07-11"</span>,
+  <span class="dv">7</span>, <span class="st">"2018-07-07"</span>
+) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(timestamp))</code></pre></div>
 <p>Let’s say we wanted to get only the first time people landed and registered. We would use a <code>first-first inner</code> join:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">landed <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/after_join.html">after_inner_join</a></span>(registered, </a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">                   <span class="dt">by_user =</span> <span class="st">"user_id"</span>,</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">                   <span class="dt">by_time =</span> <span class="st">"timestamp"</span>,</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">                   <span class="dt">type =</span> <span class="st">"first-first"</span>)</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; # A tibble: 4 x 3</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt;   user_id timestamp.x timestamp.y</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt;     &lt;dbl&gt; &lt;date&gt;      &lt;date&gt;     </span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; 1       1 2018-07-01  2018-07-02 </span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; 2       3 2018-07-02  2018-07-02 </span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; 3       6 2018-07-07  2018-07-10 </span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; 4       5 2018-07-10  2018-07-11</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">landed <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="reference/after_join.html">after_inner_join</a></span>(registered, 
+                   <span class="dt">by_user =</span> <span class="st">"user_id"</span>,
+                   <span class="dt">by_time =</span> <span class="st">"timestamp"</span>,
+                   <span class="dt">type =</span> <span class="st">"first-first"</span>)
+<span class="co">#&gt; # A tibble: 4 x 3</span>
+<span class="co">#&gt;   user_id timestamp.x timestamp.y</span>
+<span class="co">#&gt;     &lt;dbl&gt; &lt;date&gt;      &lt;date&gt;     </span>
+<span class="co">#&gt; 1       1 2018-07-01  2018-07-02 </span>
+<span class="co">#&gt; 2       3 2018-07-02  2018-07-02 </span>
+<span class="co">#&gt; 3       6 2018-07-07  2018-07-10 </span>
+<span class="co">#&gt; 4       5 2018-07-10  2018-07-11</span></code></pre></div>
 <p>If your time and user columns have different names, you can work with that too:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">landed &lt;-<span class="st"> </span>landed <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">landed_at =</span> timestamp,</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">         <span class="dt">user_id_x =</span> user_id)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">registered &lt;-<span class="st"> </span>registered <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">registered_at =</span> timestamp,</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">         <span class="dt">user_id_y =</span> user_id)</a></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">landed <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/after_join.html">after_inner_join</a></span>(registered, </a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">                   <span class="dt">by_user =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"user_id_x"</span> =<span class="st"> "user_id_y"</span>),</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">                   <span class="dt">by_time =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"landed_at"</span> =<span class="st"> "registered_at"</span>),</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">                   <span class="dt">type =</span> <span class="st">"first-first"</span>)</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; # A tibble: 4 x 3</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;   user_id_x landed_at  registered_at</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;       &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;       </span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; 1         1 2018-07-01 2018-07-02   </span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; 2         3 2018-07-02 2018-07-02   </span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; 3         6 2018-07-07 2018-07-10   </span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; 4         5 2018-07-10 2018-07-11</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">landed &lt;-<span class="st"> </span>landed <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">landed_at =</span> timestamp,
+         <span class="dt">user_id_x =</span> user_id)
+
+registered &lt;-<span class="st"> </span>registered <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">registered_at =</span> timestamp,
+         <span class="dt">user_id_y =</span> user_id)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">landed <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="reference/after_join.html">after_inner_join</a></span>(registered, 
+                   <span class="dt">by_user =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"user_id_x"</span> =<span class="st"> "user_id_y"</span>),
+                   <span class="dt">by_time =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"landed_at"</span> =<span class="st"> "registered_at"</span>),
+                   <span class="dt">type =</span> <span class="st">"first-first"</span>)
+<span class="co">#&gt; # A tibble: 4 x 3</span>
+<span class="co">#&gt;   user_id_x landed_at  registered_at</span>
+<span class="co">#&gt;       &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;       </span>
+<span class="co">#&gt; 1         1 2018-07-01 2018-07-02   </span>
+<span class="co">#&gt; 2         3 2018-07-02 2018-07-02   </span>
+<span class="co">#&gt; 3         6 2018-07-07 2018-07-10   </span>
+<span class="co">#&gt; 4         5 2018-07-10 2018-07-11</span></code></pre></div>
 </div>
 </div>
 <div id="summarizing-funnels" class="section level2">
@@ -202,7 +197,6 @@
 <h2 class="hasAnchor">
 <a href="#reporting-bugs-and-adding-features" class="anchor"></a>Reporting bugs and adding features</h2>
 <p>If you find any bugs or have a feature request or question, please <a href="https://github.com/datacamp/funneljoin/issues/new">create an issue</a>. If you’d like to add a feature, tests, or other functionality, please also make an issue first and let’s discuss!</p>
-</div>
 </div>
   </div>
 
