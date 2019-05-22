@@ -56,30 +56,37 @@ summarize_prop_tests <- function(x, alternative_name = alternative.name, ..., un
 
 #' Summarize Left-joined table into conversion count
 #'
-#' @param x a data.frame with one row per user
-#' @param time_col_y the name of the second event time column
-#' @param alternative_name the name of the column indicating the experiment group
+#' @param x A tbl with one row per user
+#' @param converted The name of the column representing whether the user converted
+#' (treated as FALSE if NA or FALSE, otherwise TRUE)
 #'
-#' @return a table with three columns, `nb_starts`, `nb_conversions`, and `alternative.name`
+#' @return A table with columns for your groups, along with `nb_starts` and `nb_conversions`
 #' @export
-summarize_conversions <- function(x, time_col_y = timestamp.y,
-                                  alternative_name = alternative.name) {
+summarize_conversions <- function(x, converted) {
 
-  var_enq_time <- dplyr::enquo(time_col_y)
-  var_enq_alternative <- dplyr::enquo(alternative_name)
-
+  var_converted <- dplyr::enquo(converted)
   if (inherits(x, "tbl_lazy")) {
-    ret <- x %>%
-      dplyr::group_by(!!var_enq_alternative, add = TRUE) %>%
-      dplyr::summarise(nb_starts = n(),
-                       nb_conversions = COUNT(!!var_enq_time))
+    first_value <- x %>%
+      head(1) %>%
+      pull(!!var_converted)
+
+    if (is.logical(first_value)) {
+      ret <- x %>%
+        dplyr::summarise(nb_starts = n(),
+                         nb_conversions = sum(ifelse(!!var_converted, 1, 0)))
+
+    }
+    else {
+      ret <- x %>%
+        dplyr::summarise(nb_starts = n(),
+                         nb_conversions = COUNT(!!var_converted))
+    }
   }
 
   else {
     ret <- x %>%
-      dplyr::group_by(!!var_enq_alternative, add = TRUE) %>%
       dplyr::summarise(nb_starts = dplyr::n(),
-                       nb_conversions = sum(!is.na(!!var_enq_time)))
+                       nb_conversions = sum(!is.na(!!var_converted) & as.logical(!!var_converted)))
   }
 
   ret

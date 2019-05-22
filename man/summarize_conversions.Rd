@@ -4,18 +4,16 @@
 \alias{summarize_conversions}
 \title{Summarize Left-joined table into conversion count}
 \usage{
-summarize_conversions(x, time_col_y = timestamp.y,
-  alternative_name = alternative.name)
+summarize_conversions(x, converted)
 }
 \arguments{
-\item{x}{a data.frame with one row per user}
+\item{x}{A tbl with one row per user}
 
-\item{time_col_y}{the name of the second event time column}
-
-\item{alternative_name}{the name of the column indicating the experiment group}
+\item{converted}{The name of the column representing whether the user converted
+(treated as FALSE if NA or FALSE, otherwise TRUE)}
 }
 \value{
-a table with three columns, `nb_starts`, `nb_conversions`, and `alternative.name`
+A table with columns for your groups, along with `nb_starts` and `nb_conversions`
 }
 \description{
 Summarize Left-joined table into conversion count
