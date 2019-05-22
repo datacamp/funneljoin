@@ -86,9 +86,10 @@ summarize_conversions <- function(x, converted) {
   else {
     ret <- x %>%
       dplyr::summarise(nb_starts = dplyr::n(),
-                       nb_conversions = sum(!is.na(!!var_converted) | is.logical(!!var_converted)))
+                       nb_conversions = ifelse(is.logical(!!var_converted),
+                                                sum(!!var_converted),
+                                                sum(!is.na(!!var_converted))))
   }
 
   ret
 }
-
