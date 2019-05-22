@@ -19,10 +19,27 @@ simple_example <- tibble::tribble(
   "treatment", "2018-07-01", "2018-07-05"
 )
 
-
 simple_summarized_conversion <- simple_example %>%
   group_by(alternative.name) %>%
   summarize_conversions(timestamp.y)
+
+for_conversion <- tibble::tribble(
+  ~"experiment_group", ~"first_event", ~"last_event", ~"type",
+  "control", "2018-07-01", NA, "click",
+  "control", "2018-07-02", NA, "click",
+  "control", "2018-07-03", "2018-07-05", "click",
+  "treatment", "2018-07-01", "2018-07-05", "click",
+  "treatment", "2018-07-01", "2018-07-05", "click",
+  "control", "2018-07-01", NA, "purchase",
+  "control", "2018-07-02", NA, "purchase",
+  "control", "2018-07-03", NA, "purchase",
+  "treatment", "2018-07-01", NA, "purchase",
+  "treatment", "2018-07-01", "2018-07-05", "purchase"
+)
+
+converted_data <- for_conversion %>%
+  group_by(type, experiment_group) %>%
+  summarize_conversions(last_event)
 
 test_that("summarize_conversions works with when group has no conversions", {
   expect_equal(nrow(simple_summarized_conversion), 2)
@@ -34,4 +51,9 @@ test_that("summarize_conversions works with when group has no conversions", {
               nrow(), 10)
 })
 
-
+test_that("summarize_conversions won't return NA", {
+  expect_equal(simple_summarized_conversion %>%
+                 filter(alternative.name == "treatment") %>%
+                 pull(nb_conversions), 3)
+  expect_false(any(is.na(converted_data$nb_conversions)))
+})
