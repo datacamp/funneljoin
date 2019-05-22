@@ -165,7 +165,8 @@ experiment_starts %>%
                    by_user = "user_id",
                    by_time = "timestamp",
                    type = "first-firstafter") %>% 
-  summarize_conversions()
+  group_by(alternative.name) %>%
+  summarize_conversions(timestamp.y)
 ```
 
 `summarize_conversions` also works if we have multiple types of conversions, specified by a column. Just group by that column before doing `summarize_conversions()`. You can also specify the name of your second timestamp column with the argument `time_col_y` (make sure you enter it unquoted) and the column indicating experiment group with the argument `alternative_name`. 
@@ -186,9 +187,8 @@ for_conversion <- tibble::tribble(
 )
 
 for_conversion %>%
-  group_by(type) %>%
-  summarize_conversions(time_col_y = last_event, 
-                        alternative_name = experiment_group)
+  group_by(type, experiment_group) %>%
+  summarize_conversions(last_event)
 ```
 
 ## Summarize Prop Tests
