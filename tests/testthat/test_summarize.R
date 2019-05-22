@@ -21,11 +21,13 @@ simple_example <- tibble::tribble(
 
 
 simple_summarized_conversion <- simple_example %>%
+  group_by(alternative.name) %>%
   summarize_conversions(timestamp.y)
 
 test_that("summarize_conversions works with when group has no conversions", {
   expect_equal(nrow(simple_summarized_conversion), 2)
   expect_gt(tbl_views_snowplow_experiment_starts() %>%
+              group_by(alternative.name) %>%
               summarize_conversions(user_id) %>%
               filter(nb_conversions == 0) %>%
               collect() %>%
