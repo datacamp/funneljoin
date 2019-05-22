@@ -57,3 +57,25 @@ test_that("summarize_conversions won't return NA", {
                  pull(nb_conversions), 3)
   expect_false(any(is.na(converted_data$nb_conversions)))
 })
+
+conversions_logical <- tibble::tribble(
+  ~"experiment_group", ~"first_event", ~"last_event", ~"type",
+  "control", "2018-07-01", FALSE, "click",
+  "control", "2018-07-02", FALSE, "click",
+  "control", "2018-07-03", TRUE, "click",
+  "treatment", "2018-07-01", TRUE, "click",
+  "treatment", "2018-07-01", TRUE, "click",
+  "control", "2018-07-01", FALSE, "purchase",
+  "control", "2018-07-02", FALSE, "purchase",
+  "control", "2018-07-03", FALSE, "purchase",
+  "treatment", "2018-07-01", FALSE, "purchase",
+  "treatment", "2018-07-01", TRUE, "purchase"
+)
+summarized_logical_conversions <- conversions_logical %>%
+  group_by(experiment_group) %>%
+  summarize_conversions(last_event)
+
+test_that("summarize_conversions works with TRUE/FALSE") {
+  expect_equal(sum(summarized_logical_conversions$nb_conversions), 4)
+}
+
