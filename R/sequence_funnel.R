@@ -22,6 +22,7 @@ funnel_start <- function(type, tstamp, user_id) {
 #' @examples
 funnel_step <- function(type) {
 
+
 }
 
 #' Title
