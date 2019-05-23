@@ -1,39 +1,6 @@
 context("lastbefore-any joining")
 library(dplyr)
 
-landed <- tibble::tribble(
-  ~user_id, ~timestamp,
-  1, "2018-07-01",
-  2, "2018-07-01",
-  3, "2018-07-02",
-  4, "2018-07-01",
-  4, "2018-07-04",
-  5, "2018-07-10",
-  5, "2018-07-12",
-  6, "2018-07-07",
-  6, "2018-07-08"
-) %>%
-  mutate(timestamp = as.Date(timestamp))
-
-registered <- tibble::tribble(
-  ~user_id, ~timestamp,
-  1, "2018-07-02",
-  3, "2018-07-02",
-  4, "2018-06-10",
-  4, "2018-07-02",
-  5, "2018-07-11",
-  6, "2018-07-10",
-  6, "2018-07-11",
-  7, "2018-07-07"
-) %>%
-  mutate(timestamp = as.Date(timestamp))
-
-# 1 2018-07-01
-# 3 2018-07-02
-# 2018-07-01
-# 5 2018-07-10
-# 6 two rows both 07-08
-
 test_that("after_join works with mode = inner and type = lastbefore-any", {
 
   res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "inner", type = "lastbefore-any")
