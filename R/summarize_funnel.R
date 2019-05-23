@@ -67,18 +67,18 @@ summarize_conversions <- function(x, converted) {
   var_converted <- dplyr::enquo(converted)
   if (inherits(x, "tbl_lazy")) {
     first_value <- x %>%
-      head(1) %>%
-      pull(!!var_converted)
+      dplyr::head(1) %>%
+      dplyr::pull(!!var_converted)
 
     if (is.logical(first_value)) {
       ret <- x %>%
-        dplyr::summarise(nb_starts = n(),
+        dplyr::summarise(nb_starts = dplyr::n(),
                          nb_conversions = sum(ifelse(!!var_converted, 1, 0)))
 
     }
     else {
       ret <- x %>%
-        dplyr::summarise(nb_starts = n(),
+        dplyr::summarise(nb_starts = dplyr::n(),
                          nb_conversions = COUNT(!!var_converted))
     }
   }
