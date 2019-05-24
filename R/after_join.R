@@ -29,6 +29,9 @@
 #'   \code{as.difftime(2, units = "hours")}.
 #' @param gap_col Whether to include a numeric column, \code{.gap},
 #'   with the time difference in seconds between the events.
+#' @param suffix If there are non-joined duplicate variables in x and y,
+#' these suffixes will be added to the output to disambiguate them.
+#' Should be a character vector of length 2.
 #' @importFrom magrittr %>%
 #'
 #' @details
@@ -102,7 +105,8 @@ after_join <- function(x,
                        type = "first-first",
                        max_gap = NULL,
                        min_gap = NULL,
-                       gap_col = FALSE) {
+                       gap_col = FALSE,
+                       suffix = c(".x", ".y")) {
 
   if (!is.null(attr(x, "after_join")) & inherits(x, "tbl_lazy")) {
     stop("You can not do multiple after joins in a row remotely. Please pull your data locally.")
@@ -220,7 +224,7 @@ after_join <- function(x,
   if (mode %in% c("inner", "left", "right", "full")) {
     ret <- x_i %>%
       join_func(pairs, by = "..idx") %>%
-      join_func(y_i, by = c(by_user, "..idy" = "..idy")) %>%
+      join_func(y_i, by = c(by_user, "..idy" = "..idy"), suffix = suffix) %>%
       dplyr::select(-..idx, -..idy)
   } else if (mode %in% c("semi", "anti")) {
     ret <- x_i %>%
@@ -234,43 +238,43 @@ after_join <- function(x,
 
 #' @rdname after_join
 #' @export
-after_inner_join <- function(x, y, by_time, by_user, type, max_gap = NULL,  min_gap = NULL, gap_col = FALSE) {
+after_inner_join <- function(x, y, by_time, by_user, type, max_gap = NULL,  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y")) {
   after_join(x, y, by_time, by_user,
-             mode = "inner", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col)
+             mode = "inner", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix)
 }
 
 #' @rdname after_join
 #' @export
-after_left_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE) {
+after_left_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y")) {
   after_join(x, y, by_time, by_user,
-             mode = "left", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col)
+             mode = "left", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix)
 }
 
 #' @rdname after_join
 #' @export
-after_right_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE) {
+after_right_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y")) {
   after_join(x, y, by_time, by_user,
-             mode = "right", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col)
+             mode = "right", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix)
 }
 
 #' @rdname after_join
 #' @export
-after_full_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE) {
+after_full_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y")) {
   after_join(x, y, by_time, by_user,
-             mode = "full", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col)
+             mode = "full", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix)
 }
 
 #' @rdname after_join
 #' @export
-after_anti_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE) {
+after_anti_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y")) {
   after_join(x, y, by_time, by_user,
-             mode = "anti", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col)
+             mode = "anti", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix)
 }
 
 #' @rdname after_join
 #' @export
 after_semi_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL,
-                            gap_col = FALSE) {
+                            gap_col = FALSE, suffix = c(".x", ".y")) {
   after_join(x, y, by_time, by_user,
-             mode = "semi", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col)
+             mode = "semi", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix)
 }
