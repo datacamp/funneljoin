@@ -24,5 +24,6 @@ Imports:
     glue,
     tibble,
     magrittr,
-    broom
+    broom,
+    purrr
 VignetteBuilder: knitr
