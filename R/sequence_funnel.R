@@ -8,8 +8,7 @@ if (FALSE) {
 
 
   funnel_step("project_start", type = "first-firstafter") %>%
-    funnel_step("subscription", type = "first-firstafter") %>%
-    funnel_end()
+    funnel_step("subscription", type = "first-firstafter")
 }
 
 #' Start a funnel
@@ -70,15 +69,4 @@ funnel_step <- function(tbl, event_type, type) {
   attr(ret, "funnel_metadata") <- md
 
   ret
-}
-
-#' Title
-#'
-#' @param tbl
-#' @return
-#' @export
-#'
-#' @examples
-funnel_end <- function(tbl) {
-
 }
