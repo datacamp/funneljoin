@@ -34,7 +34,7 @@ funnel_start <- function(tbl, event_type, event, tstamp, user) {
 funnel_step <- function(tbl, event_type, type) {
   md <- attr(tbl, "funnel_metadata")
   last_event <- utils::tail(md$event_sequence, 1)
-  md$event_sequence <- c(tbl$event_sequence, event_type)
+  md$event_sequence <- c(md$event_sequence, event_type)
 
   second_event_data <- md$original_data %>%
     dplyr::filter(!!dplyr::sym(md$event) == event_type) %>%
