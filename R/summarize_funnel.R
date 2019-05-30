@@ -67,8 +67,8 @@ summarize_conversions <- function(x, converted) {
   var_converted <- dplyr::enquo(converted)
   if (inherits(x, "tbl_lazy")) {
     first_value <- x %>%
-      head(1) %>%
-      pull(!!var_converted)
+      utils::head(1) %>%
+      dplyr::pull(!!var_converted)
 
     if (is.logical(first_value)) {
       ret <- x %>%
