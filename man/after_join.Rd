@@ -12,25 +12,25 @@
 \usage{
 after_join(x, y, by_time, by_user, mode = "inner",
   type = "first-first", max_gap = NULL, min_gap = NULL,
-  gap_col = FALSE)
+  gap_col = FALSE, suffix = c(".x", ".y"))
 
 after_inner_join(x, y, by_time, by_user, type, max_gap = NULL,
-  min_gap = NULL, gap_col = FALSE)
+  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
 
 after_left_join(x, y, by_time, by_user, type, max_gap = NULL,
-  min_gap = NULL, gap_col = FALSE)
+  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
 
 after_right_join(x, y, by_time, by_user, type, max_gap = NULL,
-  min_gap = NULL, gap_col = FALSE)
+  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
 
 after_full_join(x, y, by_time, by_user, type, max_gap = NULL,
-  min_gap = NULL, gap_col = FALSE)
+  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
 
 after_anti_join(x, y, by_time, by_user, type, max_gap = NULL,
-  min_gap = NULL, gap_col = FALSE)
+  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
 
 after_semi_join(x, y, by_time, by_user, type, max_gap = NULL,
-  min_gap = NULL, gap_col = FALSE)
+  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
 }
 \arguments{
 \item{x}{A tbl representing the first event to occur in the funnel.}
@@ -61,6 +61,10 @@ integer representing the number of seconds or a difftime object, such as
 
 \item{gap_col}{Whether to include a numeric column, \code{.gap},
 with the time difference in seconds between the events.}
+
+\item{suffix}{If there are non-joined duplicate variables in x and y,
+these suffixes will be added to the output to disambiguate them.
+Should be a character vector of length 2.}
 }
 \description{
 Join two tables based on observations in one table happening after
