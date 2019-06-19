@@ -22,5 +22,7 @@ Imports:
     glue,
     tibble,
     magrittr,
-    broom
+    broom,
+    purrr,
+    rlang
 VignetteBuilder: knitr
