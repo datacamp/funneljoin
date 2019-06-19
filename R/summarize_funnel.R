@@ -72,13 +72,13 @@ summarize_conversions <- function(x, converted) {
 
     if (is.logical(first_value)) {
       ret <- x %>%
-        dplyr::summarise(nb_starts = n(),
+        dplyr::summarise(nb_starts = dplyr::n(),
                          nb_conversions = sum(ifelse(!!var_converted, 1, 0)))
 
     }
     else {
       ret <- x %>%
-        dplyr::summarise(nb_starts = n(),
+        dplyr::summarise(nb_starts = dplyr::n(),
                          nb_conversions = COUNT(!!var_converted))
     }
   }

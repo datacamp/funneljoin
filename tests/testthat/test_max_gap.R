@@ -1,32 +1,5 @@
 context("max_gap")
 
-landed <- tibble::tribble(
-  ~user_id, ~timestamp,
-  1, "2018-07-01",
-  2, "2018-07-01",
-  3, "2018-07-02",
-  4, "2018-07-01",
-  4, "2018-07-04",
-  5, "2018-07-10",
-  5, "2018-07-12",
-  6, "2018-07-07",
-  6, "2018-07-08"
-) %>%
-  dplyr::mutate(timestamp = as.Date(timestamp))
-
-registered <- tibble::tribble(
-  ~user_id, ~timestamp,
-  1, "2018-07-02",
-  3, "2018-07-02",
-  4, "2018-06-10",
-  4, "2018-07-02",
-  5, "2018-07-11",
-  6, "2018-07-10",
-  6, "2018-07-11",
-  7, "2018-07-07"
-) %>%
-  dplyr::mutate(timestamp = as.Date(timestamp))
-
 three_days = as.difftime(3, unit = "days")
 three_days_numeric = 60 * 60 * 24 * 3
 
