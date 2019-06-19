@@ -38,7 +38,7 @@ res_funnel_start <- funnel_start(moments, "course_start", moment_type, timestamp
 test_that("funnel_start works", {
 
   expect_is(res_funnel_start, "tbl_df")
-  expect_equal(names(res_funnel_start), c("user_id", "timestamp_course_start", "moment_type_course_start"))
+  expect_equal(names(res_funnel_start), c("user_id", "timestamp_course_start"))
   expect_equal(nrow(res_funnel_start), 6)
   expect_equal(names(attributes(res_funnel_start)$funnel_metadata),
                c("original_data", "tstamp", "user", "event", "event_sequence"))
@@ -59,8 +59,8 @@ test_that("funnel_step works with one step first-firstafter", {
   expect_equal(unique(one_step_md$original_data$moment_type),
                c("course_start", "subscription"))
   expect_equal(names(res_one_step),
-               c("user_id", "timestamp_course_start", "moment_type_course_start",
-                 "timestamp_subscription", "moment_type_subscription"))
+               c("user_id", "timestamp_course_start",
+                 "timestamp_subscription"))
   expect_equal(res_one_step %>%
                  filter(timestamp_subscription < timestamp_course_start) %>%
                  nrow(), 0)
@@ -77,9 +77,9 @@ test_that("funnel_step works with two steps first-firstafter", {
 
   expect_equal(two_step_md$event_sequence, c("course_start", "subscription", "project_start"))
   expect_equal(names(res_two_step),
-               c("user_id", "timestamp_course_start", "moment_type_course_start",
-                 "timestamp_subscription", "moment_type_subscription",
-                 "timestamp_project_start", "moment_type_project_start"))
+               c("user_id", "timestamp_course_start",
+                 "timestamp_subscription",
+                 "timestamp_project_start"))
   expect_true(any(!is.na(res_two_step$timestamp_project_start)))
   expect_equal(res_two_step %>%
                  filter(timestamp_project_start < timestamp_subscription) %>%
