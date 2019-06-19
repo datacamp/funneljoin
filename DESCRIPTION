@@ -25,5 +25,6 @@ Imports:
     tibble,
     magrittr,
     broom,
-    purrr
+    purrr,
+    rlang
 VignetteBuilder: knitr
