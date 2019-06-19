@@ -21,6 +21,7 @@ funnel_start <- function(tbl, event_type, event, tstamp, user) {
 
   tbl %>%
     dplyr::filter(!!dplyr::sym(md$event) == event_type) %>%
+    dplyr::select(-!!dplyr::sym(md$event)) %>%
     dplyr::rename_at(dplyr::vars(-!!md$user), paste0, "_", event_type)
 }
 
@@ -38,6 +39,7 @@ funnel_step <- function(tbl, event_type, type) {
 
   second_event_data <- md$original_data %>%
     dplyr::filter(!!dplyr::sym(md$event) == event_type) %>%
+    dplyr::select(-!!dplyr::sym(md$event)) %>%
     dplyr::rename_at(dplyr::vars(-!!md$user), paste0, "_", event_type)
 
   tstamp_by <- stats::setNames(paste0(md$tstamp, "_", event_type),
