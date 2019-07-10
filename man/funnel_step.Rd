@@ -4,7 +4,7 @@
 \alias{funnel_step}
 \title{Continue to funnel}
 \usage{
-funnel_step(tbl, event_type, type)
+funnel_step(tbl, event_type, type, ...)
 }
 \arguments{
 \item{tbl}{A table of different events and timestamps}
@@ -12,6 +12,8 @@ funnel_step(tbl, event_type, type)
 \item{event_type}{The next event in the funnel}
 
 \item{type}{The type of after_join (e.g. "first-first", "any-any")}
+
+\item{...}{Extra arguments passed on to \link{after_left_join}}
 }
 \description{
 Continue to funnel

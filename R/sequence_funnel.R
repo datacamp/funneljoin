@@ -30,9 +30,10 @@ funnel_start <- function(tbl, event_type, event, tstamp, user) {
 #' @param tbl A table of different events and timestamps
 #' @param event_type The next event in the funnel
 #' @param type The type of after_join (e.g. "first-first", "any-any")
+#' @param ... Extra arguments passed on to \link{after_left_join}
 #' @export
 #'
-funnel_step <- function(tbl, event_type, type) {
+funnel_step <- function(tbl, event_type, type, ...) {
   md <- attr(tbl, "funnel_metadata")
   last_event <- utils::tail(md$event_sequence, 1)
   md$event_sequence <- c(md$event_sequence, event_type)
@@ -49,7 +50,8 @@ funnel_step <- function(tbl, event_type, type) {
     after_left_join(second_event_data,
                     by_user = md$user,
                     by_time = tstamp_by,
-                    type = type)
+                    type = type,
+                    ...)
 
   attr(ret, "funnel_metadata") <- md
 
