@@ -119,6 +119,11 @@ summarize_funnel <- function(tbl_funnel) {
     dplyr::mutate(moment_type = factor(moment_type, steps))
 }
 
-funnel_metadata <- function(tbl_funnel, name) {
-  attributes(tbl_funnel)$funnel_metadata[[name]]
+funnel_metadata <- function(tbl_funnel, name = NULL) {
+  ret <- attributes(tbl_funnel)$funnel_metadata
+  if (!is.null(name)) {
+    ret <- ret$name
+  }
+
+  ret
 }
