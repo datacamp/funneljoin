@@ -14,7 +14,8 @@ funnel_start <- function(tbl, moment_type, moment, tstamp, user) {
     tstamp = dplyr::quo_name(dplyr::enquo(tstamp)),
     user = dplyr::quo_name(dplyr::enquo(user)),
     moment = dplyr::quo_name(dplyr::enquo(moment)),
-    moment_sequence = moment_type
+    moment_sequence = moment_type,
+    type_sequence = character(0)
   )
 
   attr(tbl, "funnel_metadata") <- md
@@ -43,6 +44,7 @@ funnel_step <- function(tbl, moment_type, type, ...) {
   md <- attr(tbl, "funnel_metadata")
   last_moment <- utils::tail(md$moment_sequence, 1)
   md$moment_sequence <- c(md$moment_sequence, moment_type)
+  md$type_sequence <- c(md$type_sequence, type)
 
   filtered <- md$original_data[md$original_data[[md$moment]] == moment_type, ]
 
