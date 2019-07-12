@@ -2,9 +2,12 @@
 % Please edit documentation in R/sequence_funnel.R
 \name{funnel_step}
 \alias{funnel_step}
+\alias{funnel_steps}
 \title{Continue to funnel}
 \usage{
 funnel_step(tbl, moment_type, type, ...)
+
+funnel_steps(tbl, moment_types, type, ...)
 }
 \arguments{
 \item{tbl}{A table of different moments and timestamps}

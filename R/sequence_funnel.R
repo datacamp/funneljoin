@@ -65,19 +65,13 @@ funnel_step <- function(tbl, moment_type, type, ...) {
   ret
 }
 
-#' Multiple
-#'
-#' @param tbl_funnel
-#' @param steps For \code{funnel_steps}, a vector
-#'
-#' @return
 #' @export
 #'
-#' @examples
-funnel_steps <- function(tbl_funnel, moment_types, type, ...) {
+#' @rdname funnel_step
+funnel_steps <- function(tbl, moment_types, type, ...) {
   for (s in moment_types) {
-    tbl_funnel <- funnel_step(tbl_funnel, s, type, ...)
+    tbl <- funnel_step(tbl, s, type, ...)
   }
-  tbl_funnel
+  tbl
 }
 
