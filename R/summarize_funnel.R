@@ -106,9 +106,10 @@ summarize_funnel <- function(tbl_funnel) {
   original_count <- nrow(tbl_funnel)
 
   tbl_funnel %>%
-    dplyr::summarize_at(vars(contains(tstamp)), ~ sum(!is.na(.))) %>%
+    dplyr::summarize_at(dplyr::vars(dplyr::contains(tstamp)),
+                        ~ sum(!is.na(.))) %>%
     dplyr::rename_all(list(~ sub(paste0(tstamp, "_"), "", .))) %>%
     tidyr::gather(moment, n) %>%
     dplyr::mutate(pct = n / original_count,
-                  cum_pct = n / lag(n))
+                  cum_pct = n / dplyr::lag(n))
   }
