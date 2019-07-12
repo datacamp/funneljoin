@@ -93,3 +93,22 @@ summarize_conversions <- function(x, converted) {
 
   ret
 }
+
+#' Summarize after funnel start and funnel step(s)
+#'
+#' @param tbl_funnel a table from funnel start and funnel step(s)
+#'
+#' @return
+#' @export
+summarize_funnel <- function(tbl_funnel) {
+  tstamp <- attributes(tbl_funnel)$funnel_metadata$tstamp
+  first_moment <- attributes(tbl_funnel)$funnel_metadata$event_sequence[1]
+  original_count <- nrow(tbl_funnel)
+
+  tbl_funnel %>%
+    dplyr::summarize_at(vars(contains(tstamp)), ~ sum(!is.na(.))) %>%
+    dplyr::rename_all(list(~ sub(paste0(tstamp, "_"), "", .))) %>%
+    tidyr::gather(moment, n) %>%
+    dplyr::mutate(pct = n / original_count,
+                  cum_pct = n / lag(n))
+  }
