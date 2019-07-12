@@ -26,5 +26,6 @@ Imports:
     magrittr,
     broom,
     purrr,
-    rlang
+    rlang,
+    tidyr
 VignetteBuilder: knitr
