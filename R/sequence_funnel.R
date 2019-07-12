@@ -1,28 +1,28 @@
 #' Start a funnel
 #'
-#' @param tbl A table of different events and timestamps
-#' @param event_type The first event in the funnel
-#' @param event The name of the column with the event_type
-#' @param tstamp The name of the column with the timestamps of the events
-#' @param user The name of the column indicating the user who did the event
+#' @param tbl A table of different moments and timestamps
+#' @param moment_type The first moment in the funnel
+#' @param moment The name of the column with the moment_type
+#' @param tstamp The name of the column with the timestamps of the moments
+#' @param user The name of the column indicating the user who did the moment
 #'
 #' @export
 #'
-funnel_start <- function(tbl, event_type, event, tstamp, user) {
+funnel_start <- function(tbl, moment_type, moment, tstamp, user) {
   md <- list(
     original_data = tbl,
     tstamp = dplyr::quo_name(dplyr::enquo(tstamp)),
     user = dplyr::quo_name(dplyr::enquo(user)),
-    event = dplyr::quo_name(dplyr::enquo(event)),
-    event_sequence = event_type
+    moment = dplyr::quo_name(dplyr::enquo(moment)),
+    moment_sequence = moment_type
   )
 
   attr(tbl, "funnel_metadata") <- md
+  tbl <- tbl[tbl[[md$moment]] == moment_type, ]
 
   ret <- tbl %>%
-    dplyr::filter(!!dplyr::sym(md$event) == event_type) %>%
-    dplyr::select(-!!dplyr::sym(md$event)) %>%
-    dplyr::rename_at(dplyr::vars(-!!md$user), paste0, "_", event_type)
+    dplyr::select(-!!dplyr::sym(md$moment)) %>%
+    dplyr::rename_at(dplyr::vars(-!!md$user), paste0, "_", moment_type)
 
   class(ret) <- c("tbl_funnel", class(ret))
 
@@ -31,27 +31,30 @@ funnel_start <- function(tbl, event_type, event, tstamp, user) {
 
 #' Continue to funnel
 #'
-#' @param tbl A table of different events and timestamps
-#' @param event_type The next event in the funnel
+#' @param tbl A table of different moments and timestamps
+#' @param moment_type The next moment in the funnel
 #' @param type The type of after_join (e.g. "first-first", "any-any")
-#' @param ... Extra arguments passed on to \link{after_left_join}
+#' @param moment_types For \code{funnel_steps}, a character vector of
+#' moment types, which are applied in order
+#' @param ... Extra arguments passed on to \link{after_left_join}. For \code{funnel_steps}, these are passed on to \code{funnel_step}.
 #' @export
 #'
-funnel_step <- function(tbl, event_type, type, ...) {
+funnel_step <- function(tbl, moment_type, type, ...) {
   md <- attr(tbl, "funnel_metadata")
-  last_event <- utils::tail(md$event_sequence, 1)
-  md$event_sequence <- c(md$event_sequence, event_type)
+  last_moment <- utils::tail(md$moment_sequence, 1)
+  md$moment_sequence <- c(md$moment_sequence, moment_type)
 
-  second_event_data <- md$original_data %>%
-    dplyr::filter(!!dplyr::sym(md$event) == event_type) %>%
-    dplyr::select(-!!dplyr::sym(md$event)) %>%
-    dplyr::rename_at(dplyr::vars(-!!md$user), paste0, "_", event_type)
+  filtered <- md$original_data[md$original_data[[md$moment]] == moment_type, ]
 
-  tstamp_by <- stats::setNames(paste0(md$tstamp, "_", event_type),
-                               paste0(md$tstamp, "_", last_event))
+  second_moment_data <- filtered %>%
+    dplyr::select(-!!dplyr::sym(md$moment)) %>%
+    dplyr::rename_at(dplyr::vars(-!!md$user), paste0, "_", moment_type)
+
+  tstamp_by <- stats::setNames(paste0(md$tstamp, "_", moment_type),
+                               paste0(md$tstamp, "_", last_moment))
 
   ret <- tbl %>%
-    after_left_join(second_event_data,
+    after_left_join(second_moment_data,
                     by_user = md$user,
                     by_time = tstamp_by,
                     type = type,
@@ -61,3 +64,20 @@ funnel_step <- function(tbl, event_type, type, ...) {
 
   ret
 }
+
+#' Multiple
+#'
+#' @param tbl_funnel
+#' @param steps For \code{funnel_steps}, a vector
+#'
+#' @return
+#' @export
+#'
+#' @examples
+funnel_steps <- function(tbl_funnel, moment_types, type, ...) {
+  for (s in moment_types) {
+    tbl_funnel <- funnel_step(tbl_funnel, s, type, ...)
+  }
+  tbl_funnel
+}
+

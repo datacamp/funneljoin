@@ -4,18 +4,18 @@
 \alias{funnel_start}
 \title{Start a funnel}
 \usage{
-funnel_start(tbl, event_type, event, tstamp, user)
+funnel_start(tbl, moment_type, moment, tstamp, user)
 }
 \arguments{
-\item{tbl}{A table of different events and timestamps}
+\item{tbl}{A table of different moments and timestamps}
 
-\item{event_type}{The first event in the funnel}
+\item{moment_type}{The first moment in the funnel}
 
-\item{event}{The name of the column with the event_type}
+\item{moment}{The name of the column with the moment_type}
 
-\item{tstamp}{The name of the column with the timestamps of the events}
+\item{tstamp}{The name of the column with the timestamps of the moments}
 
-\item{user}{The name of the column indicating the user who did the event}
+\item{user}{The name of the column indicating the user who did the moment}
 }
 \description{
 Start a funnel

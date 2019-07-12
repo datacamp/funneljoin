@@ -4,16 +4,19 @@
 \alias{funnel_step}
 \title{Continue to funnel}
 \usage{
-funnel_step(tbl, event_type, type, ...)
+funnel_step(tbl, moment_type, type, ...)
 }
 \arguments{
-\item{tbl}{A table of different events and timestamps}
+\item{tbl}{A table of different moments and timestamps}
 
-\item{event_type}{The next event in the funnel}
+\item{moment_type}{The next moment in the funnel}
 
 \item{type}{The type of after_join (e.g. "first-first", "any-any")}
 
-\item{...}{Extra arguments passed on to \link{after_left_join}}
+\item{...}{Extra arguments passed on to \link{after_left_join}. For \code{funnel_steps}, these are passed on to \code{funnel_step}.}
+
+\item{moment_types}{For \code{funnel_steps}, a character vector of
+moment types, which are applied in order}
 }
 \description{
 Continue to funnel
