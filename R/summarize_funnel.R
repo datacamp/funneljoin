@@ -98,18 +98,27 @@ summarize_conversions <- function(x, converted) {
 #'
 #' @param tbl_funnel a table from funnel start and funnel step(s)
 #'
-#' @return
+#' @return A tibble with one row for each moment_type and grouping variable, with columns:
+#' \describe{
+#'   \item{nb_step}{The number of users who reached this moment}
+#'   \item{pct_cumulative}{The percentage of original users who reached this moment}
+#'   \item{pct_step}{The percentage of users who reached the last step reaching this moment}
+#' }
 #' @export
 summarize_funnel <- function(tbl_funnel) {
-  tstamp <- attributes(tbl_funnel)$funnel_metadata$tstamp
-  first_moment <- attributes(tbl_funnel)$funnel_metadata$event_sequence[1]
-  original_count <- nrow(tbl_funnel)
+  tstamp <- funnel_metadata(res_two_step, "tstamp")
+  steps <- funnel_metadata(res_two_step, "event_sequence")
 
   tbl_funnel %>%
     dplyr::summarize_at(dplyr::vars(dplyr::contains(tstamp)),
                         ~ sum(!is.na(.))) %>%
     dplyr::rename_all(list(~ sub(paste0(tstamp, "_"), "", .))) %>%
-    tidyr::gather(moment, n) %>%
-    dplyr::mutate(pct = n / original_count,
-                  cum_pct = n / dplyr::lag(n))
-  }
+    tidyr::gather(moment_type, nb_step) %>%
+    dplyr::mutate(pct_cumulative = nb_step / dplyr::first(nb_step),
+                  pct_step = nb_step / dplyr::lag(nb_step)) %>%
+    dplyr::mutate(moment_type = factor(moment_type, steps))
+}
+
+funnel_metadata <- function(tbl_funnel, name) {
+  attributes(tbl_funnel)$funnel_metadata[[name]]
+}
