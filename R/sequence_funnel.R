@@ -25,6 +25,8 @@ funnel_start <- function(tbl, event_type, event, tstamp, user) {
     dplyr::rename_at(dplyr::vars(-!!md$user), paste0, "_", event_type)
 
   class(ret) <- c("tbl_funnel", class(ret))
+
+  ret
 }
 
 #' Continue to funnel
