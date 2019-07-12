@@ -41,7 +41,7 @@ test_that("funnel_start works", {
   expect_equal(names(res_funnel_start), c("user_id", "timestamp_course_start"))
   expect_equal(nrow(res_funnel_start), 6)
   expect_equal(names(attributes(res_funnel_start)$funnel_metadata),
-               c("original_data", "tstamp", "user", "moment", "moment_sequence"))
+               c("original_data", "tstamp", "user", "moment", "moment_sequence", "type_sequence"))
   expect_equal(attributes(res_funnel_start)$funnel_metadata$moment_sequence, "course_start")
   expect_equal(moments, attributes(res_funnel_start)$funnel_metadata$original_data)
   expect_equal(length(res_funnel_start$user_id), dplyr::n_distinct(res_funnel_start$user_id))
@@ -85,5 +85,6 @@ test_that("funnel_step works with two steps first-firstafter", {
                  filter(timestamp_project_start < timestamp_subscription) %>%
                  nrow(), 0)
   expect_equal(multi_moments, attributes(res_two_step)$funnel_metadata$original_data)
+  expect_equal(two_step_md$type_sequence, c("first-firstafter", "first-firstafter"))
 
 })
