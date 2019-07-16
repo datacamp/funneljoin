@@ -88,3 +88,22 @@ test_that("funnel_step works with two steps first-firstafter", {
   expect_equal(two_step_md$type_sequence, c("first-firstafter", "first-firstafter"))
 
 })
+
+test_that("funnel_step works when there use moment multiple times") {
+  res_start_step <- multi_moments %>%
+    funnel_start("course_start", moment_type, timestamp, user_id) %>%
+    funnel_step("subscription", type = "first-firstafter")
+
+  expect_error(res_repeat_step %>%
+                 funnel_step("subscription", type = "first-firstafter"))
+
+  res_repeat_step <- multi_moments %>%
+    funnel_start("course_start", moment_type, timestamp, user_id) %>%
+    funnel_step("subscription", type = "first-firstafter") %>%
+    funnel_step("subscription", type = "first-firstafter", name = "sub_two")
+
+  expect_equal(colnames(res_repeat_step), c("user_id", "timestamp_course_start",
+                                            "timestamp_subscription", "timestamp_sub_two"))
+
+
+  }
