@@ -37,22 +37,28 @@ funnel_start <- function(tbl, moment_type, moment, tstamp, user) {
 #' @param type The type of after_join (e.g. "first-first", "any-any")
 #' @param moment_types For \code{funnel_steps}, a character vector of
 #' moment types, which are applied in order
+#' @param name If you want a custom name instead of the moment_type; needed if the moment type is already in the sequence
 #' @param ... Extra arguments passed on to \link{after_left_join}. For \code{funnel_steps}, these are passed on to \code{funnel_step}.
 #' @export
 #'
-funnel_step <- function(tbl, moment_type, type, ...) {
+funnel_step <- function(tbl, moment_type, type, name = moment_type, ...) {
   md <- attr(tbl, "funnel_metadata")
+
+  if (moment_type %in% md$moment_sequence && moment_type == name) {
+    stop(paste(moment_type, "is already in the sequence; use the name argument to specify a custom name for the new moment."))
+  }
+
   last_moment <- utils::tail(md$moment_sequence, 1)
-  md$moment_sequence <- c(md$moment_sequence, moment_type)
+  md$moment_sequence <- c(md$moment_sequence, name)
   md$type_sequence <- c(md$type_sequence, type)
 
   filtered <- md$original_data[md$original_data[[md$moment]] == moment_type, ]
 
   second_moment_data <- filtered %>%
     dplyr::select(-!!dplyr::sym(md$moment)) %>%
-    dplyr::rename_at(dplyr::vars(-!!md$user), paste0, "_", moment_type)
+    dplyr::rename_at(dplyr::vars(-!!md$user), paste0, "_", name)
 
-  tstamp_by <- stats::setNames(paste0(md$tstamp, "_", moment_type),
+  tstamp_by <- stats::setNames(paste0(md$tstamp, "_", name),
                                paste0(md$tstamp, "_", last_moment))
 
   ret <- tbl %>%
