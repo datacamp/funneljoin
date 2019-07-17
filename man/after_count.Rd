@@ -6,7 +6,6 @@
 \alias{after_left_count}
 \alias{after_right_count}
 \alias{after_full_count}
-\alias{after_semi_count}
 \title{Join tables to get the count of events following another}
 \usage{
 after_count(x, y, by_time, by_user, mode = "inner", type = "first",
@@ -23,9 +22,6 @@ after_right_count(x, y, by_time, by_user, type, max_gap = NULL,
   min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
 
 after_full_count(x, y, by_time, by_user, type, max_gap = NULL,
-  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
-
-after_semi_count(x, y, by_time, by_user, type, max_gap = NULL,
   min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
 }
 \arguments{
