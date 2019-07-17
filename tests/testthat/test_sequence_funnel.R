@@ -89,7 +89,7 @@ test_that("funnel_step works with two steps first-firstafter", {
 
 })
 
-test_that("funnel_step works when there use moment multiple times") {
+test_that("funnel_step works when there use moment multiple times", {
   res_start_step <- multi_moments %>%
     funnel_start("course_start", moment_type, timestamp, user_id) %>%
     funnel_step("subscription", type = "first-firstafter")
@@ -106,4 +106,4 @@ test_that("funnel_step works when there use moment multiple times") {
                                             "timestamp_subscription", "timestamp_sub_two"))
 
   expect_equal(sum(!is.na(res_repeat_step$timestamp_sub_two)), 2)
-}
+})
