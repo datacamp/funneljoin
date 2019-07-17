@@ -95,11 +95,3 @@ after_full_count <- function(x, y, by_time, by_user, type, max_gap = NULL, min_g
   after_count(x, y, by_time, by_user,
              mode = "full", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix)
 }
-
-#' @rdname after_count
-#' @export
-after_semi_count <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL,
-                            gap_col = FALSE, suffix = c(".x", ".y")) {
-  after_count(x, y, by_time, by_user,
-             mode = "semi", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix)
-}
