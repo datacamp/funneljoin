@@ -63,7 +63,8 @@ after_count <- function(x,
   }
   else {
     after_join_result %>%
-      dplyr::group_by(!!dplyr::sym((user_xy$x)), !!dplyr::sym((time_xy$x))) %>%
+      dplyr::group_by(!!dplyr::sym((user_xy$x)),
+                      !!dplyr::sym((time_xy$x))) %>%
       dplyr::summarize(nb_events = sum(!is.na(!!dplyr::sym((time_xy$y)))))
   }
 }
