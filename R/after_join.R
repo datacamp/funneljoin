@@ -155,7 +155,7 @@ after_join <- function(x,
   }
 
   # Handle the case when columns with the same name are appended with .x & .y
-  if (time_xy$x == time_xy$y) {
+  if (time_xy$x == time_xy$y || time_xy$x %in% colnames(y_i) || time_xy$y %in% colnames(x_i)) {
     time_xy <- list(x = paste0(time_xy$x, ".x"),
                     y = paste0(time_xy$y, ".y"))
   }
