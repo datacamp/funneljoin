@@ -96,3 +96,32 @@ test_that("after_join works with mode = full and type = first-firstafter", {
   expect_true(all(!is.na(res$user_id)))
 })
 
+course_data <- tibble::tribble(
+ ~ "user_id", ~ "course_id", ~ "started_at", ~ "completed_at",
+ 1, 58, "2018-07-01", "2018-07-04",
+ 1, 60, "2018-08-04", NA,
+ 2, 58, "2019-05-01", NA,
+ 2, 60, "2019-04-01", "2019-04-04",
+ 3, 58, "2019-06-01", "2019-06-02",
+ 3, 60, "2019-03-01", "2019-04-02"
+)
+test_that("after_join works when columns have same name but not joining on them", {
+
+  res <- after_left_join(course_data %>%
+                      filter(course_id == 58),
+                    course_data %>%
+                      filter(course_id == 60),
+                    by_user = "user_id",
+                    by_time = c("completed_at" = "started_at"),
+                    type = "first-firstafter")
+
+  expect_is(res, "tbl_df")
+  expect_equal(names(res), c("user_id", "course_id.x", "started_at.x",
+                             "completed_at.x", "course_id.y", "started_at.y", "completed_at.y"))
+  expect_true(nrow(res) >= 3)
+  expect_equal(unique(res$course_id.x), 58)
+  expect_true(all(res$started_at.y >= res$completed_at.x |
+                    is.na(res$started_at.y)))
+})
+
+
