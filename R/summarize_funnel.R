@@ -107,7 +107,7 @@ summarize_conversions <- function(x, converted) {
 #' @export
 summarize_funnel <- function(tbl_funnel) {
   tstamp <- funnel_metadata(tbl_funnel, "tstamp")
-  steps <- funnel_metadata(tbl_funnel, "event_sequence")
+  steps <- funnel_metadata(tbl_funnel, "moment_sequence")
 
   tbl_funnel %>%
     dplyr::summarize_at(dplyr::vars(dplyr::contains(tstamp)),
@@ -122,7 +122,7 @@ summarize_funnel <- function(tbl_funnel) {
 funnel_metadata <- function(tbl_funnel, name = NULL) {
   ret <- attributes(tbl_funnel)$funnel_metadata
   if (!is.null(name)) {
-    ret <- ret$name
+    ret <- ret[[name]]
   }
 
   ret
