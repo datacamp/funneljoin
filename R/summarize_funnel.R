@@ -60,7 +60,7 @@ summarize_prop_tests <- function(x, alternative_name = alternative.name, ..., un
 #' @param converted The name of the column representing whether the user converted
 #' (treated as FALSE if NA or FALSE, otherwise TRUE)
 #'
-#' @return A table with columns for your groups, along with `nb_starts`, `nb_conversions`, and `pct_converted`
+#' @return A table with columns for your groups, along with `nb_users`, `nb_conversions`, and `pct_converted`
 #' @export
 summarize_conversions <- function(x, converted) {
 
@@ -72,25 +72,25 @@ summarize_conversions <- function(x, converted) {
 
     if (is.logical(first_value)) {
       ret <- x %>%
-        dplyr::summarise(nb_starts = dplyr::n(),
+        dplyr::summarise(nb_users = dplyr::n(),
                          nb_conversions = sum(ifelse(!!var_converted, 1, 0)))
 
     }
     else {
       ret <- x %>%
-        dplyr::summarise(nb_starts = dplyr::n(),
+        dplyr::summarise(nb_users = dplyr::n(),
                          nb_conversions = COUNT(!!var_converted),
-                         pct_converted = nb_conversions / nb_starts)
+                         pct_converted = nb_conversions / nb_users)
     }
   }
 
   else {
     ret <- x %>%
-      dplyr::summarise(nb_starts = dplyr::n(),
+      dplyr::summarise(nb_users = dplyr::n(),
                        nb_conversions = ifelse(is.logical(!!var_converted),
                                                 sum(!!var_converted),
                                                 sum(!is.na(!!var_converted))),
-                       pct_converted = nb_conversions / nb_starts)
+                       pct_converted = nb_conversions / nb_users)
   }
 
   ret

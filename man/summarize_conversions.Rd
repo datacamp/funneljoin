@@ -13,7 +13,7 @@ summarize_conversions(x, converted)
 (treated as FALSE if NA or FALSE, otherwise TRUE)}
 }
 \value{
-A table with columns for your groups, along with `nb_starts` and `nb_conversions`
+A table with columns for your groups, along with `nb_users`, `nb_conversions`, and `pct_converted`
 }
 \description{
 Summarize Left-joined table into conversion count
