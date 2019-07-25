@@ -76,9 +76,10 @@ funnel_step <- function(tbl, moment_type, type, name = moment_type, ...) {
 #' @export
 #'
 #' @rdname funnel_step
-funnel_steps <- function(tbl, moment_types, type, ...) {
-  for (s in moment_types) {
-    tbl <- funnel_step(tbl, s, type, ...)
+funnel_steps <- function(tbl, moment_types, types, ...) {
+
+  for (i in 1:length(moment_types)) {
+    tbl <- funnel_step(tbl, moment_types[i], types[i], ...)
   }
   tbl
 }
