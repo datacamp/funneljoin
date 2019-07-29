@@ -33,7 +33,8 @@ multi_moments <- tibble::tribble(
 ) %>%
   mutate(timestamp = as.Date(timestamp))
 
-res_funnel_start <- funnel_start(moments, "course_start", moment_type, timestamp, user_id)
+res_funnel_start <- funnel_start(moments, moment_type = "course_start",
+                                 moment = "moment_type", tstamp = "timestamp", user = "user_id")
 
 test_that("funnel_start works", {
 

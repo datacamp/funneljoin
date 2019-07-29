@@ -9,6 +9,9 @@
 #' @export
 #'
 funnel_start <- function(tbl, moment_type, moment, tstamp, user) {
+  if (!(moment_type %in% tbl[[moment]])) {
+    stop("The moment_type you specified is not in the moment column")
+  }
   md <- list(
     original_data = tbl,
     tstamp = dplyr::quo_name(dplyr::enquo(tstamp)),
@@ -43,6 +46,10 @@ funnel_start <- function(tbl, moment_type, moment, tstamp, user) {
 #'
 funnel_step <- function(tbl, moment_type, type, name = moment_type, ...) {
   md <- attr(tbl, "funnel_metadata")
+
+  if (!(moment_type %in% md$original_data[[md$moment]])) {
+    stop("The moment_type you specified is not in the moment column")
+  }
 
   if (moment_type %in% md$moment_sequence && moment_type == name) {
     stop(paste(moment_type, "is already in the sequence; use the name argument to specify a custom name for the new moment."))
