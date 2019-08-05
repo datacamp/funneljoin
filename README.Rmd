@@ -23,14 +23,14 @@ For more examples of how to use funneljoin, check out [the vignette](https://rob
 
 You can install the development version from [GitHub](https://github.com/) with:
 
-```{r}
+```{r, eval = FALSE}
 # install.packages("devtools")
 devtools::install_github("robinsones/funneljoin")
 ```
 
-### after_join()
+## after_join()
 
-```{r}
+```{r, message = FALSE}
 library(dplyr)
 library(funneljoin)
 ```

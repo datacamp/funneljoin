@@ -14,39 +14,13 @@ You can install the development version from [GitHub](https://github.com/) with:
 ``` r
 # install.packages("devtools")
 devtools::install_github("robinsones/funneljoin")
-#> Using GitHub PAT from envvar GITHUB_PAT
-#> Downloading GitHub repo robinsones/funneljoin@master
-#> from URL https://api.github.com/repos/robinsones/funneljoin/zipball/master
-#> Installing funneljoin
-#> Downloading GitHub repo tidyverse/glue@master
-#> from URL https://api.github.com/repos/tidyverse/glue/zipball/master
-#> Installing glue
-#> '/Library/Frameworks/R.framework/Resources/bin/R' --no-site-file  \
-#>   --no-environ --no-save --no-restore --quiet CMD INSTALL  \
-#>   '/private/var/folders/bt/k43np8sx7hdck9fs4gx3byr40000gn/T/Rtmp1qETqv/devtools3034731bb08/tidyverse-glue-7ac044a'  \
-#>   --library='/Library/Frameworks/R.framework/Versions/3.4/Resources/library'  \
-#>   --install-tests
-#> 
-#> '/Library/Frameworks/R.framework/Resources/bin/R' --no-site-file  \
-#>   --no-environ --no-save --no-restore --quiet CMD INSTALL  \
-#>   '/private/var/folders/bt/k43np8sx7hdck9fs4gx3byr40000gn/T/Rtmp1qETqv/devtools3033bfa1750/robinsones-funneljoin-b06a7a2'  \
-#>   --library='/Library/Frameworks/R.framework/Versions/3.4/Resources/library'  \
-#>   --install-tests
-#> 
 ```
 
-### after\_join()
+after\_join()
+-------------
 
 ``` r
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 library(funneljoin)
 ```
 
