@@ -90,13 +90,16 @@ We now have a dataset of four rows. Notice a few things:
 
 What if instead we wanted all landing-registration pairs that happened within a 4-day window? We now add the `max_gap` argument. This takes either a number, which is the number of seconds, or a difftime object. Instead of calculating the number of seconds in 4 days, we'll just make a difftime object. Because we want any pair, not just the pairs of the first landings and registrations, we change the type to `any-any`.
 
+We'll also add `gap_col = TRUE` to return a column, `.gap`, which is the gap in seconds between the events.
+
 ```{r}
 landed %>%
   after_inner_join(registered, 
                    by_user = "user_id",
                    by_time = "timestamp",
                    type = "any-any", 
-                   max_gap = as.difftime(4, units = "days"))
+                   max_gap = as.difftime(4, units = "days"),
+                   gap_col = TRUE)
 ```
 
 We now have a dataset of 7 rows. Notice a few things: 
@@ -104,13 +107,6 @@ We now have a dataset of 7 rows. Notice a few things:
   - As always, `timestamp.y` is greater than or equal to `timestamp.x`. 
   - User 6 appears three times, as they have three landing-registration pairs where the time difference is less than four days.
   - Just as before, because it's an `inner` join, we only have users who were in both tables and had a `timestamp.y` that was greater than a `timestamp.x`. 
-  
-## Rules
-
-Some rules to keep in mind: 
-
-  - If the first type in the pair is "last" or "first", then a right join has the same number of rows as y.
-  - If the second type in the pair is "last", "first", or "firstafter", then a left join has the same number of rows as x. 
 
 ## Other types of joins
 
