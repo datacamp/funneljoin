@@ -108,17 +108,21 @@ summarize_conversions <- function(x, converted) {
 #' }
 #' @export
 summarize_funnel <- function(tbl_funnel) {
-  tstamp <- funnel_metadata(tbl_funnel, "tstamp")
-  steps <- funnel_metadata(tbl_funnel, "moment_sequence")
+  tstamp <- funneljoin:::funnel_metadata(tbl_funnel, "tstamp")
+  steps <- funneljoin:::funnel_metadata(tbl_funnel, "moment_sequence")
+
+  g <- dplyr::group_vars(tbl_funnel)
 
   tbl_funnel %>%
     dplyr::summarize_at(dplyr::vars(dplyr::contains(tstamp)),
                         ~ sum(!is.na(.))) %>%
     dplyr::rename_all(list(~ sub(paste0(tstamp, "_"), "", .))) %>%
-    tidyr::gather(moment_type, nb_step) %>%
+    tidyr::gather(moment_type, nb_step, -!!g) %>%
+    dplyr::group_by_at(g) %>%
     dplyr::mutate(pct_cumulative = nb_step / dplyr::first(nb_step),
                   pct_step = nb_step / dplyr::lag(nb_step)) %>%
-    dplyr::mutate(moment_type = factor(moment_type, steps))
+    dplyr::mutate(moment_type = factor(moment_type, steps)) %>%
+    dplyr::group_by_at(head(g, -1)) # strip off the last grouping
 }
 
 funnel_metadata <- function(tbl_funnel, name = NULL) {
