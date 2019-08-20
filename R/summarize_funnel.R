@@ -108,8 +108,8 @@ summarize_conversions <- function(x, converted) {
 #' }
 #' @export
 summarize_funnel <- function(tbl_funnel) {
-  tstamp <- funneljoin:::funnel_metadata(tbl_funnel, "tstamp")
-  steps <- funneljoin:::funnel_metadata(tbl_funnel, "moment_sequence")
+  tstamp <- funnel_metadata(tbl_funnel, "tstamp")
+  steps <- funnel_metadata(tbl_funnel, "moment_sequence")
 
   g <- dplyr::group_vars(tbl_funnel)
 
