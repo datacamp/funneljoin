@@ -30,6 +30,10 @@ funnel_start <- function(tbl, moment_type, moment, tstamp, user) {
     dplyr::select(-!!dplyr::sym(md$moment)) %>%
     dplyr::rename_at(dplyr::vars(-!!md$user), paste0, "_", moment_type)
 
+  if (!inherits(.data, "tbl_lazy")) {
+    ret <- ret %>%
+      dplyr::select_if(~ any(!is.na(.)))
+  }
   class(ret) <- c("tbl_funnel", class(ret))
 
   ret
