@@ -25,79 +25,79 @@ reclass.tbl_funnel <- function(x, result) {
 #' @export
 dplyr::filter
 
-#' @rdname metric-s3
+#' @rdname funnel-s3
 #' @export
 filter.tbl_funnel <- function(.data, ...) {
   reclass(.data, NextMethod())
 }
 
-#' @rdname metric-s3
+#' @rdname funnel-s3
 #' @export
 select.tbl_funnel <- function(.data, ...) {
   reclass(.data, NextMethod())
 }
 
-#' @rdname metric-s3
+#' @rdname funnel-s3
 #' @export
 arrange.tbl_funnel <- function(.data, ...) {
   reclass(.data, NextMethod())
 }
 
-#' @rdname metric-s3
+#' @rdname funnel-s3
 #' @export
 mutate.tbl_funnel <- function(.data, ...) {
   reclass(.data, NextMethod())
 }
 
-#' @rdname metric-s3
+#' @rdname funnel-s3
 #' @export
 group_by.tbl_funnel <- function(.data, ...) {
   reclass(.data, NextMethod())
 }
 
-#' @rdname metric-s3
+#' @rdname funnel-s3
 #' @export
 summarise.tbl_funnel <- function(.data, ...) {
   reclass(.data, NextMethod())
 }
 
-#' @rdname metric-s3
+#' @rdname funnel-s3
 #' @export
 inner_join.tbl_funnel <- function(.data, ...) {
   reclass(.data, NextMethod())
 }
 
-#' @rdname metric-s3
+#' @rdname funnel-s3
 #' @export
 left_join.tbl_funnel <- function(.data, ...) {
   reclass(.data, NextMethod())
 }
 
-#' @rdname metric-s3
+#' @rdname funnel-s3
 #' @export
 right_join.tbl_funnel <- function(.data, ...) {
   reclass(.data, NextMethod())
 }
 
-#' @rdname metric-s3
+#' @rdname funnel-s3
 #' @export
 semi_join.tbl_funnel <- function(.data, ...) {
   reclass(.data, NextMethod())
 }
 
-#' @rdname metric-s3
+#' @rdname funnel-s3
 #' @export
 anti_join.tbl_funnel <- function(.data, ...) {
   reclass(.data, NextMethod())
 }
 
-#' @rdname metric-s3
+#' @rdname funnel-s3
 #' @export
 rename.tbl_funnel <- function(.data, ...) {
   reclass(.data, NextMethod())
 }
 
-#' @rdname metric-s3
+#' @rdname funnel-s3
 #' @export
 transmute.tbl_funnel <- function(.data, ...) {
   reclass(.data, NextMethod())
