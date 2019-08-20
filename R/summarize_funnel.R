@@ -122,7 +122,7 @@ summarize_funnel <- function(tbl_funnel) {
     dplyr::mutate(pct_cumulative = nb_step / dplyr::first(nb_step),
                   pct_step = nb_step / dplyr::lag(nb_step)) %>%
     dplyr::mutate(moment_type = factor(moment_type, steps)) %>%
-    dplyr::group_by_at(head(g, -1)) # strip off the last grouping
+    dplyr::group_by_at(utils::head(g, -1)) # strip off the last grouping
 }
 
 funnel_metadata <- function(tbl_funnel, name = NULL) {
