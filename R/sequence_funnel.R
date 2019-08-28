@@ -50,20 +50,14 @@ funnel_start <- function(tbl, moment_type, moment, tstamp, user) {
 #' @param ... Extra arguments passed on to \link{after_left_join}. For \code{funnel_steps}, these are passed on to \code{funnel_step}.
 #' @export
 #'
-funnel_step <- function(tbl, moment_type, type, name = moment_type, ...) {
+funnel_step <- function(tbl, moment_type, type, name = moment_type, optional = FALSE, ...) {
   md <- attr(tbl, "funnel_metadata")
-
-  if (!(moment_type %in% md$original_data[[md$moment]])) {
-    stop(paste(moment_type, "is not in the moment column"))
-  }
 
   if (moment_type %in% md$moment_sequence && moment_type == name) {
     stop(paste(moment_type, "is already in the sequence; use the name argument to specify a custom name for the new moment."))
   }
 
   last_moment <- utils::tail(md$moment_sequence, 1)
-  md$moment_sequence <- c(md$moment_sequence, name)
-  md$type_sequence <- c(md$type_sequence, type)
 
   filtered <- md$original_data[md$original_data[[md$moment]] == moment_type, ]
 
@@ -80,6 +74,41 @@ funnel_step <- function(tbl, moment_type, type, name = moment_type, ...) {
                     by_time = tstamp_by,
                     type = type,
                     ...)
+
+  last_optional <- length(md$optional_sequence) && utils::tail(md$optional_sequence, 1)
+
+  if (last_optional) {
+    if (optional) {
+      stop("Multiple optional steps in a row is not yet supported")
+    }
+
+    # Try joining by the second to last step, which will take priority
+    data_before_optional <- md$data_before_optional
+    penultimate_moment <- tail(attr(data_before_optional, "funnel_metadata")$moment_sequence, 1)
+
+    tstamp_penultimate_by <- stats::setNames(paste0(md$tstamp, "_", name),
+                                             paste0(md$tstamp, "_", penultimate_moment))
+
+    ret_penultimate <- data_before_optional %>%
+      after_left_join(second_moment_data,
+                      by_user = md$user,
+                      by_time = tstamp_penultimate_by,
+                      type = type,
+                      ...)
+
+    # Remove the optional ones
+
+    md$data_before_optional <- NULL
+  }
+
+  # Append to the sequences
+  md$moment_sequence <- c(md$moment_sequence, name)
+  md$type_sequence <- c(md$type_sequence, type)
+  md$optional_sequence <- c(md$optional_sequence, optional)
+
+  if (optional) {
+    md$data_before_optional <- tbl
+  }
 
   attr(ret, "funnel_metadata") <- md
 
