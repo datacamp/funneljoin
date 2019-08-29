@@ -1,6 +1,6 @@
 #' Summarise after join funnel with proportion test
 #'
-#' @param x a data.frame with columns nb_conversions and nb_starts
+#' @param x a data.frame with columns nb_conversions and nb_users
 #' @param alternative_name the name of the column indicating the experiment group
 #' @param ... any additional arguments
 #' @param ungroup whether the table needs to be ungrouped
@@ -29,7 +29,7 @@ summarize_prop_tests <- function(x, alternative_name = alternative.name, ..., un
 
   ret <- prepared %>%
     dplyr::do(broom::tidy(stats::prop.test(.$nb_conversions,
-                                           .$nb_starts,
+                                           .$nb_users,
                                            conf.level = .9, ...))) %>%
     dplyr::transmute(estimate1,
               estimate2,
@@ -79,8 +79,8 @@ summarize_conversions <- function(x, converted) {
     else {
       ret <- x %>%
         dplyr::summarise(nb_users = dplyr::n(),
-                         nb_conversions = COUNT(!!var_converted),
-                         pct_converted = nb_conversions / nb_users)
+                         nb_conversions = COUNT(!!var_converted)) %>%
+        dplyr::mutate(pct_converted = nb_conversions / nb_users)
     }
   }
 
@@ -89,8 +89,8 @@ summarize_conversions <- function(x, converted) {
       dplyr::summarise(nb_users = dplyr::n(),
                        nb_conversions = ifelse(is.logical(!!var_converted),
                                                 sum(!!var_converted),
-                                                sum(!is.na(!!var_converted))),
-                       pct_converted = nb_conversions / nb_users)
+                                                sum(!is.na(!!var_converted)))) %>%
+      dplyr::mutate(pct_converted = nb_conversions / nb_users)
   }
 
   ret
