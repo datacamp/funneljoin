@@ -6,3 +6,5 @@
 ^\.travis\.yml$
 ^\.httr-oauth$
 ^docs$
+^doc$
+^Meta$
