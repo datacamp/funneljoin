@@ -91,7 +91,7 @@ test_that("after_join works for out-of-memory tables with mode = anti and type =
   expect_true(all(!is.na(res$course_id)))
 
   hard_launches_in_res <- hard_launches %>%
-    dplyr::filter(course_id %in% res$course_id) %>%
+    dplyr::filter(course_id %in% !!res$course_id) %>%
     dplyr::collect()
 
   expect_equal(nrow(hard_launches_in_res), 0)
@@ -115,7 +115,7 @@ test_that("after_join works for out-of-memory tables with mode = semi and type =
   expect_true(all(!is.na(res$course_id)))
 
   hard_launches_in_res <- hard_launches %>%
-    dplyr::filter(course_id %in% res$course_id) %>%
+    dplyr::filter(course_id %in% !!res$course_id) %>%
     dplyr::collect()
 
   expect_equal(n_distinct(hard_launches_in_res$course_id), nrow(res))
