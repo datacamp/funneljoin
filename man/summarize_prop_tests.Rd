@@ -8,7 +8,7 @@ summarize_prop_tests(x, alternative_name = alternative.name, ...,
   ungroup = TRUE)
 }
 \arguments{
-\item{x}{a data.frame with columns nb_conversions and nb_starts}
+\item{x}{a data.frame with columns nb_conversions and nb_users}
 
 \item{alternative_name}{the name of the column indicating the experiment group}
 

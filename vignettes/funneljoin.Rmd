@@ -189,7 +189,7 @@ for_conversion %>%
 
 ## Summarize Prop Tests
 
-`summarize_prop_tests()` takes in a dataset with at least three columns - `nb_starts`, `nb_conversions`, and a column indicating experiment group. It can also have an additional column that is the type of conversion - for example, you could have clicks and purchases. Each type of conversion can only have two rows, one `control` and one other group. If you have that additional column of type, you need to group by it first. 
+`summarize_prop_tests()` takes in a dataset with at least three columns - `nb_users`, `nb_conversions`, and a column indicating experiment group. It can also have an additional column that is the type of conversion - for example, you could have clicks and purchases. Each type of conversion can only have two rows, one `control` and one other group. If you have that additional column of type, you need to group by it first. 
 
 It returns a dataset with at least 5 columns:
 
@@ -203,7 +203,7 @@ If you had a type column, it will also be in the output.
 
 ```{r}
 tbl <- tibble::tribble(
-  ~ experiment_group, ~nb_starts, ~nb_conversions, ~type,
+  ~ experiment_group, ~nb_users, ~nb_conversions, ~type,
   "control", 500, 200, "purchase",
   "treatment", 500, 100, "purchase", 
   "control", 500, 360, "click",
