@@ -108,3 +108,18 @@ test_that("funnel_step works when there use moment multiple times", {
 
   expect_equal(sum(!is.na(res_repeat_step$timestamp_sub_two)), 2)
 })
+
+test_that("group_by() preserves funnel attributes", {
+  res_one_step_groups <- res_funnel_start %>%
+    mutate(type = sample(c("a", "b"), nrow(res_funnel_start), replace = TRUE)) %>%
+    funnel_step("subscription", type = "first-firstafter")
+
+  md_grouped <- res_one_step_groups %>%
+    group_by(type) %>%
+    funneljoin:::funnel_metadata()
+
+  expect_equal(md_grouped$tstamp, "timestamp")
+  expect_equal(md_grouped$type_sequence, "first-firstafter")
+  expect_equal(names(md_grouped), c("original_data", "tstamp", "user",
+                                    "moment", "moment_sequence", "type_sequence"))
+})
