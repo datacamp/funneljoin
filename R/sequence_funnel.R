@@ -47,6 +47,8 @@ funnel_start <- function(tbl, moment_type, moment, tstamp, user) {
 #' @param moment_types For \code{funnel_steps}, a character vector of
 #' moment types, which are applied in order
 #' @param name If you want a custom name instead of the moment_type; needed if the moment type is already in the sequence
+#' @param optional Whether this step in the funnel should be optional. If so, the following step will also try joining
+#' in a way that skips this step. Note that multiple optional steps in a row aren't supported.
 #' @param ... Extra arguments passed on to \link{after_left_join}. For \code{funnel_steps}, these are passed on to \code{funnel_step}.
 #' @export
 #'
@@ -86,8 +88,17 @@ funnel_step <- function(tbl, moment_type, type, name = moment_type, optional = F
     data_before_optional <- md$data_before_optional
     penultimate_moment <- tail(attr(data_before_optional, "funnel_metadata")$moment_sequence, 1)
 
-    tstamp_penultimate_by <- stats::setNames(paste0(md$tstamp, "_", name),
-                                             paste0(md$tstamp, "_", penultimate_moment))
+    tstamp_current <- paste0(md$tstamp, "_", name)
+    tstamp_penultimate <- paste0(md$tstamp, "_", penultimate_moment)
+    tstamp_penultimate_by <- stats::setNames(tstamp_current, tstamp_penultimate)
+
+    # If there are multiple user-tstamp ties for penultimate moment, doesn't work
+    counts <- tbl %>%
+      dplyr::count(!!sym(md$user), !!sym(tstamp_penultimate))
+
+    if (any(counts$n > 1)) {
+      stop("Can't use an optional step if there are duplicate ", md$user, ", ", tstamp_penultimate, " pairs in data")
+    }
 
     ret_penultimate <- data_before_optional %>%
       after_left_join(second_moment_data,
@@ -96,7 +107,12 @@ funnel_step <- function(tbl, moment_type, type, name = moment_type, optional = F
                       type = type,
                       ...)
 
-    # Remove the optional ones
+    # Be willing to use ret_penultimate's second step if it exists
+    ret <- ret %>%
+      right_join(ret_penultimate, by = c(md$user, tstamp_penultimate)) %>%
+      mutate(!!tstamp_current := coalesce(!!rlang::sym(paste0(tstamp_current, ".y")),
+                                         !!rlang::sym(paste0(tstamp_current, ".x")))) %>%
+      select(-ends_with(".x"), -ends_with(".y"))
 
     md$data_before_optional <- NULL
   }
