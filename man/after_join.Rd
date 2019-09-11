@@ -77,7 +77,7 @@ type argument to specify which observations in a funnel get kept
 (see details for supported types).
 }
 \details{
-\code{type} can be any combination of \code{first}, \code{last}, \code{any}, \code{lastbefore} with \code{first}, \code{last}, \code{any},  \code{firstafter}. Some common ones you may use include:
+\code{type} can be any combination of \code{first}, \code{last}, \code{any}, \code{lastbefore}, \code{firstwithin} with \code{first}, \code{last}, \code{any},  \code{firstafter}. Some common ones you may use include:
 \describe{
   \item{first-first}{Take the earliest x and y for each user \bold{before} joining. For example, you want the first time someone entered an experiment, followed by the first time someone \bold{ever} registered. If they registered, entered the experiment, and registered again, you do not want to include that person.}
   \item{first-firstafter}{Take the first x, then the first y after that. For example, you want when someone first entered an experiment and the first course they started afterwards. You don't care if they started courses before entering the experiment. }
