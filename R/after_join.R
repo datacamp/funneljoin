@@ -118,7 +118,7 @@ after_join <- function(x,
     stop("type argument only supports pairs")
   }
 
-  type_x <- match.arg(types[1], c("first", "last", "any", "lastbefore"))
+  type_x <- match.arg(types[1], c("first", "last", "any", "lastbefore", "firstwithin"))
   type_y <- match.arg(types[2], c("first", "last", "any", "firstafter"))
 
   if (length(by_user) > 1) {
@@ -176,7 +176,7 @@ after_join <- function(x,
   if (type_x == "firstwithin") {
     pairs <- pairs %>%
       distinct_events(time_col = time_xy$x,
-                      user_col = "..idx",
+                      user_col = "..idy",
                       type = "first")
     }
 
