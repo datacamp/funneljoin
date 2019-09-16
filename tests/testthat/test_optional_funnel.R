@@ -53,4 +53,5 @@ test_that("Funnels don't allow multiple optional steps in a row", {
 
 test_that("Funnels with optional steps don't support duplicated user-timestamp pairs", {
   # TODO
+
 })
