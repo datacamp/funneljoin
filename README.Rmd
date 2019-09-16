@@ -19,6 +19,8 @@ The goal of funneljoin is to make it easy to analyze behavior funnels. For examp
 
 For more examples of how to use funneljoin, check out [the vignette](https://robinsones.github.io/funneljoin/articles/funneljoin.html), which shows different types of joins and the optional arguments, or this [blog post](https://hookedondata.org/introducing-the-funneljoin-package/), which showcases how to use funneljoin analyze questions and answers on StackOverflow. 
 
+Funneljoin was developed at [DataCamp](https://www.datacamp.com/) by Anthony Baker, David Robinson, and Emily Robinson.
+
 ## Installation
 
 You can install the development version from [GitHub](https://github.com/) with:
