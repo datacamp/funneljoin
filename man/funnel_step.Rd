@@ -5,7 +5,8 @@
 \alias{funnel_steps}
 \title{Continue to funnel}
 \usage{
-funnel_step(tbl, moment_type, type, name = moment_type, ...)
+funnel_step(tbl, moment_type, type, name = moment_type,
+  optional = FALSE, ...)
 
 funnel_steps(tbl, moment_types, type, ...)
 }
@@ -17,6 +18,9 @@ funnel_steps(tbl, moment_types, type, ...)
 \item{type}{The type of after_join (e.g. "first-first", "any-any")}
 
 \item{name}{If you want a custom name instead of the moment_type; needed if the moment type is already in the sequence}
+
+\item{optional}{Whether this step in the funnel should be optional. If so, the following step will also try joining
+in a way that skips this step. Note that multiple optional steps in a row aren't supported.}
 
 \item{...}{Extra arguments passed on to \link{after_left_join}. For \code{funnel_steps}, these are passed on to \code{funnel_step}.}
 
