@@ -121,5 +121,5 @@ test_that("group_by() preserves funnel attributes", {
   expect_equal(md_grouped$tstamp, "timestamp")
   expect_equal(md_grouped$type_sequence, "first-firstafter")
   expect_equal(names(md_grouped), c("original_data", "tstamp", "user",
-                                    "moment", "moment_sequence", "type_sequence"))
+                                    "moment", "moment_sequence", "type_sequence", "optional_sequence"))
 })

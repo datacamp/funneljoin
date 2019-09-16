@@ -86,7 +86,7 @@ funnel_step <- function(tbl, moment_type, type, name = moment_type, optional = F
 
     # Try joining by the second to last step, which will take priority
     data_before_optional <- md$data_before_optional
-    penultimate_moment <- tail(attr(data_before_optional, "funnel_metadata")$moment_sequence, 1)
+    penultimate_moment <- utils::tail(attr(data_before_optional, "funnel_metadata")$moment_sequence, 1)
 
     tstamp_current <- paste0(md$tstamp, "_", name)
     tstamp_penultimate <- paste0(md$tstamp, "_", penultimate_moment)
