@@ -2,6 +2,8 @@ context("Joining using remote tables")
 skip_on_travis()
 skip_on_cran()
 skip_if_not_installed("datacampr")
+skip_if_not_installed("dcmetrics")
+library(dcmetrics)
 library(datacampr)
 
 three_days = as.difftime(3, unit = "days")
@@ -14,7 +16,6 @@ soft_launches <- tbl_main_course_state_logs() %>%
 hard_launches <- tbl_main_course_state_logs() %>%
   dplyr::filter(new_state == "live") %>%
   dplyr::select(course_id, live_at = created_at)
-
 
 test_that("after_join works for out-of-memory tables with mode = inner and type = first-first", {
 
@@ -236,4 +237,56 @@ test_that("after_join works with mode = inner, type = any-any, table is remote",
     pull(n)
 
   expect_gte(res, 50)
+})
+
+
+courses_started_datacamp <- tbl_views_user_content_history() %>%
+  enrich_users(domain) %>%
+  filter(domain == "datacamp.com",
+        content_type == "course",
+        between(started_at, "2019-08-01", "2019-08-20"))  %>%
+  select(user_id, started_at)
+
+projects_started_datacamp <- tbl_views_user_content_history() %>%
+  enrich_users(domain) %>%
+  filter(domain == "datacamp.com",
+         content_type == "project",
+         between(started_at, "2019-08-01", "2019-08-20")) %>%
+  select(user_id, started_at)
+
+courses_started_datacamp_local <- courses_started_datacamp %>%
+  collect()
+
+projects_started_datacamp_local <- projects_started_datacamp %>%
+  collect()
+
+courses_started_datacamp %>%
+  after_left_join(projects_started_datacamp,
+                  by_user = "user_id",
+                  by_time = "started_at",
+                  type = "first-any",
+                  max_gap = as.difftime(10, units = "days"))
+
+test_that("after_join results with mode = inner, type = firstwithin-any, table is remote is same when table is local", {
+
+  res_remote <- courses_started_datacamp %>%
+    after_inner_join(projects_started_datacamp,
+                    by_user = "user_id",
+                    by_time = "started_at",
+                    type = "firstwithin-any",
+                    max_gap = as.difftime(10, units = "days")) %>%
+    collect()
+
+  res_local <- courses_started_datacamp_local %>%
+    after_inner_join(projects_started_datacamp_local,
+                    by_user = "user_id",
+                    by_time = "started_at",
+                    type = "firstwithin-any",
+                    max_gap = as.difftime(10, units = "days"))
+
+  expect_equal(res_local, res_remote)
+  expect_equal(nrow(res_remote), 17)
+  expect_equal(n_distinct(res_remote$started_at.y), nrow(res_remote))
+  expect_equal(n_distinct(res_remote$started_at.x), 8)
+
 })

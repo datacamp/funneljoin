@@ -54,19 +54,23 @@ test_that("after_join works with mode = right and type = firstwithin-any", {
                      by_time = "timestamp",
                      by_user = "user",
                      type = "firstwithin-any",
-                     max_gap = as.difftime(30, units = "days"))
+                     max_gap = as.difftime(30, units = "days"),
+                     gap_col = TRUE)
 
   expect_equal(nrow(res), 4)
   expect_true(is.na(filter(res, user == 2)$timestamp.x))
+  expect_equal(nrow(filter(res, .gap > 60 * 60 * 24 * 30)), 0)
 
   res <- clicks %>%
     after_right_join(conversions,
                      by_time = "timestamp",
                      by_user = "user",
                      type = "firstwithin-any",
-                     max_gap = as.difftime(90, units = "days"))
+                     max_gap = as.difftime(90, units = "days"),
+                     gap_col = TRUE)
   expect_equal(nrow(res), 4)
   expect_false(is.na(filter(res, user == 2)$timestamp.x))
+  expect_equal(nrow(filter(res, .gap > 60 * 60 * 24 * 90)), 0)
 })
 
 
