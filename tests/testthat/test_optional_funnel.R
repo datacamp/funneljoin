@@ -19,6 +19,25 @@ multi_moments <- tibble::tribble(
 ) %>%
   mutate(timestamp = as.Date(timestamp))
 
+multi_moments_with_dupes <- tibble::tribble(
+  ~user_id, ~timestamp, ~ moment_type,
+  1, "2018-07-01", "course_start",
+  1, "2018-07-04", "project_start",
+  2, "2018-07-01", "course_start",
+  2, "2018-06-05", "project_start",
+  3, "2018-07-02", "course_start",
+  4, "2018-07-01", "course_start",
+  4, "2018-07-04", "subscription",
+  5, "2018-07-10", "course_start",
+  5, "2018-07-12", "subscription",
+  5, "2018-07-15", "project_start",
+  6, "2018-07-07", "subscription",
+  6, "2018-07-08", 'course_start',
+  6, "2018-07-08", 'course_start',
+  6, "2018-07-11", 'project_start'
+) %>%
+  mutate(timestamp = as.Date(timestamp))
+
 test_that("Optional funnel works", {
   optional <- multi_moments %>%
     funnel_start("subscription", moment_type, timestamp, user_id) %>%
@@ -52,6 +71,12 @@ test_that("Funnels don't allow multiple optional steps in a row", {
 })
 
 test_that("Funnels with optional steps don't support duplicated user-timestamp pairs", {
-  # TODO
+
+  setup <- multi_moments_with_dupes %>%
+    funnel_start("course_start", moment_type, timestamp, user_id) %>%
+    funnel_step("project_start", type = "any-firstafter", optional = TRUE)
+
+  expect_error(funnel_step(setup, "subscription", type = "any-any"), "duplicate user")
+
 
 })
