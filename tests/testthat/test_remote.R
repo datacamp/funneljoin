@@ -274,8 +274,7 @@ test_that("after_join results with mode = inner, type = firstwithin-any, table i
                     by_user = "user_id",
                     by_time = "started_at",
                     type = "firstwithin-any",
-                    max_gap = as.difftime(10, units = "days"),
-                    gap_col = TRUE) %>%
+                    max_gap = as.difftime(10, units = "days")) %>%
     collect()
 
   res_local <- courses_started_datacamp_local %>%
@@ -283,13 +282,10 @@ test_that("after_join results with mode = inner, type = firstwithin-any, table i
                     by_user = "user_id",
                     by_time = "started_at",
                     type = "firstwithin-any",
-                    max_gap = as.difftime(10, units = "days"),
-                    gap_col = TRUE) %>%
-    collect()
+                    max_gap = as.difftime(10, units = "days"))
 
   expect_equal(res_local, res_remote)
   expect_equal(nrow(res_remote), 17)
-  expect_true(all(res_remote$.gap < 10 * 60 * 60 * 24))
   expect_equal(n_distinct(res_remote$started_at.y), nrow(res_remote))
   expect_equal(n_distinct(res_remote$started_at.x), 8)
 
