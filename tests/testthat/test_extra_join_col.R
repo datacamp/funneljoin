@@ -17,11 +17,10 @@ ad_clicks <- tibble::tribble(
   1, "2019-09-10", "A",
   2, "2019-09-25", "B",
   2, "2019-09-27", "A",
-  3, "2019-09-23", "D"
+  3, "2019-09-23", "D",
+  5, "2019-09-24", "C"
 )
 
-# join-col, inner, and first-firstafter
-# 1-1, 3-4
 test_that("after_join works with mode = inner, a by_col, and type = first-firstafter", {
   res <- ad_views %>%
     after_inner_join(ad_clicks,
@@ -34,7 +33,29 @@ test_that("after_join works with mode = inner, a by_col, and type = first-firsta
   expect_equal(res$user, c(1, 2))
   expect_equal(res$ad.x, res$ad.y)
   expect_true(all(res$tstamp.y >= res$tstamp.x))
-
 })
+
+
+test_that("after_join works with mode = left, a by_col, and type = first-firstafter", {
+  res <- ad_views %>%
+    after_left_join(ad_clicks,
+                     type = "first-firstafter",
+                     by_time = "tstamp",
+                     by_user = "user",
+                     by_col = 'ad')
+
+  expect_is(res, "tbl_df")
+  expect_equal(names(res), c("user", "tstamp.x", "ad.x", "tstamp.y", "ad.y"))
+  expect_true(all(!is.na(res$tstamp.x)))
+  expect_true(any(is.na(res$tstamp.y)))
+  expect_true(all(!is.na(res$ad.x)))
+  expect_true(any(is.na(res$ad.y)))
+  expect_equal(nrow(res), 4)
+  expect_true(all(res$ad.x == res$ad.y | is.na(res$ad.y)))
+  expect_true(all(res$tstamp.y >= res$tstamp.x | is.na(res$tstamp.y)))
+  expect_gt(nrow(ad_views), nrow(res))
+  expect_true(!5 %in% res$user)
+})
+
 
 
