@@ -27,6 +27,8 @@
 #' @param min_gap Optional: the maximum gap allowed between events. Can be a
 #'   integer representing the number of seconds or a difftime object, such as
 #'   \code{as.difftime(2, units = "hours")}.
+#' @param by_col Optional: whether another column besides users will determine
+#'   if pairs can be
 #' @param gap_col Whether to include a numeric column, \code{.gap},
 #'   with the time difference in seconds between the events.
 #' @param suffix If there are non-joined duplicate variables in x and y,
@@ -105,6 +107,7 @@ after_join <- function(x,
                        type = "first-first",
                        max_gap = NULL,
                        min_gap = NULL,
+                       by_col = NULL,
                        gap_col = FALSE,
                        suffix = c(".x", ".y")) {
 
@@ -132,6 +135,7 @@ after_join <- function(x,
   user_xy <- dplyr::common_by(by_user, x, y)
   time_xy <- dplyr::common_by(by_time, x, y)
 
+
   x_i <- x %>%
     dplyr::arrange(!!dplyr::sym(user_xy$x), !!dplyr::sym(time_xy$x)) %>%
     dplyr::mutate(..idx = row_number())
@@ -154,6 +158,7 @@ after_join <- function(x,
                       type = type_y)
   }
 
+
   # Handle the case when columns with the same name are appended with .x & .y
   if (time_xy$x == time_xy$y || time_xy$x %in% colnames(y_i) || time_xy$y %in% colnames(x_i)) {
     time_xy <- list(x = paste0(time_xy$x, ".x"),
@@ -171,6 +176,18 @@ after_join <- function(x,
                            min_gap = min_gap,
                            time_xy = time_xy,
                            user_xy = user_xy)
+  }
+
+  if (!is.null(by_col)) {
+    col_xy <- dplyr::common_by(by_col, x, y)
+    # Handle the case when columns with the same name are appended with .x & .y
+    if (col_xy$x == col_xy$y || col_xy$x %in% colnames(y_i) || col_xy$y %in% colnames(x_i)) {
+      col_xy <- list(x = paste0(col_xy$x, ".x"),
+                     y = paste0(col_xy$y, ".y"))
+    }
+
+    pairs <- pairs %>%
+      filter(!!dplyr::sym(col_xy$x) == !!dplyr::sym(col_xy$y))
   }
 
   if (type_x == "firstwithin") {
