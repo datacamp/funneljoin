@@ -1,9 +1,5 @@
 context("summarize functions")
-skip_on_travis()
-skip_on_cran()
-skip_if_not_installed("datacampr")
 library(dplyr)
-library(datacampr)
 
 simple_example <- tibble::tribble(
   ~"alternative.name", ~"timestamp.x", ~"timestamp.y",
@@ -43,12 +39,6 @@ converted_data <- for_conversion %>%
 
 test_that("summarize_conversions works with when group has no conversions", {
   expect_equal(nrow(simple_summarized_conversion), 2)
-  expect_gt(tbl_views_snowplow_experiment_starts() %>%
-              group_by(alternative.name) %>%
-              summarize_conversions(user_id) %>%
-              filter(nb_conversions == 0) %>%
-              collect() %>%
-              nrow(), 10)
 })
 
 test_that("summarize_conversions won't return NA", {
@@ -79,4 +69,3 @@ summarized_logical_conversions <- conversions_logical %>%
 test_that("summarize_conversions works with TRUE/FALSE", {
   expect_equal(sum(summarized_logical_conversions$nb_conversions), 4)
 })
-
