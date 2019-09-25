@@ -80,7 +80,7 @@ summarize_conversions <- function(x, converted) {
       ret <- x %>%
         dplyr::summarise(nb_users = dplyr::n(),
                          nb_conversions = COUNT(!!var_converted)) %>%
-        dplyr::mutate(pct_converted = nb_conversions / nb_users)
+        dplyr::mutate(pct_converted = (nb_conversions * 1.0) / nb_users)
     }
   }
 
