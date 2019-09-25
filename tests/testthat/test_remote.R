@@ -239,6 +239,24 @@ test_that("after_join works with mode = inner, type = any-any, table is remote",
   expect_gte(res, 50)
 })
 
+test_that("summarize_conversions doesn't return pct_converted 0 remotely", {
+  summarized_remote <- tbl_views_snowplow_filtered_experiments_moments_after() %>%
+    filter(name == "exp104__growth__emerging_perpetual_127__50__1") %>%
+    summarize_conversions(active_course_start) %>%
+    collect()
+  expect_gt(summarized_remote$pct_converted, 0)
+})
+
+test_that("summarize_conversions works with when group has no conversions", {
+  expect_gt(tbl_views_snowplow_experiment_starts() %>%
+              group_by(alternative.name) %>%
+              summarize_conversions(user_id) %>%
+              filter(nb_conversions == 0) %>%
+              collect() %>%
+              nrow(), 10)
+})
+
+
 
 courses_started_datacamp <- tbl_views_user_content_history() %>%
   enrich_users(domain) %>%
