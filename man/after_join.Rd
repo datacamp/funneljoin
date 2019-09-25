@@ -15,22 +15,28 @@ after_join(x, y, by_time, by_user, mode = "inner",
   by_col = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
 
 after_inner_join(x, y, by_time, by_user, type, max_gap = NULL,
-  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
+  min_gap = NULL, by_col = NULL, gap_col = FALSE, suffix = c(".x",
+  ".y"))
 
 after_left_join(x, y, by_time, by_user, type, max_gap = NULL,
-  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
+  min_gap = NULL, by_col = NULL, gap_col = FALSE, suffix = c(".x",
+  ".y"))
 
 after_right_join(x, y, by_time, by_user, type, max_gap = NULL,
-  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
+  min_gap = NULL, by_col = NULL, gap_col = FALSE, suffix = c(".x",
+  ".y"))
 
 after_full_join(x, y, by_time, by_user, type, max_gap = NULL,
-  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
+  min_gap = NULL, by_col = NULL, gap_col = FALSE, suffix = c(".x",
+  ".y"))
 
 after_anti_join(x, y, by_time, by_user, type, max_gap = NULL,
-  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
+  min_gap = NULL, by_col = NULL, gap_col = FALSE, suffix = c(".x",
+  ".y"))
 
 after_semi_join(x, y, by_time, by_user, type, max_gap = NULL,
-  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"))
+  min_gap = NULL, by_col = NULL, gap_col = FALSE, suffix = c(".x",
+  ".y"))
 }
 \arguments{
 \item{x}{A tbl representing the first event to occur in the funnel.}
