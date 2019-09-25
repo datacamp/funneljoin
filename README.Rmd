@@ -37,52 +37,25 @@ library(dplyr)
 library(funneljoin)
 ```
 
-```{r}
-landed <- tibble::tribble(
-  ~user_id, ~timestamp,
-  1, "2018-07-01",
-  2, "2018-07-01",
-  3, "2018-07-02",
-  4, "2018-07-01",
-  4, "2018-07-04",
-  5, "2018-07-10",
-  5, "2018-07-12",
-  6, "2018-07-07",
-  6, "2018-07-08"
-) %>%
-  mutate(timestamp = as.Date(timestamp))
+We'll take a look at two tables that come with the package, `landed` and `registered`. Each has a column `user_id` and `timestamp`.
 
-registered <- tibble::tribble(
-  ~user_id, ~timestamp,
-  1, "2018-07-02",
-  3, "2018-07-02",
-  4, "2018-06-10",
-  4, "2018-07-02",
-  5, "2018-07-11",
-  6, "2018-07-10",
-  6, "2018-07-11",
-  7, "2018-07-07"
-) %>%
-  mutate(timestamp = as.Date(timestamp))
-```
-
-Let's say we wanted to get only the first time people landed and registered. We would `after_inner_join()` with a `first-first` type: 
+Let's say we wanted to get the first time people landed and the first time afterward they registered. We would `after_inner_join()` with a `first-firstafter` type: 
 
 ```{r}
 landed %>%
   after_inner_join(registered, 
                    by_user = "user_id",
                    by_time = "timestamp",
-                   type = "first-first",
+                   type = "first-firstafter",
                    suffix = c("_landed", "_registered"))
 ```
 
 The first two arguments are the tables we're joining, with the first table being the events that happen first. We then specify: 
 
-  - `by_time`: the time columns in each table. This would typically be a datetime or a date column. These columns are used to filter for time y being after time x.
+  - `by_time`: the time columns in each table. This would typically be a datetime or a date column. These columns are used to filter for time y being after or the same as time x.
   - `by_user`:the user or identity columns in each table. These must be identical for a pair of rows to match.
   - `type`: the type of funnel used to distinguish between event pairs, such as "first-first", "last-first", "any-firstafter".
-  - `suffix`: just like dplyr’s join functions, this specifies what should be appended to the names of columns that are in both tables.
+  - `suffix` (optional): just like dplyr’s join functions, this specifies what should be appended to the names of columns that are in both tables.
 
 `type` can be any combination of `first`, `last`, `any`, and `lastbefore` with `first`, `last`,  `any`, and `firstafter`. Some common ones you may use include:  
 
