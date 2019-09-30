@@ -9,6 +9,7 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #'
 #' activity <- tibble::tribble(
 #'   ~ "user_id", ~ "event", ~ "timestamp",
@@ -74,6 +75,8 @@ funnel_start <- function(tbl, moment_type, moment, tstamp, user) {
 #' @export
 #'
 #' @examples
+#'
+#' library(dplyr)
 #'
 #' activity <- tibble::tribble(
 #'   ~ "user_id", ~ "event", ~ "timestamp",

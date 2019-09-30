@@ -32,6 +32,8 @@ Continue to funnel
 }
 \examples{
 
+library(dplyr)
+
 activity <- tibble::tribble(
   ~ "user_id", ~ "event", ~ "timestamp",
   1, "landing", "2019-07-01",

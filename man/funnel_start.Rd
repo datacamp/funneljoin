@@ -21,6 +21,7 @@ funnel_start(tbl, moment_type, moment, tstamp, user)
 Start a funnel
 }
 \examples{
+library(dplyr)
 
 activity <- tibble::tribble(
   ~ "user_id", ~ "event", ~ "timestamp",
