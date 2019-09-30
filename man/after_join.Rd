@@ -118,13 +118,13 @@ registered <- tribble(
  mutate(timestamp = as.Date(timestamp))
 
 after_inner_join(landed, registered, by_user = "user_id",
-           by_time = "timestamp", mode = "inner", type = "first-first")
+           by_time = "timestamp", type = "first-first")
 
 # You can use different methods of joining:
 after_left_join(landed, registered, by_user = "user_id",
-           by_time = "timestamp", mode = "left", type = "first-first")
+           by_time = "timestamp", type = "first-first")
 
 after_anti_join(landed, registered, by_user = "user_id",
-           by_time = "timestamp", mode = "anti", type = "any-any")
+           by_time = "timestamp", type = "any-any")
 
 }
