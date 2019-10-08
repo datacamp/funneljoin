@@ -69,3 +69,25 @@ summarized_logical_conversions <- conversions_logical %>%
 test_that("summarize_conversions works with TRUE/FALSE", {
   expect_equal(sum(summarized_logical_conversions$nb_conversions), 4)
 })
+
+true_and_na <- tibble::tribble(
+  ~"alternative.name", ~"timestamp.x", ~"timestamp.y",
+  "control", "2018-07-10", NA,
+  "control", "2018-07-11", NA,
+  "control", "2018-07-12", NA,
+  "treatment", "2018-07-01", TRUE,
+  "treatment", "2018-07-01", TRUE,
+  "control", "2018-07-01", NA,
+  "control", "2018-07-02", NA,
+  "control", "2018-07-03", TRUE,
+  "treatment", "2018-07-01", NA,
+  "treatment", "2018-07-01", TRUE
+)
+
+true_and_na_summarized <- true_and_na %>%
+  group_by(alternative.name) %>%
+  summarize_conversions(timestamp.y)
+
+test_that("summarize_conversions works with TRUE/NA", {
+  expect_equal(sum(true_and_na_summarized$nb_conversions), 4)
+})
