@@ -5,7 +5,7 @@
 #' @param user_col the name of the user identifying column
 #' @param type the type of after_join ("first-first", "first-firstafter", etc.)
 #' @importFrom magrittr %>%
-
+#' @export
 distinct_events <- function(.data, time_col, user_col, type) {
   if (inherits(.data, "tbl_lazy")) {
     desc <- if (type == "last") " DESC" else ""

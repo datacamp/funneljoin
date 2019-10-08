@@ -99,9 +99,9 @@ after_join <- function(x,
                        gap_col = FALSE,
                        suffix = c(".x", ".y")) {
 
-  if (!is.null(attr(x, "after_join")) & inherits(x, "tbl_lazy")) {
-    stop("You can not do multiple after joins in a row remotely. Please pull your data locally.")
-  }
+#   if (!is.null(attr(x, "after_join")) & inherits(x, "tbl_lazy")) {
+#     stop("You can not do multiple after joins in a row remotely. Please pull your data locally.")
+#   }
 
   types <- strsplit(type, '\\-')[[1]]
 
@@ -231,6 +231,11 @@ after_join <- function(x,
   }
 
   attr(ret, "after_join") <- 1
+
+  if (inherits(.data, "tbl_lazy")) {
+    ret <- datacampr::materialize_temp(ret)
+  }
+
   ret
 }
 
