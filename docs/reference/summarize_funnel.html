@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Summarise after join funnel with proportion test — summarize_prop_tests • funneljoin</title>
+<title>Summarize after funnel start and funnel step(s) — summarize_funnel • funneljoin</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Summarise after join funnel with proportion test — summarize_prop_tests" />
-<meta property="og:description" content="Summarise after join funnel with proportion test" />
+<meta property="og:title" content="Summarize after funnel start and funnel step(s) — summarize_funnel" />
+<meta property="og:description" content="Summarize after funnel start and funnel step(s)" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -106,42 +106,35 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Summarise after join funnel with proportion test</h1>
+    <h1>Summarize after funnel start and funnel step(s)</h1>
     
-    <div class="hidden name"><code>summarize_prop_tests.Rd</code></div>
+    <div class="hidden name"><code>summarize_funnel.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Summarise after join funnel with proportion test</p>
+    <p>Summarize after funnel start and funnel step(s)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>summarize_prop_tests</span>(<span class='no'>x</span>, <span class='kw'>alternative_name</span> <span class='kw'>=</span> <span class='no'>alternative.name</span>, <span class='no'>...</span>,
-  <span class='kw'>ungroup</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>summarize_funnel</span>(<span class='no'>tbl_funnel</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>a data.frame with columns nb_conversions and nb_users</p></td>
-    </tr>
-    <tr>
-      <th>alternative_name</th>
-      <td><p>the name of the column indicating the experiment group</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>any additional arguments</p></td>
-    </tr>
-    <tr>
-      <th>ungroup</th>
-      <td><p>whether the table needs to be ungrouped</p></td>
+      <th>tbl_funnel</th>
+      <td><p>a table from funnel start and funnel step(s)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data.frame with proportion test results</p>
+    <p>A tibble with one row for each moment_type and grouping variable, with columns:</p><dl class='dl-horizontal'>
+  <dt>nb_step</dt><dd><p>The number of users who reached this moment</p></dd>
+  <dt>pct_cumulative</dt><dd><p>The percentage of original users who reached this moment</p></dd>
+  <dt>pct_step</dt><dd><p>The percentage of users who reached the last step reaching this moment</p></dd>
+
+</dl>
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
