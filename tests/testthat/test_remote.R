@@ -256,8 +256,6 @@ test_that("summarize_conversions works with when group has no conversions", {
               nrow(), 10)
 })
 
-
-
 courses_started_datacamp <- tbl_views_user_content_history() %>%
   enrich_users(domain) %>%
   filter(domain == "datacamp.com",
@@ -303,8 +301,6 @@ test_that("after_join results with mode = inner, type = firstwithin-any, table i
                     max_gap = as.difftime(10, units = "days"))
 
   expect_equal(res_local, res_remote)
-  expect_equal(nrow(res_remote), 17)
   expect_equal(n_distinct(res_remote$started_at.y), nrow(res_remote))
-  expect_equal(n_distinct(res_remote$started_at.x), 8)
 
 })
