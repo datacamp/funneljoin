@@ -1,6 +1,6 @@
 Package: funneljoin
 Type: Package
-Title: Join Tables Based on Events Occurring in Sequence
+Title: Time-based Joins to Analyze Sequences of Events
 Version: 0.1.0
 Authors@R: c(
     person("Emily", "Robinson", email = "robinson.es@gmail.com", role = c("aut", "cre")),
@@ -10,7 +10,11 @@ Depends:
     R (>= 2.10)
 Maintainer: Emily Robinson <robinson.es@gmail.com>
 Description: Time-based joins to analyze sequence of events, 
-    both in memory and out of memory. 
+    both in memory and out of memory. after_join() joins two 
+    tables of events, while funnel_start() and funnel_step() 
+    join events in the same table. With the type argument, you
+    can switch between different funnel types, like first-first
+    and last-firstafter.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
