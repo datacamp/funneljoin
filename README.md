@@ -1,34 +1,52 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Travis-CI Build Status](https://travis-ci.org/robinsones/funneljoin.svg?branch=master)](https://travis-ci.org/robinsones/funneljoin)
 
-The goal of funneljoin is to make it easy to analyze behavior funnels. For example, maybe you're interested in finding the people who visit a page and then register. Or you want all the times people click on an item and add it to their cart within 2 days. These can all be answered quickly with funneljoin's `after_join()` or `funnel_start()` and `funnel_step()`. As funneljoin uses dplyr, it can also work with remote tables, **but has only been tried on postgres**.
+[![Travis-CI Build
+Status](https://travis-ci.org/robinsones/funneljoin.svg?branch=master)](https://travis-ci.org/robinsones/funneljoin)
 
-For more examples of how to use funneljoin, check out [the vignette](https://robinsones.github.io/funneljoin/articles/funneljoin.html), which shows different types of joins and the optional arguments, or this [blog post](https://hookedondata.org/introducing-the-funneljoin-package/), which showcases how to use funneljoin analyze questions and answers on StackOverflow.
+The goal of funneljoin is to make it easy to analyze behavior funnels.
+For example, maybe you’re interested in finding the people who visit a
+page and then register. Or you want all the times people click on an
+item and add it to their cart within 2 days. These can all be answered
+quickly with funneljoin’s `after_join()` or `funnel_start()` and
+`funnel_step()`. As funneljoin uses dplyr, it can also work with remote
+tables, **but has only been tried on postgres**.
 
-Funneljoin was developed at [DataCamp](https://www.datacamp.com/) by Anthony Baker, David Robinson, and Emily Robinson and continues to be maintained primarily by Emily.
+For more examples of how to use funneljoin, check out [the
+vignette](https://robinsones.github.io/funneljoin/articles/funneljoin.html),
+which shows different types of joins and the optional arguments, or this
+[blog
+post](https://hookedondata.org/introducing-the-funneljoin-package/),
+which showcases how to use funneljoin analyze questions and answers on
+StackOverflow.
 
-Installation
-------------
+Funneljoin was developed at [DataCamp](https://www.datacamp.com/) by
+Anthony Baker, David Robinson, and Emily Robinson and continues to be
+maintained primarily by Emily.
 
-You can install the development version from [GitHub](https://github.com/) with:
+## Installation
+
+You can install the development version from
+[GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("robinsones/funneljoin")
 ```
 
-after\_join()
--------------
+## after\_join()
 
 ``` r
 library(dplyr)
 library(funneljoin)
 ```
 
-We'll take a look at two tables that come with the package, `landed` and `registered`. Each has a column `user_id` and `timestamp`.
+We’ll take a look at two tables that come with the package, `landed` and
+`registered`. Each has a column `user_id` and `timestamp`.
 
-Let's say we wanted to get the first time people landed and the first time afterward they registered. We would `after_inner_join()` with a `first-firstafter` type:
+Let’s say we wanted to get the first time people landed and the first
+time afterward they registered. We would `after_inner_join()` with a
+`first-firstafter` type:
 
 ``` r
 landed %>%
@@ -47,22 +65,46 @@ landed %>%
 #> 5       5 2018-07-10       2018-07-11
 ```
 
-The first two arguments are the tables we're joining, with the first table being the events that happen first. We then specify:
+The first two arguments are the tables we’re joining, with the first
+table being the events that happen first. We then specify:
 
--   `by_time`: the time columns in each table. This would typically be a datetime or a date column. These columns are used to filter for time y being after or the same as time x.
--   `by_user`:the user or identity columns in each table. These must be identical for a pair of rows to match.
--   `type`: the type of funnel used to distinguish between event pairs, such as "first-first", "last-first", "any-firstafter".
--   `suffix` (optional): just like dplyr’s join functions, this specifies what should be appended to the names of columns that are in both tables.
+  - `by_time`: the time columns in each table. This would typically be a
+    datetime or a date column. These columns are used to filter for time
+    y being after or the same as time x.
+  - `by_user`:the user or identity columns in each table. These must be
+    identical for a pair of rows to match.
+  - `type`: the type of funnel used to distinguish between event pairs,
+    such as “first-first”, “last-first”, “any-firstafter”.
+  - `suffix` (optional): just like dplyr’s join functions, this
+    specifies what should be appended to the names of columns that are
+    in both tables.
 
-`type` can be any combination of `first`, `last`, `any`, and `lastbefore` with `first`, `last`, `any`, and `firstafter`. Some common ones you may use include:
+`type` can be any combination of `first`, `last`, `any`, and
+`lastbefore` with `first`, `last`, `any`, and `firstafter`. Some common
+ones you may use include:
 
--   **first-first**: Take the earliest x and y for each user **before** joining. For example, you want the first time someone entered an experiment, followed by the first time someone **ever** registered. If they registered, entered the experiment, and registered again, you do not want to include that person.
--   **first-firstafter**: Take the first x, then the first y after that. For example, you want when someone first entered an experiment and the first course they started afterwards. You don't care if they started courses before entering the experiment.
--   **lastbefore-firstafter**: First x that's followed by a y before the next x. For example, in last click paid ad attribution, you want the last ad someone clicked before the first subscription they did afterward.
--   **any-firstafter**: Take all Xs followed by the first Y after it. For example, you want all the times someone visited a homepage and their first product page they visited afterwards.
--   **any-any**: Take all Xs followed by all Ys. For example, you want all the times someone visited a homepage and **all** the product pages they saw afterward.
+  - **first-first**: Take the earliest x and y for each user **before**
+    joining. For example, you want the first time someone entered an
+    experiment, followed by the first time someone **ever** registered.
+    If they registered, entered the experiment, and registered again,
+    you do not want to include that person.
+  - **first-firstafter**: Take the first x, then the first y after that.
+    For example, you want when someone first entered an experiment and
+    the first course they started afterwards. You don’t care if they
+    started courses before entering the experiment.
+  - **lastbefore-firstafter**: First x that’s followed by a y before the
+    next x. For example, in last click paid ad attribution, you want the
+    last ad someone clicked before the first subscription they did
+    afterward.
+  - **any-firstafter**: Take all Xs followed by the first Y after it.
+    For example, you want all the times someone visited a homepage and
+    their first product page they visited afterwards.
+  - **any-any**: Take all Xs followed by all Ys. For example, you want
+    all the times someone visited a homepage and **all** the product
+    pages they saw afterward.
 
-If your time and user columns have different names, you can work with that too:
+If your time and user columns have different names, you can work with
+that too:
 
 ``` r
 landed <- landed %>%
@@ -89,10 +131,10 @@ landed %>%
 #> 4         5 2018-07-10 2018-07-11
 ```
 
-funnel\_start() and funnel\_step()
-----------------------------------
+## funnel\_start() and funnel\_step()
 
-Sometimes you have all the data you need in one table. For example, let's look at this table of user activity on a website.
+Sometimes you have all the data you need in one table. For example,
+let’s look at this table of user activity on a website.
 
 ``` r
 activity <- tibble::tribble(
@@ -110,13 +152,17 @@ activity <- tibble::tribble(
 )
 ```
 
-We can use `funnel_start()` and `funnel_step()` to make an activity funnel. `funnel_start()` takes five arugments:
+We can use `funnel_start()` and `funnel_step()` to make an activity
+funnel. `funnel_start()` takes five arguments:
 
--   `tbl`: The table of events.
--   `moment_type`: The first moment, or event, in the funnel.
--   `moment`: The name of the column that indicates the `moment_type`.
--   `tstamp`: The name of the column with the timestamps of the moment.
--   `user`: The name of the column indicating the user who did the moment.
+  - `tbl`: The table of events.
+  - `moment_type`: The first moment, or event, in the funnel.
+  - `moment`: The name of the column that indicates the `moment_type`.
+  - `tstamp`: The name of the column with the timestamps of the moment.
+  - `user`: The name of the column indicating the user who did the
+    moment.
+
+<!-- end list -->
 
 ``` r
 activity %>%
@@ -133,9 +179,14 @@ activity %>%
 #> 4       4 2019-06-13
 ```
 
-`funnel_start()` returns a table with the user\_ids and a column with the name of your timestamp column, `_`, and the moment type. This table also includes metadata.
+`funnel_start()` returns a table with the user\_ids and a column with
+the name of your timestamp column, `_`, and the moment type. This table
+also includes metadata.
 
-To add more moments to the funnel, you use `funnel_step()`. Since you've indicated in `funnel_start()` what columns to use for each part, now you only need to have the `moment_type` and the `type` of `after_join()` (e.g. "first-first", "first-any").
+To add more moments to the funnel, you use `funnel_step()`. Since you’ve
+indicated in `funnel_start()` what columns to use for each part, now you
+only need to have the `moment_type` and the `type` of `after_join()`
+(e.g. “first-first”, “first-any”).
 
 ``` r
 activity %>%
@@ -176,9 +227,17 @@ activity %>%
 #> 5       4 2019-06-13        <NA>                   <NA>
 ```
 
-If you use a `type` that allows multiple moments of one type for a user, like "first-any", you will get more rows per user rather than more columns. For example, user 1 had two purchases, so she now has two rows. The `timestamp_landing` and `timestamp_registration` is the same for both rows, but they have a different `timestamp_purchase`.
+If you use a `type` that allows multiple moments of one type for a user,
+like “first-any”, you will get more rows per user rather than more
+columns. For example, user 1 had two purchases, so she now has two rows.
+The `timestamp_landing` and `timestamp_registration` is the same for
+both rows, but they have a different `timestamp_purchase`.
 
-Finally, you can use the `summarize_funnel()` to understand how many and what percentage of people make it through to each next step of the funnel. We can also switch to `funnel_steps()` to shorten our code a bit - we give it a character vector of `moment_types` in order and the `type` for each step.
+Finally, you can use the `summarize_funnel()` to understand how many and
+what percentage of people make it through to each next step of the
+funnel. We can also switch to `funnel_steps()` to shorten our code a bit
+- we give it a character vector of `moment_types` in order and the
+`type` for each step.
 
 ``` r
 activity %>%
@@ -197,9 +256,15 @@ activity %>%
 #> 3 purchase           2           0.5     0.667
 ```
 
-`nb_step` is how many users made it to each step, `pct_cumulative` is what percent that is out of the original step, and `pct_step` is what percentage that is out of those who made it to the previous step. So in our case, 2 people had a purchase, which is 50% of the people who landed but 66% of those who registered.
+`nb_step` is how many users made it to each step, `pct_cumulative` is
+what percent that is out of the original step, and `pct_step` is what
+percentage that is out of those who made it to the previous step. So in
+our case, 2 people had a purchase, which is 50% of the people who landed
+but 66% of those who registered.
 
-Reporting bugs and adding features
-----------------------------------
+## Reporting bugs and adding features
 
-If you find any bugs or have a feature request or question, please [create an issue](https://github.com/robinsones/funneljoin/issues/new). If you'd like to add a feature, tests, or other functionality, please also make an issue first and let's discuss!
+If you find any bugs or have a feature request or question, please
+[create an issue](https://github.com/robinsones/funneljoin/issues/new).
+If you’d like to add a feature, tests, or other functionality, please
+also make an issue first and let’s discuss\!

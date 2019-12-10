@@ -105,7 +105,7 @@ activity <- tibble::tribble(
 )
 ```
 
-We can use `funnel_start()` and `funnel_step()` to make an activity funnel. `funnel_start()` takes five arugments: 
+We can use `funnel_start()` and `funnel_step()` to make an activity funnel. `funnel_start()` takes five arguments: 
 
   - `tbl`: The table of events.
   - `moment_type`: The first moment, or event, in the funnel.
