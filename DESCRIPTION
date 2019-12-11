@@ -1,6 +1,6 @@
 Package: funneljoin
 Type: Package
-Title: Time-based Joins to Analyze Sequences of Events
+Title: Time-Based Joins to Analyze Sequences of Events
 Version: 0.1.0
 Authors@R: c(
     person("Emily", "Robinson", email = "robinson.es@gmail.com", role = c("aut", "cre")),
