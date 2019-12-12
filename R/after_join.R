@@ -245,43 +245,43 @@ after_join <- function(x,
 
 #' @rdname after_join
 #' @export
-after_inner_join <- function(x, y, by_time, by_user, type, max_gap = NULL,  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y")) {
+after_inner_join <- function(x, y, by_time, by_user, type, max_gap = NULL,  min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"), ties = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "inner", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix)
+             mode = "inner", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix, ties = ties)
 }
 
 #' @rdname after_join
 #' @export
-after_left_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y")) {
+after_left_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"), ties = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "left", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix)
+             mode = "left", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix, ties = ties)
 }
 
 #' @rdname after_join
 #' @export
-after_right_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y")) {
+after_right_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"), ties = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "right", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix)
+             mode = "right", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix, ties = ties)
 }
 
 #' @rdname after_join
 #' @export
-after_full_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y")) {
+after_full_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"), ties = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "full", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix)
+             mode = "full", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix, ties = ties)
 }
 
 #' @rdname after_join
 #' @export
-after_anti_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y")) {
+after_anti_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL, gap_col = FALSE, suffix = c(".x", ".y"), ties = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "anti", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix)
+             mode = "anti", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix, ties = ties)
 }
 
 #' @rdname after_join
 #' @export
 after_semi_join <- function(x, y, by_time, by_user, type, max_gap = NULL, min_gap = NULL,
-                            gap_col = FALSE, suffix = c(".x", ".y")) {
+                            gap_col = FALSE, suffix = c(".x", ".y"), ties = FALSE) {
   after_join(x, y, by_time, by_user,
-             mode = "semi", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix)
+             mode = "semi", type = type, max_gap = max_gap, min_gap = min_gap, gap_col = gap_col, suffix = suffix, ties = ties)
 }
