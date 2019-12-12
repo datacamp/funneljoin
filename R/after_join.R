@@ -32,6 +32,7 @@
 #' @param suffix If there are non-joined duplicate variables in x and y,
 #' these suffixes will be added to the output to disambiguate them.
 #' Should be a character vector of length 2.
+#' @param ties if TRUE, events with the same time will be joined. Defaults to FALSE.
 #' @importFrom magrittr %>%
 #'
 #' @details
@@ -97,7 +98,8 @@ after_join <- function(x,
                        max_gap = NULL,
                        min_gap = NULL,
                        gap_col = FALSE,
-                       suffix = c(".x", ".y")) {
+                       suffix = c(".x", ".y"),
+                       ties = FALSE) {
 
   if (!is.null(attr(x, "after_join")) & inherits(x, "tbl_lazy")) {
     stop("You can not do multiple after joins in a row remotely. Please pull your data locally.")
@@ -152,9 +154,16 @@ after_join <- function(x,
   }
 
   # Get all the matching rows
-  pairs <- x_i %>%
-    dplyr::inner_join(y_i, by = user_xy) %>%
-    dplyr::filter(!!dplyr::sym(time_xy$x) <= !!dplyr::sym(time_xy$y))
+  if (ties) {
+    pairs <- x_i %>%
+      dplyr::inner_join(y_i, by = user_xy) %>%
+      dplyr::filter(!!dplyr::sym(time_xy$x) <= !!dplyr::sym(time_xy$y))
+  }
+  else {
+    pairs <- x_i %>%
+      dplyr::inner_join(y_i, by = user_xy) %>%
+      dplyr::filter(!!dplyr::sym(time_xy$x) < !!dplyr::sym(time_xy$y))
+  }
 
   if (!is.null(max_gap) || !is.null(min_gap)) {
     pairs <- filter_in_gap(pairs = pairs,

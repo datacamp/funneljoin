@@ -20,7 +20,8 @@ after_join(
   max_gap = NULL,
   min_gap = NULL,
   gap_col = FALSE,
-  suffix = c(".x", ".y")
+  suffix = c(".x", ".y"),
+  ties = FALSE
 )
 
 after_inner_join(
@@ -128,6 +129,8 @@ with the time difference in seconds between the events.}
 \item{suffix}{If there are non-joined duplicate variables in x and y,
 these suffixes will be added to the output to disambiguate them.
 Should be a character vector of length 2.}
+
+\item{ties}{if TRUE, events with the same time will be joined. Defaults to FALSE.}
 }
 \description{
 Join two tables based on observations in one table happening after
