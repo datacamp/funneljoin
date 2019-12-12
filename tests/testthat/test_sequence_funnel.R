@@ -106,7 +106,7 @@ test_that("funnel_step works when there use moment multiple times", {
   expect_equal(colnames(res_repeat_step), c("user_id", "timestamp_course_start",
                                             "timestamp_subscription", "timestamp_sub_two"))
 
-  expect_equal(sum(!is.na(res_repeat_step$timestamp_sub_two)), 2)
+  expect_equal(sum(!is.na(res_repeat_step$timestamp_sub_two)), 0)
 })
 
 test_that("group_by() preserves funnel attributes", {

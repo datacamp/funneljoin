@@ -64,9 +64,9 @@ test_that("after_join works with mode = right and type = lastbefore-firstafter",
                as.Date("2018-07-10"))
 })
 
-test_that("after_join works with mode = anti and type = lastbefore-firstafter", {
+test_that("after_join works with mode = anti and type = lastbefore-firstafter and ties = TRUE", {
 
-  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "anti", type = "lastbefore-firstafter")
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "anti", type = "lastbefore-firstafter", ties = TRUE)
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp"))
@@ -78,9 +78,9 @@ test_that("after_join works with mode = anti and type = lastbefore-firstafter", 
   expect_true(as.Date("2018-07-12") %in% res$timestamp)
 })
 
-test_that("after_join works with mode = semi and type = lastbefore-firstafter", {
+test_that("after_join works with mode = semi and type = lastbefore-firstafter and ties = TRUE", {
 
-  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "semi", type = "lastbefore-firstafter")
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "semi", type = "lastbefore-firstafter", ties = TRUE)
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp"))

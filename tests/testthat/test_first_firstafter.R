@@ -50,9 +50,10 @@ test_that("after_join works with mode = right and type = first-firstafter", {
   expect_true(all(!is.na(res$user_id)))
 })
 
-test_that("after_join works with mode = anti and type = first-firstafter", {
+test_that("after_join works with mode = anti and type = first-firstafter and ties = TRUE", {
 
-  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "anti", type = "first-firstafter")
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "anti", type = "first-firstafter",
+                    ties = TRUE)
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp"))
@@ -63,9 +64,10 @@ test_that("after_join works with mode = anti and type = first-firstafter", {
   expect_true(as.Date("2018-07-01") %in% res$timestamp)
 })
 
-test_that("after_join works with mode = semi and type = first-firstafter", {
+test_that("after_join works with mode = semi and type = first-firstafter and ties = TRUE", {
 
-  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "semi", type = "first-firstafter")
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "semi", type = "first-firstafter",
+                    ties = TRUE)
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp"))
@@ -105,6 +107,7 @@ course_data <- tibble::tribble(
  3, 58, "2019-06-01", "2019-06-02",
  3, 60, "2019-03-01", "2019-04-02"
 )
+
 test_that("after_join works when columns have same name but not joining on them", {
 
   res <- after_left_join(course_data %>%

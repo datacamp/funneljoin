@@ -52,7 +52,8 @@ test_that("after_join works with mode = right and type = any-firstafter", {
 
 test_that("after_join works with mode = anti and type = any-firstafter", {
 
-  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "anti", type = "any-firstafter")
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "anti", type = "any-firstafter",
+                    ties = TRUE)
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp"))
@@ -65,7 +66,8 @@ test_that("after_join works with mode = anti and type = any-firstafter", {
 
 test_that("after_join works with mode = semi and type = any-firstafter", {
 
-  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "semi", type = "any-firstafter")
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "semi", type = "any-firstafter",
+                    ties = TRUE)
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp"))

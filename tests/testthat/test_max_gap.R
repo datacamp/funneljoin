@@ -103,7 +103,8 @@ test_that("after_join works with mode = right and type = any-any and max_gap = n
 
 test_that("after_join works with mode = anti and type = any-any and max_gap = difftime", {
 
-  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "anti", type = "any-any", max_gap = three_days)
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "anti", type = "any-any", max_gap = three_days,
+                    ties = TRUE)
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp"))
@@ -114,9 +115,10 @@ test_that("after_join works with mode = anti and type = any-any and max_gap = di
   expect_true(as.Date("2018-07-04") %in% res$timestamp)
 })
 
-test_that("after_join works with mode = anti and type = any-any and max_gap = numeric", {
+test_that("after_join works with mode = anti and type = any-any and max_gap = numeric and ties = TRUE", {
 
-  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "anti", type = "any-any", max_gap = three_days_numeric)
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "anti", type = "any-any", max_gap = three_days_numeric,
+                    ties = TRUE)
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp"))
@@ -127,9 +129,10 @@ test_that("after_join works with mode = anti and type = any-any and max_gap = nu
   expect_true(as.Date("2018-07-04") %in% res$timestamp)
 })
 
-test_that("after_join works with mode = semi and type = any-any and max_gap = difftime", {
+test_that("after_join works with mode = semi and type = any-any and max_gap = difftime and ties = TRUE", {
 
-  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "semi", type = "any-any", max_gap = three_days)
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "semi", type = "any-any", max_gap = three_days,
+                    ties = TRUE)
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp"))
@@ -139,9 +142,9 @@ test_that("after_join works with mode = semi and type = any-any and max_gap = di
   expect_true(all(!is.na(res$user_id)))
 })
 
-test_that("after_join works with mode = semi and type = any-any and max_gap = numeric", {
+test_that("after_join works with mode = semi and type = any-any and max_gap = numeric and ties = TRUE", {
 
-  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "semi", type = "any-any", max_gap = three_days_numeric)
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "semi", type = "any-any", max_gap = three_days_numeric, ties = TRUE)
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp"))

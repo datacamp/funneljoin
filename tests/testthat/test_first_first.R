@@ -1,10 +1,10 @@
 context("first-first joining")
 library(dplyr)
 
-test_that("after_join works with mode = inner and type = first-first", {
+test_that("after_join works with mode = inner and type = first-first and ties = TRUE", {
 
   res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"),
-                    type = "first-first", mode = "inner")
+                    type = "first-first", mode = "inner", ties = TRUE)
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp.x", "timestamp.y"))
@@ -56,7 +56,7 @@ test_that("after_join works with mode = anti and type = first-first", {
   expect_equal(names(res), c("user_id", "timestamp"))
   expect_true(4 %in% res$user_id)
   expect_true(2 %in% res$user_id)
-  expect_true(!3 %in% res$user_id)
+  expect_true(3 %in% res$user_id)
   expect_true(all(!is.na(res$timestamp)))
   expect_true(all(!is.na(res$user_id)))
 })
@@ -69,7 +69,7 @@ test_that("after_join works with mode = semi and type = first-first", {
   expect_equal(names(res), c("user_id", "timestamp"))
   expect_true(1 %in% res$user_id)
   expect_true(!2 %in% res$user_id)
-  expect_true(3 %in% res$user_id)
+  expect_true(!3 %in% res$user_id)
   expect_true(all(!is.na(res$timestamp)))
   expect_true(all(!is.na(res$user_id)))
 })

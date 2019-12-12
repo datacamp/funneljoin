@@ -22,7 +22,7 @@ test_that("after_join works with mode = inner and type = any-any", {
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp.x", "timestamp.y"))
-  expect_true(nrow(res) >= 8)
+  expect_true(nrow(res) >= 7)
   expect_true(all(res$timestamp.y >= res$timestamp.x))
   expect_gt(nrow(res), n_distinct(landed$user_id))
   expect_true(1 %in% res$user_id)
@@ -49,9 +49,10 @@ test_that("after_join works with mode = right and type = any-any", {
   expect_true(all(!is.na(res$user_id)))
 })
 
-test_that("after_join works with mode = anti and type = any-any", {
+test_that("after_join works with mode = anti and type = any-any and ties = TRUE", {
 
-  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "anti", type = "any-any")
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "anti", type = "any-any",
+                    ties = TRUE)
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp"))
@@ -62,9 +63,9 @@ test_that("after_join works with mode = anti and type = any-any", {
   expect_true(as.Date("2018-07-04") %in% res$timestamp)
 })
 
-test_that("after_join works with mode = semi and type = any-any", {
+test_that("after_join works with mode = semi and type = any-any and ties = TRUE", {
 
-  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "semi", type = "any-any")
+  res <- after_join(landed, registered, by_user = "user_id", by_time = c("timestamp" = "timestamp"), mode = "semi", type = "any-any", ties = TRUE)
 
   expect_is(res, "tbl_df")
   expect_equal(names(res), c("user_id", "timestamp"))
