@@ -5,8 +5,7 @@
 \alias{funnel_steps}
 \title{Continue to funnel}
 \usage{
-funnel_step(tbl, moment_type, type, name = moment_type,
-  optional = FALSE, ...)
+funnel_step(tbl, moment_type, type, name = moment_type, optional = FALSE, ...)
 
 funnel_steps(tbl, moment_types, type, ...)
 }
