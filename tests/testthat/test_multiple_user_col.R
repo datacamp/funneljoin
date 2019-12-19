@@ -73,3 +73,23 @@ test_that("multiple join columns work with any-any and inner_join", {
 })
 
 
+test_that("multiple join columns work with any-any and anti_join", {
+  res <- landed_multi %>%
+    after_join(registered_multi,
+                     by_user = c("user_id", "package"),
+                     by_time = "timestamp",
+                     type = "any-any",
+               mode = "anti")
+
+  expect_is(res, "tbl_df")
+  expect_equal(names(res), c("user_id_package", "timestamp"))
+  expect_true(all(!is.na(res$timestamp)))
+  expect_true(all(!is.na(res$user_id_package)))
+  expect_true(!"4_tidyr" %in% res$user_id_package)
+  expect_true(!2 %in% res$user_id_package)
+  expect_true("1_dplyr" %in% res$user_id_package)
+  expect_equal(nrow(res), 5)
+  expect_equal(nrow(dplyr::filter(res, user_id_package == "5_tidyr")), 2)
+})
+
+
