@@ -235,8 +235,8 @@ both rows, but they have a different `timestamp_purchase`.
 
 Finally, you can use the `summarize_funnel()` to understand how many and
 what percentage of people make it through to each next step of the
-funnel. We can also switch to `funnel_steps()` to shorten our code a bit
-- we give it a character vector of `moment_types` in order and the
+funnel. We can also switch to `funnel_steps()` to shorten our code a
+bit: we give it a character vector of `moment_types` in order and the
 `type` for each step.
 
 ``` r
