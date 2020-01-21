@@ -104,16 +104,16 @@ logs <- tribble(
   mutate(user = 1)
 
 logs <- tribble(
-  ~date, ~event,
-  "2020-01-06", "upload",
-  "2020-01-08", "print",
-  "2020-01-13", "upload",
-  "2020-01-20", "print",
-  "2020-01-21", "upload"
+  ~date, ~event, ~deadline,
+  "2020-01-06", "upload", "2020-01-05",
+  "2020-01-08", "print", "2020-01-05",
+  "2020-01-13", "upload", "2020-01-12",
+  "2020-01-20", "print", "2020-01-19",
+  "2020-01-21", "upload", "2020-01-19"
 ) %>%
   mutate(date = as.Date(date),
          user = 1,
-         deadline = floor_date(date, "week"))
+         deadline = as.Date(deadline))
 
 test_that("multiple join columns work with funnel_start and funnel_step", {
   res <- logs %>%
@@ -151,8 +151,8 @@ test_that("multiple join columns work with funnel_start and funnel_step first-fi
                     suffix = c("_landed", "_registered"))
 
   expect_equal(res_normal, res_sequence)
-  expect_is(res, "tbl_df")
-  expect_is(res, "tbl_funnel")
+  expect_is(res_sequence, "tbl_df")
+  expect_is(res_sequence, "tbl_funnel")
   expect_equal(attributes(res_sequence)$funnel_metadata$user, "user_id_package")
   expect_equal(names(res_sequence), c("user_id_package", "timestamp_landed", "timestamp_registered"))
   expect_true(all(!is.na(res_sequence$timestamp_landed)))

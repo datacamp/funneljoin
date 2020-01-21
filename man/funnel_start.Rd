@@ -15,7 +15,7 @@ funnel_start(tbl, moment_type, moment, tstamp, user)
 
 \item{tstamp}{The name of the column with the timestamps of the moments}
 
-\item{user}{The name of the column indicating the user who did the moment}
+\item{user}{The name(s) of the column indicating the user who did the moment}
 }
 \description{
 Start a funnel
