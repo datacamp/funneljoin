@@ -5,12 +5,16 @@ Version: 0.1.0.9000
 Authors@R: c(
     person("Emily", "Robinson", email = "robinson.es@gmail.com", role = c("aut", "cre")),
     person("Anthony", "Baker", email = "anthony@datacamp.com", role = c("aut")),
-    person("David", "Robinson", email = "drob@datacamp.com", role = c("aut")))
+    person("David", "Robinson", email = "admiral.david@gmail.com", role = c("aut")))
 Depends:
     R (>= 2.10)
 Maintainer: Emily Robinson <robinson.es@gmail.com>
 Description: Time-based joins to analyze sequence of events, 
-    both in memory and out of memory. 
+    both in memory and out of memory. after_join() joins two 
+    tables of events, while funnel_start() and funnel_step() 
+    join events in the same table. With the type argument, you
+    can switch between different funnel types, like first-first
+    and last-firstafter.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -27,5 +31,6 @@ Imports:
     broom,
     purrr,
     rlang,
-    tidyr
+    tidyr,
+    methods
 VignetteBuilder: knitr

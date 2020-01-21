@@ -33,7 +33,7 @@ You can do this with funneljoin's `after_join()` function. The arguments are:
 
 Funneljoins can be any combination of `first`, `last`, `any`, and `lastbefore` with `first`, `last`,  `any`, and `firstafter`.
 
-Let's take an example. We'll create two tables, one of landings and one of registrations. Each has a `user_id` and `timestamp` column. 
+Let's take an example. We'll use two tables, one of landings and one of registrations, that come with the package. Each has a `user_id` and `timestamp` column. 
 
 ```{r}
 library(dplyr)
@@ -41,35 +41,14 @@ library(funneljoin)
 ```
 
 ```{r}
-landed <- tibble::tribble(
-  ~user_id, ~timestamp,
-  1, "2018-07-01",
-  2, "2018-07-01",
-  3, "2018-07-02",
-  4, "2018-07-01",
-  4, "2018-07-04",
-  5, "2018-07-10",
-  5, "2018-07-12",
-  6, "2018-07-07",
-  6, "2018-07-08"
-) %>%
-  mutate(timestamp = as.Date(timestamp))
-
-registered <- tibble::tribble(
-  ~user_id, ~timestamp,
-  1, "2018-07-02",
-  3, "2018-07-02",
-  4, "2018-06-10",
-  4, "2018-07-02",
-  5, "2018-07-11",
-  6, "2018-07-10",
-  6, "2018-07-11",
-  7, "2018-07-07"
-) %>%
-  mutate(timestamp = as.Date(timestamp))
+landed
 ```
 
-Let's say we wanted to get only the first time people landed and the first time they registered, *if* it was after their first registration. We would use a `first-first inner` join. 
+```{r}
+registered
+```
+
+Let's say we wanted to get only the first time people landed and the first time they registered, *if* it was after their first landing. We would use a `first-first inner` join. 
 
 ```{r}
 landed %>%

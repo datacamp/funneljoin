@@ -8,6 +8,28 @@
 #'
 #' @export
 #'
+#' @examples
+#' library(dplyr)
+#'
+#' activity <- tibble::tribble(
+#'   ~ "user_id", ~ "event", ~ "timestamp",
+#'   1, "landing", "2019-07-01",
+#'   1, "registration", "2019-07-02",
+#'   1, "purchase", "2019-07-07",
+#'   1, "purchase", "2019-07-10",
+#'   2, "landing", "2019-08-01",
+#'   2, "registration", "2019-08-15",
+#'   3, "landing", "2019-05-01",
+#'   3, "registration", "2019-06-01",
+#'   3, "purchase", "2019-06-04",
+#'   4, "landing", "2019-06-13")
+#'
+#' activity %>%
+#'   funnel_start(moment_type = "landing",
+#'                moment = "event",
+#'                tstamp = "timestamp",
+#'                user = "user_id")
+#'
 funnel_start <- function(tbl, moment_type, moment, tstamp, user) {
 
   if (!(moment_type %in% tbl[[dplyr::quo_name(dplyr::enquo(moment))]])) {
@@ -52,6 +74,32 @@ funnel_start <- function(tbl, moment_type, moment, tstamp, user) {
 #' @param ... Extra arguments passed on to \link{after_left_join}. For \code{funnel_steps}, these are passed on to \code{funnel_step}.
 #' @export
 #'
+#' @examples
+#'
+#' library(dplyr)
+#'
+#' activity <- tibble::tribble(
+#'   ~ "user_id", ~ "event", ~ "timestamp",
+#'   1, "landing", "2019-07-01",
+#'   1, "registration", "2019-07-02",
+#'   1, "purchase", "2019-07-07",
+#'   1, "purchase", "2019-07-10",
+#'   2, "landing", "2019-08-01",
+#'   2, "registration", "2019-08-15",
+#'   3, "landing", "2019-05-01",
+#'   3, "registration", "2019-06-01",
+#'   3, "purchase", "2019-06-04",
+#'   4, "landing", "2019-06-13")
+#'
+#' activity %>%
+#'   funnel_start(moment_type = "landing",
+#'                moment = "event",
+#'                tstamp = "timestamp",
+#'                user = "user_id")  %>%
+#' funnel_step(moment_type = "registration",
+#'            type = "first-firstafter")
+#'
+
 funnel_step <- function(tbl, moment_type, type, name = moment_type, optional = FALSE, ...) {
   md <- attr(tbl, "funnel_metadata")
 

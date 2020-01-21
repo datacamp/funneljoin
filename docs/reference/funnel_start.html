@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Summarise after join funnel with proportion test — summarize_prop_tests • funneljoin</title>
+<title>Start a funnel — funnel_start • funneljoin</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Summarise after join funnel with proportion test — summarize_prop_tests" />
-<meta property="og:description" content="Summarise after join funnel with proportion test" />
+<meta property="og:title" content="Start a funnel — funnel_start" />
+<meta property="og:description" content="Start a funnel" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -106,49 +106,77 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Summarise after join funnel with proportion test</h1>
+    <h1>Start a funnel</h1>
     
-    <div class="hidden name"><code>summarize_prop_tests.Rd</code></div>
+    <div class="hidden name"><code>funnel_start.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Summarise after join funnel with proportion test</p>
+    <p>Start a funnel</p>
     </div>
 
-    <pre class="usage"><span class='fu'>summarize_prop_tests</span>(<span class='no'>x</span>, <span class='kw'>alternative_name</span> <span class='kw'>=</span> <span class='no'>alternative.name</span>, <span class='no'>...</span>,
-  <span class='kw'>ungroup</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>funnel_start</span>(<span class='no'>tbl</span>, <span class='no'>moment_type</span>, <span class='no'>moment</span>, <span class='no'>tstamp</span>, <span class='no'>user</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>a data.frame with columns nb_conversions and nb_users</p></td>
+      <th>tbl</th>
+      <td><p>A table of different moments and timestamps</p></td>
     </tr>
     <tr>
-      <th>alternative_name</th>
-      <td><p>the name of the column indicating the experiment group</p></td>
+      <th>moment_type</th>
+      <td><p>The first moment in the funnel</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>any additional arguments</p></td>
+      <th>moment</th>
+      <td><p>The name of the column with the moment_type</p></td>
     </tr>
     <tr>
-      <th>ungroup</th>
-      <td><p>whether the table needs to be ungrouped</p></td>
+      <th>tstamp</th>
+      <td><p>The name of the column with the timestamps of the moments</p></td>
+    </tr>
+    <tr>
+      <th>user</th>
+      <td><p>The name of the column indicating the user who did the moment</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data.frame with proportion test results</p>
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
 
+<span class='no'>activity</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(
+  ~ <span class='st'>"user_id"</span>, ~ <span class='st'>"event"</span>, ~ <span class='st'>"timestamp"</span>,
+  <span class='fl'>1</span>, <span class='st'>"landing"</span>, <span class='st'>"2019-07-01"</span>,
+  <span class='fl'>1</span>, <span class='st'>"registration"</span>, <span class='st'>"2019-07-02"</span>,
+  <span class='fl'>1</span>, <span class='st'>"purchase"</span>, <span class='st'>"2019-07-07"</span>,
+  <span class='fl'>1</span>, <span class='st'>"purchase"</span>, <span class='st'>"2019-07-10"</span>,
+  <span class='fl'>2</span>, <span class='st'>"landing"</span>, <span class='st'>"2019-08-01"</span>,
+  <span class='fl'>2</span>, <span class='st'>"registration"</span>, <span class='st'>"2019-08-15"</span>,
+  <span class='fl'>3</span>, <span class='st'>"landing"</span>, <span class='st'>"2019-05-01"</span>,
+  <span class='fl'>3</span>, <span class='st'>"registration"</span>, <span class='st'>"2019-06-01"</span>,
+  <span class='fl'>3</span>, <span class='st'>"purchase"</span>, <span class='st'>"2019-06-04"</span>,
+  <span class='fl'>4</span>, <span class='st'>"landing"</span>, <span class='st'>"2019-06-13"</span>)
+
+<span class='no'>activity</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>funnel_start</span>(<span class='kw'>moment_type</span> <span class='kw'>=</span> <span class='st'>"landing"</span>,
+               <span class='kw'>moment</span> <span class='kw'>=</span> <span class='st'>"event"</span>,
+               <span class='kw'>tstamp</span> <span class='kw'>=</span> <span class='st'>"timestamp"</span>,
+               <span class='kw'>user</span> <span class='kw'>=</span> <span class='st'>"user_id"</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 4 x 2</span><span>
+#&gt;   user_id timestamp_landing
+#&gt;     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>            
+#&gt; </span><span style='color: #555555;'>1</span><span>       1 2019-07-01       
+#&gt; </span><span style='color: #555555;'>2</span><span>       2 2019-08-01       
+#&gt; </span><span style='color: #555555;'>3</span><span>       3 2019-05-01       
+#&gt; </span><span style='color: #555555;'>4</span><span>       4 2019-06-13       </div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
