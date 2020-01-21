@@ -122,6 +122,7 @@ test_that("multiple join columns work with funnel_start and funnel_step", {
     funnel_step(moment_type = "print", type = "any-firstafter")
 
   expect_is(res, "tbl_df")
+  expect_is(res, "tbl_funnel")
   expect_equal(names(res), c("date_upload", "deadline_user", "date_print"))
   expect_true(all(!is.na(res$date_upload)))
   expect_true(all(!is.na(res$deadline_user)))
@@ -131,4 +132,33 @@ test_that("multiple join columns work with funnel_start and funnel_step", {
 
 })
 
+combined_landing_registration <- registered_multi %>%
+  mutate(event = "registered") %>%
+  bind_rows(landed_multi %>%
+              mutate(event = "landed"))
+
+test_that("multiple join columns work with funnel_start and funnel_step first-firstafter", {
+  res_sequence <- combined_landing_registration %>%
+    funnel_start(moment_type = "landed", moment = "event",
+                 tstamp = "timestamp", user = c("user_id", "package")) %>%
+    funnel_step(moment_type = "registered", type = "first-firstafter")
+
+  res_normal <- landed_multi %>%
+    after_left_join(registered_multi,
+                    by_user = c("user_id", "package"),
+                    by_time = "timestamp",
+                    type = "first-firstafter",
+                    suffix = c("_landed", "_registered"))
+
+  expect_equal(res_normal, res_sequence)
+  expect_is(res, "tbl_df")
+  expect_is(res, "tbl_funnel")
+  expect_equal(attributes(res_sequence)$funnel_metadata$user, "user_id_package")
+  expect_equal(names(res_sequence), c("user_id_package", "timestamp_landed", "timestamp_registered"))
+  expect_true(all(!is.na(res_sequence$timestamp_landed)))
+  expect_true(any(is.na(res_sequence$timestamp_registered)))
+  expect_true(as.Date("2018-07-11") %in% res_sequence$timestamp_registered)
+  expect_true("1_dplyr" %in% res_sequence$user_id_package)
+
+})
 
