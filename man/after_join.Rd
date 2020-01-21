@@ -19,7 +19,6 @@ after_join(
   type = "first-first",
   max_gap = NULL,
   min_gap = NULL,
-  by_col = NULL,
   gap_col = FALSE,
   suffix = c(".x", ".y")
 )
@@ -32,7 +31,6 @@ after_inner_join(
   type,
   max_gap = NULL,
   min_gap = NULL,
-  by_col = NULL,
   gap_col = FALSE,
   suffix = c(".x", ".y")
 )
@@ -45,7 +43,6 @@ after_left_join(
   type,
   max_gap = NULL,
   min_gap = NULL,
-  by_col = NULL,
   gap_col = FALSE,
   suffix = c(".x", ".y")
 )
@@ -58,7 +55,6 @@ after_right_join(
   type,
   max_gap = NULL,
   min_gap = NULL,
-  by_col = NULL,
   gap_col = FALSE,
   suffix = c(".x", ".y")
 )
@@ -71,7 +67,6 @@ after_full_join(
   type,
   max_gap = NULL,
   min_gap = NULL,
-  by_col = NULL,
   gap_col = FALSE,
   suffix = c(".x", ".y")
 )
@@ -84,7 +79,6 @@ after_anti_join(
   type,
   max_gap = NULL,
   min_gap = NULL,
-  by_col = NULL,
   gap_col = FALSE,
   suffix = c(".x", ".y")
 )
@@ -97,7 +91,6 @@ after_semi_join(
   type,
   max_gap = NULL,
   min_gap = NULL,
-  by_col = NULL,
   gap_col = FALSE,
   suffix = c(".x", ".y")
 )
@@ -128,9 +121,6 @@ integer representing the number of seconds or a difftime object, such as
 \item{min_gap}{Optional: the maximum gap allowed between events. Can be a
 integer representing the number of seconds or a difftime object, such as
 \code{as.difftime(2, units = "hours")}.}
-
-\item{by_col}{Optional: whether another column besides users will determine
-if pairs can be}
 
 \item{gap_col}{Whether to include a numeric column, \code{.gap},
 with the time difference in seconds between the events.}
