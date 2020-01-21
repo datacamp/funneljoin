@@ -40,7 +40,7 @@ multi_moments_with_dupes <- tibble::tribble(
 
 test_that("Optional funnel works", {
   optional <- multi_moments %>%
-    funnel_start("subscription", moment_type, timestamp, user_id) %>%
+    funnel_start("subscription", "moment_type", "timestamp", "user_id") %>%
     funnel_step("course_start", type = "first-firstafter", optional = TRUE) %>%
     funnel_step("project_start", type = "first-firstafter")
 
@@ -53,7 +53,7 @@ test_that("Optional funnel works", {
   expect_equal(sum(is.na(optional$timestamp_project_start)), 1)
 
   not_optional <- multi_moments %>%
-    funnel_start("subscription", moment_type, timestamp, user_id) %>%
+    funnel_start("subscription", "moment_type", "timestamp", "user_id") %>%
     funnel_step("course_start", type = "first-firstafter") %>%
     funnel_step("project_start", type = "first-firstafter")
 
@@ -64,7 +64,7 @@ test_that("Optional funnel works", {
 
 test_that("Funnels don't allow multiple optional steps in a row", {
   setup <- multi_moments %>%
-    funnel_start("subscription", moment_type, timestamp, user_id) %>%
+    funnel_start("subscription", "moment_type", "timestamp", "user_id") %>%
     funnel_step("course_start", type = "first-firstafter", optional = TRUE)
 
   expect_error(funnel_step(setup, "project_start", type = "first-firstafter", optional = TRUE), "in a row")
@@ -73,7 +73,7 @@ test_that("Funnels don't allow multiple optional steps in a row", {
 test_that("Funnels with optional steps don't support duplicated user-timestamp pairs", {
 
   setup <- multi_moments_with_dupes %>%
-    funnel_start("course_start", moment_type, timestamp, user_id) %>%
+    funnel_start("course_start", "moment_type", "timestamp", "user_id") %>%
     funnel_step("project_start", type = "any-firstafter", optional = TRUE)
 
   expect_error(funnel_step(setup, "subscription", type = "any-any"), "duplicate user")
