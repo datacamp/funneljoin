@@ -93,17 +93,6 @@ test_that("multiple join columns work with any-any and anti_join", {
 })
 
 logs <- tribble(
-  ~date, ~event,
-  "2020-01-06", "upload",
-  "2020-01-08", "print",
-  "2020-01-13", "upload",
-  "2020-01-20", "print",
-  "2020-01-21", "upload"
-) %>%
-  mutate(date = as.Date(date)) %>%
-  mutate(user = 1)
-
-logs <- tribble(
   ~date, ~event, ~deadline,
   "2020-01-06", "upload", "2020-01-05",
   "2020-01-08", "print", "2020-01-05",
