@@ -4,7 +4,7 @@
 #' @param moment_type The first moment in the funnel
 #' @param moment The name of the column with the moment_type
 #' @param tstamp The name of the column with the timestamps of the moments
-#' @param user The name of the column indicating the user who did the moment
+#' @param user The name(s) of the column indicating the user who did the moment
 #'
 #' @export
 #'
@@ -34,6 +34,14 @@ funnel_start <- function(tbl, moment_type, moment, tstamp, user) {
 
   if (!(moment_type %in% tbl[[dplyr::quo_name(dplyr::enquo(moment))]])) {
     stop(paste(moment_type, " is not in the moment column"))
+  }
+
+  if (length(user) > 1) {
+    # combine user columns into one
+    new_user <- paste(user, collapse = "_")
+    tbl <- tbl %>%
+      tidyr::unite(!!dplyr::sym(new_user), !!dplyr::enquo(user))
+    user <- new_user
   }
 
   md <- list(
