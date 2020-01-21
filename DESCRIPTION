@@ -1,7 +1,7 @@
 Package: funneljoin
 Type: Package
 Title: Join Tables Based on Events Occurring in Sequence
-Version: 0.2.9000
+Version: 0.1.0.9000
 Authors@R: c(
     person("Emily", "Robinson", email = "robinson.es@gmail.com", role = c("aut", "cre")),
     person("Anthony", "Baker", email = "anthony@datacamp.com", role = c("aut")),
