@@ -92,4 +92,43 @@ test_that("multiple join columns work with any-any and anti_join", {
   expect_equal(nrow(dplyr::filter(res, user_id_package == "5_tidyr")), 2)
 })
 
+logs <- tribble(
+  ~date, ~event,
+  "2020-01-06", "upload",
+  "2020-01-08", "print",
+  "2020-01-13", "upload",
+  "2020-01-20", "print",
+  "2020-01-21", "upload"
+) %>%
+  mutate(date = as.Date(date)) %>%
+  mutate(user = 1)
+
+logs <- tribble(
+  ~date, ~event,
+  "2020-01-06", "upload",
+  "2020-01-08", "print",
+  "2020-01-13", "upload",
+  "2020-01-20", "print",
+  "2020-01-21", "upload"
+) %>%
+  mutate(date = as.Date(date),
+         user = 1,
+         deadline = floor_date(date, "week"))
+
+test_that("multiple join columns work with funnel_start and funnel_step", {
+  res <- logs %>%
+    funnel_start(moment_type = "upload", moment = "event",
+                 tstamp = "date", user = c("deadline", "user")) %>%
+    funnel_step(moment_type = "print", type = "any-firstafter")
+
+  expect_is(res, "tbl_df")
+  expect_equal(names(res), c("date_upload", "deadline_user", "date_print"))
+  expect_true(all(!is.na(res$date_upload)))
+  expect_true(all(!is.na(res$deadline_user)))
+  expect_true(as.Date("2020-01-08") %in% res$date_print)
+  expect_true(any(!is.na(res$date_print)))
+  expect_equal(sum(is.na(res$date_print)), 2)
+
+})
+
 
