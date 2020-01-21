@@ -3,6 +3,7 @@
 
 [![Travis-CI Build
 Status](https://travis-ci.org/robinsones/funneljoin.svg?branch=master)](https://travis-ci.org/robinsones/funneljoin)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/funneljoin)](https://cran.r-project.org/package=funneljoin)
 
 The goal of funneljoin is to make it easy to analyze behavior funnels.
 For example, maybe you’re interested in finding the people who visit a
