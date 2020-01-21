@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+# funneljoin <img src='man/figures/logo.png' align="right" height="139" />
+
 [![Travis-CI Build
 Status](https://travis-ci.org/robinsones/funneljoin.svg?branch=master)](https://travis-ci.org/robinsones/funneljoin)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/funneljoin)](https://cran.r-project.org/package=funneljoin)
