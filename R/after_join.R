@@ -128,7 +128,6 @@ after_join <- function(x,
 
   if (length(by_user) > 1) {
     # combine user columns into one
-    # what do we do if there's an NA though?
     new_x_user_col_name <- paste(user_xy$x, collapse = "_")
     x <- x %>%
       tidyr::unite(!!dplyr::sym(new_x_user_col_name), !!dplyr::quo(user_xy$x))
@@ -138,7 +137,6 @@ after_join <- function(x,
     y <- y %>%
       tidyr::unite(!!dplyr::sym(new_y_user_col_name), !!dplyr::quo(user_xy$y))
     user_xy$y <- new_y_user_col_name
-
   }
 
   if (length(by_time) > 1) {
