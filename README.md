@@ -27,12 +27,18 @@ maintained primarily by Emily.
 
 ## Installation
 
-You can install the development version from
-[GitHub](https://github.com/) with:
+You can install this package from CRAN:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("robinsones/funneljoin")
+install.packages("funneljoin")
+```
+
+Or you can install the development version from GitHub with
+[remotes](https://github.com/r-lib/remotes):
+
+``` r
+library(remotes)
+install_github("robinsones/funneljoin")
 ```
 
 ## after\_join()

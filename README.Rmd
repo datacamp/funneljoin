@@ -24,11 +24,17 @@ Funneljoin was developed at [DataCamp](https://www.datacamp.com/) by Anthony Bak
 
 ## Installation
 
-You can install the development version from [GitHub](https://github.com/) with:
+You can install this package from CRAN:
 
-```{r, eval = FALSE}
-# install.packages("devtools")
-devtools::install_github("robinsones/funneljoin")
+```{r, eval=FALSE}
+install.packages("funneljoin")
+```
+
+Or you can install the development version from GitHub with [remotes](https://github.com/r-lib/remotes):
+
+```{r, eval=FALSE}
+library(remotes)
+install_github("robinsones/funneljoin")
 ```
 
 ## after_join()
