@@ -63,6 +63,9 @@ summarize_prop_tests <- function(x, alternative_name = alternative.name, ..., un
 #' @return A table with columns for your groups, along with `nb_users`, `nb_conversions`, and `pct_converted`
 #' @export
 summarize_conversions <- function(x, converted) {
+  if (!methods::hasArg(converted)) {
+    stop("Please specify the conversion column using the converted argument")
+  }
 
   var_converted <- dplyr::enquo(converted)
   if (inherits(x, "tbl_lazy")) {
@@ -88,7 +91,7 @@ summarize_conversions <- function(x, converted) {
     ret <- x %>%
       dplyr::summarise(nb_users = dplyr::n(),
                        nb_conversions = ifelse(is.logical(!!var_converted),
-                                                sum(!!var_converted),
+                                                sum(!!var_converted, na.rm = TRUE),
                                                 sum(!is.na(!!var_converted)))) %>%
       dplyr::mutate(pct_converted = nb_conversions / nb_users)
   }

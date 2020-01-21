@@ -20,3 +20,26 @@ funnel_start(tbl, moment_type, moment, tstamp, user)
 \description{
 Start a funnel
 }
+\examples{
+library(dplyr)
+
+activity <- tibble::tribble(
+  ~ "user_id", ~ "event", ~ "timestamp",
+  1, "landing", "2019-07-01",
+  1, "registration", "2019-07-02",
+  1, "purchase", "2019-07-07",
+  1, "purchase", "2019-07-10",
+  2, "landing", "2019-08-01",
+  2, "registration", "2019-08-15",
+  3, "landing", "2019-05-01",
+  3, "registration", "2019-06-01",
+  3, "purchase", "2019-06-04",
+  4, "landing", "2019-06-13")
+
+activity \%>\%
+  funnel_start(moment_type = "landing",
+               moment = "event",
+               tstamp = "timestamp",
+               user = "user_id")
+
+}

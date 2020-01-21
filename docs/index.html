@@ -7,10 +7,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Join Tables Based on Events Occurring in Sequence • funneljoin</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Join Tables Based on Events Occurring in Sequence">
-<meta property="og:description" content="Time-based joins to analyze sequence of events,
+<meta property="og:description" content="Time-based joins to analyze sequence of events, 
     both in memory and out of memory. ">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -19,7 +20,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-article">
+    <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -39,8 +40,8 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fa fa-home fa-lg"></span>
-
+    <span class="fas fa fas fa-home fa-lg"></span>
+     
   </a>
 </li>
 <li>
@@ -61,45 +62,54 @@
 </div>
 <!--/.navbar -->
 
+      
 
       </header><div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-9">
 
 
-
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-<p>The goal of funneljoin is to make it easy to analyze behavior funnels. For example, maybe you’re interested in finding the people who visit a page and then register. Or you want all the times people click on an item and add it to their cart within 2 days. You can do this with funneljoin’s <code><a href="reference/after_join.html">after_join()</a></code> function. The arguments are:</p>
-<ul>
-<li>
-<code>x</code>: a dataset with the first set of behaviors.</li>
-<li>
-<code>y</code>: a dataset with the second set of behaviors.</li>
-<li>
-<code>by_time</code>: a character vector to specify the time columns in x and y. This would typically be a datetime or a date column. These columns are used to filter for time y being after time x.</li>
-<li>
-<code>by_user</code>: a character vector to specify the user or identity columns in x and y.</li>
-<li>
-<code>mode</code>: the method used to join: “inner”, “full”, “anti”, “semi”, “right”, “left”. You can also use <code>after_mode_join</code> instead (e.g. <code>after_inner_join</code> instead of <code><a href="reference/after_join.html">after_join(..., mode = "inner")</a></code>)</li>
-<li>
-<code>type</code>: the type of funnel used to distinguish between event pairs, such as “first-first”, “last-first”, “any-firstafter”. See types of funnels for details.</li>
-<li>
-<code>max_gap</code> (optional): the maximum gap between events. Can be a integer representing the number of seconds between events or a difftime object.</li>
-<li>
-<code>gap_col</code> (optional): whether to return a numeric column, <code>.gap</code>, with the time difference in seconds between the events. Defaults to <code>FALSE</code>.</li>
-</ul>
-<p>As funneljoin uses dplyr, it can also work with remote tables, <strong>but has only been tried on postgres</strong>. Some of the functionality, especially the gap joins, use SQL code that may not work with different versions.</p>
+<p>The goal of funneljoin is to make it easy to analyze behavior funnels. For example, maybe you’re interested in finding the people who visit a page and then register. Or you want all the times people click on an item and add it to their cart within 2 days. These can all be answered quickly with funneljoin’s <code><a href="reference/after_join.html">after_join()</a></code> or <code><a href="reference/funnel_start.html">funnel_start()</a></code> and <code><a href="reference/funnel_step.html">funnel_step()</a></code>. As funneljoin uses dplyr, it can also work with remote tables, <strong>but has only been tried on postgres</strong>.</p>
+<p>For more examples of how to use funneljoin, check out <a href="https://robinsones.github.io/funneljoin/articles/funneljoin.html">the vignette</a>, which shows different types of joins and the optional arguments, or this <a href="https://hookedondata.org/introducing-the-funneljoin-package/">blog post</a>, which showcases how to use funneljoin analyze questions and answers on StackOverflow.</p>
+<p>Funneljoin was developed at <a href="https://www.datacamp.com/">DataCamp</a> by Anthony Baker, David Robinson, and Emily Robinson and continues to be maintained primarily by Emily.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"robinsones/funneljoin"</span>)</code></pre></div>
+devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"robinsones/funneljoin"</span>)</code></pre></div>
 </div>
-<div id="types-of-funnels" class="section level2">
+<div id="after_join" class="section level2">
 <h2 class="hasAnchor">
-<a href="#types-of-funnels" class="anchor"></a>Types of funnels</h2>
+<a href="#after_join" class="anchor"></a>after_join()</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(funneljoin)</code></pre></div>
+<p>We’ll take a look at two tables that come with the package, <code>landed</code> and <code>registered</code>. Each has a column <code>user_id</code> and <code>timestamp</code>.</p>
+<p>Let’s say we wanted to get the first time people landed and the first time afterward they registered. We would <code><a href="reference/after_join.html">after_inner_join()</a></code> with a <code>first-firstafter</code> type:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">landed <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="reference/after_join.html">after_inner_join</a></span>(registered, 
+                   <span class="dt">by_user =</span> <span class="st">"user_id"</span>,
+                   <span class="dt">by_time =</span> <span class="st">"timestamp"</span>,
+                   <span class="dt">type =</span> <span class="st">"first-firstafter"</span>,
+                   <span class="dt">suffix =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"_landed"</span>, <span class="st">"_registered"</span>))
+<span class="co">#&gt; # A tibble: 5 x 3</span>
+<span class="co">#&gt;   user_id timestamp_landed timestamp_registered</span>
+<span class="co">#&gt;     &lt;dbl&gt; &lt;date&gt;           &lt;date&gt;              </span>
+<span class="co">#&gt; 1       1 2018-07-01       2018-07-02          </span>
+<span class="co">#&gt; 2       4 2018-07-01       2018-07-02          </span>
+<span class="co">#&gt; 3       3 2018-07-02       2018-07-02          </span>
+<span class="co">#&gt; 4       6 2018-07-07       2018-07-10          </span>
+<span class="co">#&gt; 5       5 2018-07-10       2018-07-11</span></code></pre></div>
+<p>The first two arguments are the tables we’re joining, with the first table being the events that happen first. We then specify:</p>
+<ul>
+<li>
+<code>by_time</code>: the time columns in each table. This would typically be a datetime or a date column. These columns are used to filter for time y being after or the same as time x.</li>
+<li>
+<code>by_user</code>:the user or identity columns in each table. These must be identical for a pair of rows to match.</li>
+<li>
+<code>type</code>: the type of funnel used to distinguish between event pairs, such as “first-first”, “last-first”, “any-firstafter”.</li>
+<li>
+<code>suffix</code> (optional): just like dplyr’s join functions, this specifies what should be appended to the names of columns that are in both tables.</li>
+</ul>
 <p><code>type</code> can be any combination of <code>first</code>, <code>last</code>, <code>any</code>, and <code>lastbefore</code> with <code>first</code>, <code>last</code>, <code>any</code>, and <code>firstafter</code>. Some common ones you may use include:</p>
 <ul>
 <li>
@@ -113,59 +123,6 @@ devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumen
 <li>
 <strong>any-any</strong>: Take all Xs followed by all Ys. For example, you want all the times someone visited a homepage and <strong>all</strong> the product pages they saw afterward.</li>
 </ul>
-<p>See the vignette for more examples.</p>
-<div id="example" class="section level3">
-<h3 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'dplyr'</span>
-<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     filter, lag</span>
-<span class="co">#&gt; The following objects are masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(funneljoin)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">landed &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
-  <span class="op">~</span>user_id, <span class="op">~</span>timestamp,
-  <span class="dv">1</span>, <span class="st">"2018-07-01"</span>,
-  <span class="dv">2</span>, <span class="st">"2018-07-01"</span>,
-  <span class="dv">3</span>, <span class="st">"2018-07-02"</span>,
-  <span class="dv">4</span>, <span class="st">"2018-07-01"</span>,
-  <span class="dv">4</span>, <span class="st">"2018-07-04"</span>,
-  <span class="dv">5</span>, <span class="st">"2018-07-10"</span>,
-  <span class="dv">5</span>, <span class="st">"2018-07-12"</span>,
-  <span class="dv">6</span>, <span class="st">"2018-07-07"</span>,
-  <span class="dv">6</span>, <span class="st">"2018-07-08"</span>
-) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(timestamp))
-
-registered &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
-  <span class="op">~</span>user_id, <span class="op">~</span>timestamp,
-  <span class="dv">1</span>, <span class="st">"2018-07-02"</span>,
-  <span class="dv">3</span>, <span class="st">"2018-07-02"</span>,
-  <span class="dv">4</span>, <span class="st">"2018-06-10"</span>,
-  <span class="dv">4</span>, <span class="st">"2018-07-02"</span>,
-  <span class="dv">5</span>, <span class="st">"2018-07-11"</span>,
-  <span class="dv">6</span>, <span class="st">"2018-07-10"</span>,
-  <span class="dv">6</span>, <span class="st">"2018-07-11"</span>,
-  <span class="dv">7</span>, <span class="st">"2018-07-07"</span>
-) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(timestamp))</code></pre></div>
-<p>Let’s say we wanted to get only the first time people landed and registered. We would use a <code>first-first inner</code> join:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">landed <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="reference/after_join.html">after_inner_join</a></span>(registered,
-                   <span class="dt">by_user =</span> <span class="st">"user_id"</span>,
-                   <span class="dt">by_time =</span> <span class="st">"timestamp"</span>,
-                   <span class="dt">type =</span> <span class="st">"first-first"</span>)
-<span class="co">#&gt; # A tibble: 4 x 3</span>
-<span class="co">#&gt;   user_id timestamp.x timestamp.y</span>
-<span class="co">#&gt;     &lt;dbl&gt; &lt;date&gt;      &lt;date&gt;     </span>
-<span class="co">#&gt; 1       1 2018-07-01  2018-07-02 </span>
-<span class="co">#&gt; 2       3 2018-07-02  2018-07-02 </span>
-<span class="co">#&gt; 3       6 2018-07-07  2018-07-10 </span>
-<span class="co">#&gt; 4       5 2018-07-10  2018-07-11</span></code></pre></div>
 <p>If your time and user columns have different names, you can work with that too:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">landed &lt;-<span class="st"> </span>landed <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">landed_at =</span> timestamp,
@@ -175,9 +132,9 @@ registered &lt;-<span class="st"> </span>registered <span class="op">%&gt;%</spa
 <span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">registered_at =</span> timestamp,
          <span class="dt">user_id_y =</span> user_id)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">landed <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="reference/after_join.html">after_inner_join</a></span>(registered,
-                   <span class="dt">by_user =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"user_id_x"</span> =<span class="st"> "user_id_y"</span>),
-                   <span class="dt">by_time =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"landed_at"</span> =<span class="st"> "registered_at"</span>),
+<span class="st">  </span><span class="kw"><a href="reference/after_join.html">after_inner_join</a></span>(registered, 
+                   <span class="dt">by_user =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"user_id_x"</span> =<span class="st"> "user_id_y"</span>),
+                   <span class="dt">by_time =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"landed_at"</span> =<span class="st"> "registered_at"</span>),
                    <span class="dt">type =</span> <span class="st">"first-first"</span>)
 <span class="co">#&gt; # A tibble: 4 x 3</span>
 <span class="co">#&gt;   user_id_x landed_at  registered_at</span>
@@ -187,17 +144,106 @@ registered &lt;-<span class="st"> </span>registered <span class="op">%&gt;%</spa
 <span class="co">#&gt; 3         6 2018-07-07 2018-07-10   </span>
 <span class="co">#&gt; 4         5 2018-07-10 2018-07-11</span></code></pre></div>
 </div>
-</div>
-<div id="summarizing-funnels" class="section level2">
+<div id="funnel_start-and-funnel_step" class="section level2">
 <h2 class="hasAnchor">
-<a href="#summarizing-funnels" class="anchor"></a>Summarizing funnels</h2>
-<p>Funneljoin also contains two functions to summarize funnels: <code><a href="reference/summarize_conversions.html">summarize_conversions()</a></code> and <code><a href="reference/summarize_prop_tests.html">summarize_prop_tests()</a></code>- see the vignette for details.</p>
+<a href="#funnel_start-and-funnel_step" class="anchor"></a>funnel_start() and funnel_step()</h2>
+<p>Sometimes you have all the data you need in one table. For example, let’s look at this table of user activity on a website.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">activity &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(
+  <span class="op">~</span><span class="st"> "user_id"</span>, <span class="op">~</span><span class="st"> "event"</span>, <span class="op">~</span><span class="st"> "timestamp"</span>,
+  <span class="dv">1</span>, <span class="st">"landing"</span>, <span class="st">"2019-07-01"</span>,
+  <span class="dv">1</span>, <span class="st">"registration"</span>, <span class="st">"2019-07-02"</span>,
+  <span class="dv">1</span>, <span class="st">"purchase"</span>, <span class="st">"2019-07-07"</span>,
+  <span class="dv">1</span>, <span class="st">"purchase"</span>, <span class="st">"2019-07-10"</span>,
+  <span class="dv">2</span>, <span class="st">"landing"</span>, <span class="st">"2019-08-01"</span>,
+  <span class="dv">2</span>, <span class="st">"registration"</span>, <span class="st">"2019-08-15"</span>,
+  <span class="dv">3</span>, <span class="st">"landing"</span>, <span class="st">"2019-05-01"</span>,
+  <span class="dv">3</span>, <span class="st">"registration"</span>, <span class="st">"2019-06-01"</span>,
+  <span class="dv">3</span>, <span class="st">"purchase"</span>, <span class="st">"2019-06-04"</span>,
+  <span class="dv">4</span>, <span class="st">"landing"</span>, <span class="st">"2019-06-13"</span>
+)</code></pre></div>
+<p>We can use <code><a href="reference/funnel_start.html">funnel_start()</a></code> and <code><a href="reference/funnel_step.html">funnel_step()</a></code> to make an activity funnel. <code><a href="reference/funnel_start.html">funnel_start()</a></code> takes five arugments:</p>
+<ul>
+<li>
+<code>tbl</code>: The table of events.</li>
+<li>
+<code>moment_type</code>: The first moment, or event, in the funnel.</li>
+<li>
+<code>moment</code>: The name of the column that indicates the <code>moment_type</code>.</li>
+<li>
+<code>tstamp</code>: The name of the column with the timestamps of the moment.</li>
+<li>
+<code>user</code>: The name of the column indicating the user who did the moment.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">activity <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="reference/funnel_start.html">funnel_start</a></span>(<span class="dt">moment_type =</span> <span class="st">"landing"</span>, 
+               <span class="dt">moment =</span> <span class="st">"event"</span>, 
+               <span class="dt">tstamp =</span> <span class="st">"timestamp"</span>, 
+               <span class="dt">user =</span> <span class="st">"user_id"</span>)
+<span class="co">#&gt; # A tibble: 4 x 2</span>
+<span class="co">#&gt;   user_id timestamp_landing</span>
+<span class="co">#&gt;     &lt;dbl&gt; &lt;chr&gt;            </span>
+<span class="co">#&gt; 1       1 2019-07-01       </span>
+<span class="co">#&gt; 2       2 2019-08-01       </span>
+<span class="co">#&gt; 3       3 2019-05-01       </span>
+<span class="co">#&gt; 4       4 2019-06-13</span></code></pre></div>
+<p><code><a href="reference/funnel_start.html">funnel_start()</a></code> returns a table with the user_ids and a column with the name of your timestamp column, <code>_</code>, and the moment type. This table also includes metadata.</p>
+<p>To add more moments to the funnel, you use <code><a href="reference/funnel_step.html">funnel_step()</a></code>. Since you’ve indicated in <code><a href="reference/funnel_start.html">funnel_start()</a></code> what columns to use for each part, now you only need to have the <code>moment_type</code> and the <code>type</code> of <code><a href="reference/after_join.html">after_join()</a></code> (e.g. “first-first”, “first-any”).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">activity <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="reference/funnel_start.html">funnel_start</a></span>(<span class="dt">moment_type =</span> <span class="st">"landing"</span>, 
+               <span class="dt">moment =</span> <span class="st">"event"</span>, 
+               <span class="dt">tstamp =</span> <span class="st">"timestamp"</span>, 
+               <span class="dt">user =</span> <span class="st">"user_id"</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="reference/funnel_step.html">funnel_step</a></span>(<span class="dt">moment_type =</span> <span class="st">"registration"</span>,
+              <span class="dt">type =</span> <span class="st">"first-firstafter"</span>)
+<span class="co">#&gt; # A tibble: 4 x 3</span>
+<span class="co">#&gt;   user_id timestamp_landing timestamp_registration</span>
+<span class="co">#&gt;     &lt;dbl&gt; &lt;chr&gt;             &lt;chr&gt;                 </span>
+<span class="co">#&gt; 1       3 2019-05-01        2019-06-01            </span>
+<span class="co">#&gt; 2       4 2019-06-13        &lt;NA&gt;                  </span>
+<span class="co">#&gt; 3       1 2019-07-01        2019-07-02            </span>
+<span class="co">#&gt; 4       2 2019-08-01        2019-08-15</span></code></pre></div>
+<p>You can continue stacking on <code><a href="reference/funnel_step.html">funnel_step()</a></code> with more moments.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">activity <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="reference/funnel_start.html">funnel_start</a></span>(<span class="dt">moment_type =</span> <span class="st">"landing"</span>, 
+               <span class="dt">moment =</span> <span class="st">"event"</span>, 
+               <span class="dt">tstamp =</span> <span class="st">"timestamp"</span>, 
+               <span class="dt">user =</span> <span class="st">"user_id"</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="reference/funnel_step.html">funnel_step</a></span>(<span class="dt">moment_type =</span> <span class="st">"registration"</span>,
+              <span class="dt">type =</span> <span class="st">"first-firstafter"</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="reference/funnel_step.html">funnel_step</a></span>(<span class="dt">moment_type =</span> <span class="st">"purchase"</span>,
+              <span class="dt">type =</span> <span class="st">"first-any"</span>)
+<span class="co">#&gt; # A tibble: 5 x 4</span>
+<span class="co">#&gt;   user_id timestamp_landing timestamp_registration timestamp_purchase</span>
+<span class="co">#&gt;     &lt;dbl&gt; &lt;chr&gt;             &lt;chr&gt;                  &lt;chr&gt;             </span>
+<span class="co">#&gt; 1       3 2019-05-01        2019-06-01             2019-06-04        </span>
+<span class="co">#&gt; 2       1 2019-07-01        2019-07-02             2019-07-07        </span>
+<span class="co">#&gt; 3       1 2019-07-01        2019-07-02             2019-07-10        </span>
+<span class="co">#&gt; 4       2 2019-08-01        2019-08-15             &lt;NA&gt;              </span>
+<span class="co">#&gt; 5       4 2019-06-13        &lt;NA&gt;                   &lt;NA&gt;</span></code></pre></div>
+<p>If you use a <code>type</code> that allows multiple moments of one type for a user, like “first-any”, you will get more rows per user rather than more columns. For example, user 1 had two purchases, so she now has two rows. The <code>timestamp_landing</code> and <code>timestamp_registration</code> is the same for both rows, but they have a different <code>timestamp_purchase</code>.</p>
+<p>Finally, you can use the <code><a href="reference/summarize_funnel.html">summarize_funnel()</a></code> to understand how many and what percentage of people make it through to each next step of the funnel. We can also switch to <code><a href="reference/funnel_step.html">funnel_steps()</a></code> to shorten our code a bit - we give it a character vector of <code>moment_types</code> in order and the <code>type</code> for each step.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">activity <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="reference/funnel_start.html">funnel_start</a></span>(<span class="dt">moment_type =</span> <span class="st">"landing"</span>, 
+               <span class="dt">moment =</span> <span class="st">"event"</span>, 
+               <span class="dt">tstamp =</span> <span class="st">"timestamp"</span>, 
+               <span class="dt">user =</span> <span class="st">"user_id"</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="reference/funnel_step.html">funnel_steps</a></span>(<span class="dt">moment_types =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"registration"</span>, <span class="st">"purchase"</span>),
+              <span class="dt">type =</span> <span class="st">"first-firstafter"</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="reference/summarize_funnel.html">summarize_funnel</a></span>()
+<span class="co">#&gt; # A tibble: 3 x 4</span>
+<span class="co">#&gt;   moment_type  nb_step pct_cumulative pct_step</span>
+<span class="co">#&gt;   &lt;fct&gt;          &lt;int&gt;          &lt;dbl&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 landing            4           1      NA    </span>
+<span class="co">#&gt; 2 registration       3           0.75    0.75 </span>
+<span class="co">#&gt; 3 purchase           2           0.5     0.667</span></code></pre></div>
+<p><code>nb_step</code> is how many users made it to each step, <code>pct_cumulative</code> is what percent that is out of the original step, and <code>pct_step</code> is what percentage that is out of those who made it to the previous step. So in our case, 2 people had a purchase, which is 50% of the people who landed but 66% of those who registered.</p>
 </div>
 <div id="reporting-bugs-and-adding-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#reporting-bugs-and-adding-features" class="anchor"></a>Reporting bugs and adding features</h2>
-<p>If you find any bugs or have a feature request or question, please <a href="https://github.com/datacamp/funneljoin/issues/new">create an issue</a>. If you’d like to add a feature, tests, or other functionality, please also make an issue first and let’s discuss!</p>
+<p>If you find any bugs or have a feature request or question, please <a href="https://github.com/robinsones/funneljoin/issues/new">create an issue</a>. If you’d like to add a feature, tests, or other functionality, please also make an issue first and let’s discuss!</p>
 </div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -217,14 +263,13 @@ registered &lt;-<span class="st"> </span>registered <span class="op">%&gt;%</spa
 </ul>
 </div>
 
-      <div class="dev-status">
+  <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/robinsones/funneljoin"><img src="https://travis-ci.org/robinsones/funneljoin.svg?branch=master" alt="Travis-CI Build Status"></a></li>
 </ul>
 </div>
 </div>
-
 </div>
 
 
@@ -233,11 +278,13 @@ registered &lt;-<span class="st"> </span>registered <span class="op">%&gt;%</spa
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
+  
 
 
   </body>

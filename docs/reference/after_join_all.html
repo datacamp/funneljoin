@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Summarise after join funnel with proportion test — summarize_prop_tests • funneljoin</title>
+<title>View result for each type of afterjoin — after_join_all • funneljoin</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Summarise after join funnel with proportion test — summarize_prop_tests" />
-<meta property="og:description" content="Summarise after join funnel with proportion test" />
+<meta property="og:title" content="View result for each type of afterjoin — after_join_all" />
+<meta property="og:description" content="View result for each type of afterjoin" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -106,49 +106,56 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Summarise after join funnel with proportion test</h1>
+    <h1>View result for each type of afterjoin</h1>
     
-    <div class="hidden name"><code>summarize_prop_tests.Rd</code></div>
+    <div class="hidden name"><code>after_join_all.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Summarise after join funnel with proportion test</p>
+    <p>View result for each type of afterjoin</p>
     </div>
 
-    <pre class="usage"><span class='fu'>summarize_prop_tests</span>(<span class='no'>x</span>, <span class='kw'>alternative_name</span> <span class='kw'>=</span> <span class='no'>alternative.name</span>, <span class='no'>...</span>,
-  <span class='kw'>ungroup</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>after_join_all</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>by_user</span>, <span class='no'>by_time</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"inner"</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a data.frame with columns nb_conversions and nb_users</p></td>
+      <td><p>A tbl representing the first event to occur in the funnel.</p></td>
     </tr>
     <tr>
-      <th>alternative_name</th>
-      <td><p>the name of the column indicating the experiment group</p></td>
+      <th>y</th>
+      <td><p>A tbl representing an event to occur in the funnel.</p></td>
+    </tr>
+    <tr>
+      <th>by_user</th>
+      <td><p>A character vector to specify the user or identity columns in
+x and y.</p></td>
+    </tr>
+    <tr>
+      <th>by_time</th>
+      <td><p>A character vector to specify the time columns in x and y.
+This would typically be a datetime or a date column.
+These columns are used to filter for time y being after time x.</p></td>
+    </tr>
+    <tr>
+      <th>mode</th>
+      <td><p>The method used to join: "inner", "full", "anti", "semi",
+"right", "left".</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>any additional arguments</p></td>
     </tr>
-    <tr>
-      <th>ungroup</th>
-      <td><p>whether the table needs to be ungrouped</p></td>
-    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>a data.frame with proportion test results</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
     </ul>
 
   </div>
