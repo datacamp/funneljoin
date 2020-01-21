@@ -1,5 +1,5 @@
 # funneljoin (development version)
-* Allow users to join by multiple columns in `after_join()` with the `by_user` argument 
+* Allow users to join by multiple columns in `after_join()` with the `by_user` argument and in `funnel_start()` with the `user` argument. 
 
 # funneljoin 0.1.0
 
