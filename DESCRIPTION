@@ -5,7 +5,8 @@ Version: 0.1.9000
 Authors@R: c(
     person("Emily", "Robinson", email = "robinson.es@gmail.com", role = c("aut", "cre")),
     person("Anthony", "Baker", email = "anthony@datacamp.com", role = c("aut")),
-    person("David", "Robinson", email = "admiral.david@gmail.com", role = c("aut")))
+    person("David", "Robinson", email = "admiral.david@gmail.com", role = c("aut")),
+    person("Jacqueline", "Nolis", email = "jacquelinenolis@outlook.com", role = c("art")))
 Depends:
     R (>= 2.10)
 Maintainer: Emily Robinson <robinson.es@gmail.com>
