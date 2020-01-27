@@ -23,10 +23,6 @@ post](https://hookedondata.org/introducing-the-funneljoin-package/),
 which showcases how to use funneljoin analyze questions and answers on
 StackOverflow.
 
-Funneljoin was developed at [DataCamp](https://www.datacamp.com/) by
-Anthony Baker, David Robinson, and Emily Robinson and continues to be
-maintained primarily by Emily.
-
 ## Installation
 
 You can install this package from CRAN:
@@ -277,3 +273,6 @@ If you find any bugs or have a feature request or question, please
 [create an issue](https://github.com/robinsones/funneljoin/issues/new).
 If you’d like to add a feature, tests, or other functionality, please
 also make an issue first and let’s discuss\!
+
+Funneljoin was developed at DataCamp by Anthony Baker, David Robinson,
+and Emily Robinson and continues to be maintained primarily by Emily.
