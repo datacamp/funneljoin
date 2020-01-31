@@ -112,15 +112,25 @@ after_join <- function(x,
   type_x <- match.arg(types[1], c("first", "last", "any", "lastbefore", "firstwithin"))
   type_y <- match.arg(types[2], c("first", "last", "any", "firstafter"))
 
+  user_xy <- dplyr::common_by(by_user, x, y)
+
   if (length(by_user) > 1) {
-    stop("Joining on multiple user columns is not supported. Check the by_user argument.")
+    # combine user columns into one
+    new_x_user_col_name <- paste(user_xy$x, collapse = "_")
+    x <- x %>%
+      tidyr::unite(!!dplyr::sym(new_x_user_col_name), !!dplyr::quo(user_xy$x))
+    user_xy$x <- new_x_user_col_name
+
+    new_y_user_col_name <- paste(user_xy$y, collapse = "_")
+    y <- y %>%
+      tidyr::unite(!!dplyr::sym(new_y_user_col_name), !!dplyr::quo(user_xy$y))
+    user_xy$y <- new_y_user_col_name
   }
 
   if (length(by_time) > 1) {
     stop("Joining on multiple time columns is not supported. Check the by_time argument.")
   }
 
-  user_xy <- dplyr::common_by(by_user, x, y)
   time_xy <- dplyr::common_by(by_time, x, y)
 
   x_i <- x %>%
@@ -144,6 +154,7 @@ after_join <- function(x,
                       user_col = user_xy$y,
                       type = type_y)
   }
+
 
   # Handle the case when columns with the same name are appended with .x & .y
   if (time_xy$x == time_xy$y || time_xy$x %in% colnames(y_i) || time_xy$y %in% colnames(x_i)) {
@@ -219,11 +230,21 @@ after_join <- function(x,
     stop("Unknown joining mode: ", mode)
   }
 
-  if (mode %in% c("inner", "left", "right", "full")) {
-    ret <- x_i %>%
-      join_func(pairs, by = "..idx") %>%
-      join_func(y_i, by = c(by_user, "..idy" = "..idy"), suffix = suffix) %>%
-      dplyr::select(-..idx, -..idy)
+    if (mode %in% c("inner", "left", "right", "full")) {
+
+    if (length(by_user) > 1) {
+      by_user_new <- c(new_x_user_col_name, new_y_user_col_name)
+      ret <- x_i %>%
+        join_func(pairs, by = "..idx") %>%
+        join_func(y_i, by = c(by_user_new, "..idy" = "..idy"), suffix = suffix) %>%
+        dplyr::select(-..idx, -..idy)
+    }
+    else {
+      ret <- x_i %>%
+        join_func(pairs, by = "..idx") %>%
+        join_func(y_i, by = c(by_user, "..idy" = "..idy"), suffix = suffix) %>%
+        dplyr::select(-..idx, -..idy)
+    }
   } else if (mode %in% c("semi", "anti")) {
     ret <- x_i %>%
       join_func(pairs, by = "..idx") %>%

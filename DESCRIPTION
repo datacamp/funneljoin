@@ -1,7 +1,7 @@
 Package: funneljoin
 Type: Package
-Title: Time-Based Joins to Analyze Sequences of Events
-Version: 0.1.9000
+Title: Join Tables Based on Events Occurring in Sequence
+Version: 0.1.0.9000
 Authors@R: c(
     person("Emily", "Robinson", email = "robinson.es@gmail.com", role = c("aut", "cre")),
     person("Anthony", "Baker", email = "anthony@datacamp.com", role = c("aut")),
@@ -20,7 +20,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests:
-    testthat,
+    testthat (>= 2.1.0),
     knitr,
     rmarkdown
 RoxygenNote: 7.0.2

@@ -71,7 +71,7 @@ test_that("funnel_step works with one step first-firstafter", {
 
 test_that("funnel_step works with two steps first-firstafter", {
   res_two_step <- multi_moments %>%
-    funnel_start("course_start", moment_type, timestamp, user_id) %>%
+    funnel_start("course_start", "moment_type", "timestamp", "user_id") %>%
     funnel_step("subscription", type = "first-firstafter") %>%
     funnel_step("project_start", type = "first-firstafter")
   two_step_md <- attributes(res_two_step)$funnel_metadata
@@ -92,14 +92,14 @@ test_that("funnel_step works with two steps first-firstafter", {
 
 test_that("funnel_step works when there use moment multiple times", {
   res_start_step <- multi_moments %>%
-    funnel_start("course_start", moment_type, timestamp, user_id) %>%
+    funnel_start("course_start", "moment_type", "timestamp", "user_id") %>%
     funnel_step("subscription", type = "first-firstafter")
 
   expect_error(res_repeat_step %>%
                  funnel_step("subscription", type = "first-firstafter"))
 
   res_repeat_step <- multi_moments %>%
-    funnel_start("course_start", moment_type, timestamp, user_id) %>%
+    funnel_start("course_start", "moment_type", "timestamp", "user_id") %>%
     funnel_step("subscription", type = "first-firstafter") %>%
     funnel_step("subscription", type = "first-firstafter", name = "sub_two")
 
