@@ -1,15 +1,16 @@
 Package: funneljoin
 Type: Package
 Title: Time-Based Joins to Analyze Sequences of Events
-Version: 0.1.9000
+Version: 0.1.1.9000
 Authors@R: c(
-    person("Emily", "Robinson", email = "robinson.es@gmail.com", role = c("aut", "cre")),
+    person("DataCamp", "Engineering", email = "engineering@datacamp.com", role = c("cre")),
+    person("Emily", "Robinson", email = "robinson.es@gmail.com", role = c("aut")),
     person("Anthony", "Baker", email = "anthony@datacamp.com", role = c("aut")),
     person("David", "Robinson", email = "admiral.david@gmail.com", role = c("aut")),
     person("Jacqueline", "Nolis", email = "jacquelinenolis@outlook.com", role = c("art")))
 Depends:
     R (>= 2.10)
-Maintainer: Emily Robinson <robinson.es@gmail.com>
+Maintainer: DataCamp Engineering <engineering@datacamp.com>
 Description: Time-based joins to analyze sequence of events, 
     both in memory and out of memory. after_join() joins two 
     tables of events, while funnel_start() and funnel_step() 

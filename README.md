@@ -4,8 +4,7 @@
 # funneljoin <img src='man/figures/logo.png' align="right" height="139" />
 
 [![Travis-CI Build
-Status](https://travis-ci.org/robinsones/funneljoin.svg?branch=master)](https://travis-ci.org/robinsones/funneljoin)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/funneljoin)](https://cran.r-project.org/package=funneljoin)
+Status](https://travis-ci.org/datacamp/funneljoin.svg?branch=master)](https://travis-ci.org/datacamp/funneljoin)
 
 The goal of funneljoin is to make it easy to analyze behavior funnels.
 For example, maybe you’re interested in finding the people who visit a
@@ -15,8 +14,7 @@ quickly with funneljoin’s `after_join()` or `funnel_start()` and
 `funnel_step()`. As funneljoin uses dplyr, it can also work with remote
 tables, **but has only been tried on postgres**.
 
-For more examples of how to use funneljoin, check out [the
-vignette](https://robinsones.github.io/funneljoin/articles/funneljoin.html),
+For more examples of how to use funneljoin, check out the vignette,
 which shows different types of joins and the optional arguments, or this
 [blog
 post](https://hookedondata.org/introducing-the-funneljoin-package/),
@@ -25,18 +23,12 @@ StackOverflow.
 
 ## Installation
 
-You can install this package from CRAN:
-
-``` r
-install.packages("funneljoin")
-```
-
-Or you can install the development version from GitHub with
+You can install this package from GitHub with
 [remotes](https://github.com/r-lib/remotes):
 
 ``` r
 library(remotes)
-install_github("robinsones/funneljoin")
+install_github("datacamp/funneljoin")
 ```
 
 ## after\_join()
@@ -270,9 +262,10 @@ but 66% of those who registered.
 ## Reporting bugs and adding features
 
 If you find any bugs or have a feature request or question, please
-[create an issue](https://github.com/robinsones/funneljoin/issues/new).
-If you’d like to add a feature, tests, or other functionality, please
-also make an issue first and let’s discuss\!
+[create an issue](https://github.com/datacamp/funneljoin/issues/new). If
+you’d like to add a feature, tests, or other functionality, please also
+make an issue first and let’s discuss\!
 
-Funneljoin was developed at DataCamp by Anthony Baker, David Robinson,
-and Emily Robinson and continues to be maintained primarily by Emily.
+funneljoin was developed at DataCamp by Anthony Baker, David Robinson,
+and Emily Robinson. It is now maintained by the DataCamp engineering
+team.
