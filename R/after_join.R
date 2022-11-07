@@ -186,7 +186,16 @@ after_join <- function(x,
   }
 
   if (gap_col) {
-    if (inherits(pairs, "tbl_lazy")) {
+    if (inherits(pairs, "tbl_BigQueryConnection")) {
+      time_difference <- dplyr::sql(glue::glue('DATETIME_DIFF({ time_xy$y }",
+                                               "{ time_xy$x }",
+                                               SECOND)'))
+
+      pairs <- pairs %>%
+        dplyr::mutate(.gap = time_difference) %>%
+        dplyr::select(..idx, ..idy, .gap)
+    }
+    else if (inherits(pairs, "tbl_lazy")) {
       time_difference <- dplyr::sql(glue::glue('DATEDIFF("seconds",
                                                "{ time_xy$x }",
                                                "{ time_xy$y }")::integer'))
