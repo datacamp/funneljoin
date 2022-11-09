@@ -205,9 +205,9 @@ test_that("after_join works with mode = inner, type = first-firstafter, max_gap 
     dplyr::collect()
 
   expect_is(res, "tbl_df")
-  expect_equal(names(res), c("course_id", "soft_launch_at", ".gap", "live_at"))
+  expect_equal(names(res), c("course_id", "soft_launch_at", "gap", "live_at"))
   expect_true(all(res$live_at >= res$soft_launch_at))
-  expect_gte(sum(res$.gap, na.rm = TRUE), 292755)
+  expect_gte(sum(res$gap, na.rm = TRUE), 292755)
 })
 
 test_that("after_join works with mode = inner, type = any-any, table is remote", {

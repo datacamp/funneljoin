@@ -27,7 +27,7 @@
 #' @param min_gap Optional: the maximum gap allowed between events. Can be a
 #'   integer representing the number of seconds or a difftime object, such as
 #'   \code{as.difftime(2, units = "hours")}.
-#' @param gap_col Whether to include a numeric column, \code{.gap},
+#' @param gap_col Whether to include a numeric column, \code{gap},
 #'   with the time difference in seconds between the events.
 #' @param suffix If there are non-joined duplicate variables in x and y,
 #' these suffixes will be added to the output to disambiguate them.
@@ -192,8 +192,8 @@ after_join <- function(x,
                                                SECOND)'))
 
       pairs <- pairs %>%
-        dplyr::mutate(.gap = time_difference) %>%
-        dplyr::select(..idx, ..idy, .gap)
+        dplyr::mutate(gap = time_difference) %>%
+        dplyr::select(..idx, ..idy, gap)
     }
     else if (inherits(pairs, "tbl_lazy")) {
       time_difference <- dplyr::sql(glue::glue('DATEDIFF("seconds",
@@ -201,14 +201,14 @@ after_join <- function(x,
                                                "{ time_xy$y }")::integer'))
 
       pairs <- pairs %>%
-        dplyr::mutate(.gap = time_difference) %>%
-        dplyr::select(..idx, ..idy, .gap)
+        dplyr::mutate(gap = time_difference) %>%
+        dplyr::select(..idx, ..idy, gap)
     }
     else {
       pairs <- pairs %>%
-        dplyr::mutate(.gap = as.numeric(difftime(!!dplyr::sym(time_xy$y),
+        dplyr::mutate(gap = as.numeric(difftime(!!dplyr::sym(time_xy$y),
                                                  !!dplyr::sym(time_xy$x), units = "secs"))) %>%
-        dplyr::select(..idx, ..idy, .gap)
+        dplyr::select(..idx, ..idy, gap)
     }
   } else {
     pairs <- pairs %>%
