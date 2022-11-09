@@ -1,7 +1,7 @@
 filter_in_gap <- function(pairs, min_gap = NULL, max_gap = NULL, time_xy, user_xy) {
   if (inherits(pairs, "tbl_BigQueryConnection")) {
-    time_difference <- dplyr::sql(glue::glue('DATETIME_DIFF({ time_xy$y }",
-                                               "{ time_xy$x }",
+    time_difference <- dplyr::sql(glue::glue('DATETIME_DIFF(`{ time_xy$y }`,
+                                               `{ time_xy$x }`,
                                                SECOND)'))
 
     ret <- pairs %>%

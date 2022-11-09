@@ -187,8 +187,8 @@ after_join <- function(x,
 
   if (gap_col) {
     if (inherits(pairs, "tbl_BigQueryConnection")) {
-      time_difference <- dplyr::sql(glue::glue('DATETIME_DIFF({ time_xy$y }",
-                                               "{ time_xy$x }",
+      time_difference <- dplyr::sql(glue::glue('DATETIME_DIFF(`{ time_xy$y }`,
+                                               `{ time_xy$x }`,
                                                SECOND)'))
 
       pairs <- pairs %>%
