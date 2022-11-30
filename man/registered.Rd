@@ -4,11 +4,13 @@
 \name{registered}
 \alias{registered}
 \title{Example dataset of registration events}
-\format{A data frame with 8 rows and 2 variables:
+\format{
+A data frame with 8 rows and 2 variables:
 \describe{
   \item{user_id}{A numeric column for identifying people}
   \item{timestamp}{A date column for the date the registration happened}
-}}
+}
+}
 \usage{
 registered
 }

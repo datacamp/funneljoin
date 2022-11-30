@@ -4,11 +4,13 @@
 \name{landed}
 \alias{landed}
 \title{Example dataset of landing events}
-\format{A data frame with 9 rows and 2 variables:
+\format{
+A data frame with 9 rows and 2 variables:
 \describe{
   \item{user_id}{A numeric column for identifying people}
   \item{timestamp}{A date column for the date the landing happened}
-}}
+}
+}
 \usage{
 landed
 }

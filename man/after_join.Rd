@@ -122,7 +122,7 @@ integer representing the number of seconds or a difftime object, such as
 integer representing the number of seconds or a difftime object, such as
 \code{as.difftime(2, units = "hours")}.}
 
-\item{gap_col}{Whether to include a numeric column, \code{.gap},
+\item{gap_col}{Whether to include a numeric column, \code{gap},
 with the time difference in seconds between the events.}
 
 \item{suffix}{If there are non-joined duplicate variables in x and y,
